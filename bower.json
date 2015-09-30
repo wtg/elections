@@ -1,0 +1,26 @@
+{
+  "name": "elections",
+  "version": "1.0.0",
+  "homepage": "https://github.com/wtg/elections",
+  "authors": [
+    "RPI Web Technologies Group"
+  ],
+  "description": "The RPI Elections Dashboard",
+  "main": "public/index.html",
+  "moduleType": [],
+  "keywords": [
+    "webtech",
+    "rpi",
+    "elections",
+    "dashboard"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
