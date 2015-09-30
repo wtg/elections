@@ -1,0 +1,25 @@
+{
+  "name": "elections",
+  "version": "1.0.0",
+  "description": "The RPI Elections Dashboard",
+  "main": "server.js",
+  "scripts": {
+    "test": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wtg/elections.git"
+  },
+  "keywords": [
+    "elections",
+    "rpi",
+    "dashboard",
+    "webtech"
+  ],
+  "author": "RPI Web Technologies Group",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wtg/elections/issues"
+  },
+  "homepage": "https://github.com/wtg/elections#readme"
+}
