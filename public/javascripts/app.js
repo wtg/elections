@@ -18,6 +18,10 @@ app.config(['$routeProvider', function ($routeProvider) {
             templateUrl: 'partials/offices.html',
             controller: 'OfficesController'
         }).
+        when('/candidate/:rcs', {
+            templateUrl: 'partials/candidate.html',
+            controller: 'CandidateController'
+        }).
         otherwise({
             redirectTo: '/home'
         });
