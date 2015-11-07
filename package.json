@@ -1,25 +1,23 @@
 {
   "name": "elections",
-  "version": "1.0.0",
-  "description": "The RPI Elections Dashboard",
-  "main": "server.js",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "test": "node server.js"
+    "start": "node ./bin/www"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/wtg/elections.git"
-  },
-  "keywords": [
-    "elections",
-    "rpi",
-    "dashboard",
-    "webtech"
-  ],
-  "author": "RPI Web Technologies Group",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/wtg/elections/issues"
-  },
-  "homepage": "https://github.com/wtg/elections#readme"
+  "dependencies": {
+    "angular": "^1.4.7",
+    "body-parser": "~1.13.2",
+    "bootstrap": "^3.3.5",
+    "bower": "^1.6.5",
+    "cookie-parser": "~1.3.5",
+    "debug": "~2.2.0",
+    "ejs": "^2.3.4",
+    "express": "~4.13.1",
+    "font-awesome": "^4.4.0",
+    "jade": "~1.11.0",
+    "jquery": "^2.1.4",
+    "morgan": "~1.6.1",
+    "serve-favicon": "~2.3.0"
+  }
 }
