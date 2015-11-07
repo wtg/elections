@@ -1,9 +1,21 @@
-/*General*/
+/* 
+Table of Contents
+  * General
+  * Home
+  * Offices
+  * Candidate Page
+*/
+
+/* General */
 body {
 	padding-top: 70px;
 }
 
-/* Cards */
+/* Home */
+
+/* Candidate Page */
+
+/* Offices */
 .card {
     overflow: hidden;
     position: relative;
