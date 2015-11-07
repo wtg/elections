@@ -2,10 +2,7 @@ body {
 	padding-top: 70px;
 }
 
-.src-image {
-    display: none;
-}
-
+/* Candidate Card for Office View */
 .card {
     overflow: hidden;
     position: relative;
