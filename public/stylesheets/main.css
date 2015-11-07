@@ -1,8 +1,9 @@
+/*General*/
 body {
 	padding-top: 70px;
 }
 
-/* Candidate Card for Office View */
+/* Cards */
 .card {
     overflow: hidden;
     position: relative;
