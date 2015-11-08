@@ -4,16 +4,56 @@ Table of Contents
   * Home
   * Offices
   * Candidate Page
+  * Mobile
 */
 
 /* General */
 body {
-	padding-top: 70px;
+    margin: 0;
+    padding: 0;
+    background-color: LightGrey;
 }
 
 /* Home */
 
 /* Candidate Page */
+.cover-photo img{
+    width: 100%;
+    height: 15em;
+    overflow: auto;
+}
+.profile {
+    border-radius: 100%;
+    border: 1em solid white;
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/6/6b/Shirley_Ann_Jackson_World_Economic_Forum_2010.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 250px;
+    height: 250px;
+    margin: 0 auto;
+    position: relative;
+    top: -6em;
+    margin-top: 4em;
+    margin-bottom: -200px;
+}
+#candidate {
+    background-color: #DD4814;
+    border-radius: 3em;
+    padding: 100px 1em;
+    color: white;
+    max-width: 1000px;
+}
+#candidate h1 {
+    text-align: center;
+}
+#candidate-content {
+    background-color: white;
+    padding: 5em 2em 1em 2em;
+    max-width: 900px;
+    position: relative;
+    top: -2em;
+    z-index: -1;
+}
 
 /* Offices */
 .card {
@@ -56,4 +96,12 @@ body {
     border: 5px solid rgba(0,0,30,0.8);
 }
 
+/* Mobile */
+@media (min-width: 600px) {
+    .shadow {
+        -webkit-box-shadow: 0px 2px 11px -2px rgba(0,0,0,0.75);
+        -moz-box-shadow: 0px 2px 11px -2px rgba(0,0,0,0.75);
+        box-shadow: 0px 2px 11px -2px rgba(0,0,0,0.75);
+    }
+}
 .btn btn-default 
