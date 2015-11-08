@@ -29,6 +29,8 @@ body {
 
 .card .header-bg {
     /* This stretches the canvas across the entire hero unit */
+    /*background-image: url(https://www.rpi.edu/dept/parking/image/maps_2_08.jpg);*/
+    background-color: #B22222;
     position: absolute;
     top: 0;
     left: 0;
@@ -38,6 +40,7 @@ body {
     /* This positions the canvas under the text */
     z-index: 1;
 }
+
 .card .avatar {
     position: relative;
     margin-top: 15px;
@@ -52,3 +55,5 @@ body {
     border-radius: 50%;
     border: 5px solid rgba(0,0,30,0.8);
 }
+
+.btn btn-default 
