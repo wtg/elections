@@ -7,7 +7,10 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/united/bootstrap.min.css" rel="stylesheet"
           integrity="sha256-nKQVXFJ5JtDJlI5p1UcSf0JOFudCj9RgjBDsJSZPsS4= sha512-dbadXecsBCgqQ5XGx6SG+bO4vsfzznX6/NfAG4CuzLi76wcdLGAw2KIcsLyv7H5XsEGq0zaznpxDCAEIX9pdYA=="
           crossorigin="anonymous">
-    <link rel="stylesheet" href="/stylesheets/main.css" />
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="/stylesheets/main.css" />
+	<link rel="stylesheet" href="/stylesheets/offices-card.css" />
 </head>
 <body ng-cloak>
     <nav class="navbar navbar-default">
@@ -20,16 +23,16 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="#">RPI Elections</a>
+              <a class="navbar-brand" href="#/home">RPI Elections</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-                <li><a href="#/">RPI Elections</a></li>
+                <li class="active"><a href="#/offices">Offices <span class="sr-only">(current)</span></a></li>
+                <li><a href="#/events">Events</a></li>
                 <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Run for Office <span class="caret"></span></a>
                   <ul class="dropdown-menu">
                     <li><a href="#">Action</a></li>
                     <li><a href="#">Another action</a></li>
@@ -42,17 +45,17 @@
                 </li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Link</a></li>
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                  <ul class="dropdown-menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">Separated link</a></li>
-                  </ul>
-                </li>
+                <li><a href="#">Candidate Login</a></li>
+                <!--<li class="dropdown">-->
+                  <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>-->
+                  <!--<ul class="dropdown-menu">-->
+                    <!--<li><a href="#">Action</a></li>-->
+                    <!--<li><a href="#">Another action</a></li>-->
+                    <!--<li><a href="#">Something else here</a></li>-->
+                    <!--<li role="separator" class="divider"></li>-->
+                    <!--<li><a href="#">Separated link</a></li>-->
+                  <!--</ul>-->
+                <!--</li>-->
               </ul>
             </div>
         </div>
@@ -71,5 +74,17 @@
     <script src="/javascripts/controllers/MainController.js"></script>
     <script src="/javascripts/controllers/HomeController.js"></script>
     <script src="/javascripts/controllers/OfficesController.js"></script>
+    <script src="/javascripts/controllers/CandidateController.js"></script>
+	<script type="text/javascript">
+		function rotateCard(btn){
+			var $card = $(btn).closest('.card-container');
+			console.log($card);
+			if($card.hasClass('hover')){
+				$card.removeClass('hover');
+			} else {
+				$card.addClass('hover');
+			}
+		}
+	</script>
 </body>
 </html>

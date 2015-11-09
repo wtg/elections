@@ -10,6 +10,9 @@ app.config(['$routeProvider', function ($routeProvider) {
     ];
 
     $routeProvider.
+        when('', {
+            redirectTo: '/home'
+        }).
         when('/home', {
             templateUrl: 'partials/home.html',
             controller: 'HomeController'
@@ -17,6 +20,13 @@ app.config(['$routeProvider', function ($routeProvider) {
         when('/offices', {
             templateUrl: 'partials/offices.html',
             controller: 'OfficesController'
+        }).
+        when('/offices/:filter', {
+            templateUrl: 'partials/offices.html',
+            controller: 'OfficesController'
+        }).
+        when('/candidate', {
+            redirectTo: '/offices'
         }).
         when('/candidate/:rcs', {
             templateUrl: 'partials/candidate.html',
