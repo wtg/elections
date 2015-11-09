@@ -1,13 +1,110 @@
-<div class="container">
-    <div class="row" ng-repeat="o in offices">
-        <div class="col-xs-12">
-            <h1>
+<div class="container offices shadow">
+	<div class="row">
+		<div class="col-xs-12 col-sm-6">
+			<h1>Offices</h1>
+		</div>
+		<div class="col-xs-12 col-sm-6">
+			<div class="btn-group pull-right header-btns">
+				<button class="btn btn-default" ng-click="setFilter()"
+						ng-class="{'active': filter == ''}">
+					All offices
+				</button>
+				<button class="btn btn-default" ng-click="setFilter('greek')"
+						ng-class="{'active': filter == 'greek'}">
+					Greek
+				</button>
+				<button class="btn btn-default" ng-click="setFilter('independent')"
+						ng-class="{'active': filter == 'independent'}">
+					Independent
+				</button>
+				<button class="btn btn-default" ng-click="setFilter('2016')"
+						ng-class="{'active': filter == '2016'}">
+					2016
+				</button>
+				<button class="btn btn-default" ng-click="setFilter('2017')"
+						ng-class="{'active': filter == '2017'}">
+					2017
+				</button>
+				<button class="btn btn-default" ng-click="setFilter('2018')"
+						ng-class="{'active': filter == '2018'}">
+					2018
+				</button>
+				<button class="btn btn-default" ng-click="setFilter('2019')"
+						ng-class="{'active': filter == '2019'}">
+					2019
+				</button>
+			</div>
+		</div>
+	</div>
+	<div class="row" ng-repeat-start="o in offices" ng-hide="filter != '' && filter != o.type">
+        <div class="col-xs-11">
+            <h2>
                 {{o.title}}
-            </h1>
+            </h2>
         </div>
+		<div class="col-xs-1">
+			<button class="btn btn-simple btn-lg">
+				<h2 class="fa fa-info-circle"></h2>
+			</button>
+		</div>
+		<div class="col-xs-12" ng-if="o.candidates === undefined || o.candidates.length == 0">
+			<p>No candidates are running for this position!</p>
+		</div>
         <div class="col-sm-3" ng-repeat="c in o.candidates">
-            <div class="card">
-                <canvas class="header-bg" width="250" height="70" id="header-blur"></canvas>
+			<div class="card-container manual-flip">
+                <div class="card">
+                    <div class="front">
+                        <div class="cover">
+                            <img src="rotating_card_thumb.png">
+                        </div>
+                        <div class="user">
+                            <img class="img-circle" src="rotating_card_profile2.png">
+                        </div>
+                        <div class="content">
+                            <div class="main">
+                                <h3 class="name">{{c.name}}</h3>
+                                <p class="profession"></p>
+                                <h5><i class="fa fa-graduation-cap fa-fw text-muted"></i> Mechanical Enginering </h5>
+                                <h5><i class="fa fa-map-marker fa-fw text-muted"></i> Bucharest, Romania</h5>
+                                <h5><i class="fa fa-envelope-o fa-fw text-muted"></i> {{c.rcsId}}@rpi.edu</h5>
+                            </div>
+                            <div class="footer">
+                                <button class="btn btn-simple" onclick="rotateCard(this)">
+                                    <i class="fa fa-plus"></i> More
+                                </button>
+								<a class="btn btn-simple" ng-href="#/candidate/{{c.rcsId}}">
+                                    <i class="fa fa-user"></i> View Platform
+                                </a>
+                            </div>
+                        </div>
+                    </div> <!-- end front panel -->
+                    <div class="back">
+                        <div class="header">
+                            <h5 class="motto">"To be or not to be, this is my awesome motto!"</h5>
+                        </div>
+                        <div class="content">
+                            <div class="main">
+                                <h4 class="text-center">Experince</h4>
+                                <p>Mike was working with our team since 2012.</p>
+                                <h4 class="text-center">Areas of Expertise</h4>
+                                <p>Web design, Adobe Photoshop, HTML5, CSS3, Corel and many others...</p>
+                            </div>
+                        </div>
+                        <div class="footer">
+                            <button class="btn btn-simple" rel="tooltip" title="" onclick="rotateCard(this)" data-original-title="Flip Card">
+                                <i class="fa fa-reply"></i> Back
+                            </button>
+                            <div class="social-links pull-right">
+                                <a href="http://cretive-tim.com" class="facebook"><i class="fa fa-facebook fa-fw"></i></a>
+                                <a href="http://cretive-tim.com" class="google"><i class="fa fa-google-plus fa-fw"></i></a>
+                                <a href="http://cretive-tim.com" class="twitter"><i class="fa fa-twitter fa-fw"></i></a>
+                            </div>
+                        </div>
+                    </div> <!-- end back panel -->
+                </div> <!-- end card -->
+            </div>
+			<!-- <div class="card">
+                <div class="header-bg" width="250" height="70"></div>
                 <div class="avatar">
                     <img ng-src="{{c.profileImage}}" alt=""/>
                 </div>
@@ -15,401 +112,11 @@
                     <h4>{{c.name}}</h4>
 
                     <p>
-                        <button type="button" class="btn btn-default">Contact</button>
+                        <button type="button" class="btn btn-default">View Profile</button>
                     </p>
                 </div>
-            </div>
+            </div> -->
         </div>
-        <!--<div class="col-sm-3">-->
-            <!--<div class="card">-->
-                <!--<canvas class="header-bg" width="250" height="70" id="header-blur"></canvas>-->
-                <!--<div class="avatar">-->
-                    <!--<img src="" alt=""/>-->
-                <!--</div>-->
-                <!--<div class="content">-->
-                    <!--<h4>Jason Lee</h4>-->
-
-                    <!--<p>-->
-                        <!--<button type="button" class="btn btn-default">Contact</button>-->
-                    <!--</p>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="col-sm-3">-->
-            <!--<div class="card">-->
-                <!--<canvas class="header-bg" width="250" height="70" id="header-blur"></canvas>-->
-                <!--<div class="avatar">-->
-                    <!--<img src="" alt=""/>-->
-                <!--</div>-->
-                <!--<div class="content">-->
-                    <!--<h4>Jason Lee</h4>-->
-
-                    <!--<p>-->
-                        <!--<button type="button" class="btn btn-default">Contact</button>-->
-                    <!--</p>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="col-sm-3">-->
-            <!--<div class="card">-->
-                <!--<canvas class="header-bg" width="250" height="70" id="header-blur"></canvas>-->
-                <!--<div class="avatar">-->
-                    <!--<img src="" alt=""/>-->
-                <!--</div>-->
-                <!--<div class="content">-->
-                    <!--<h4>Jason Lee</h4>-->
-
-                    <!--<p>-->
-                        <!--<button type="button" class="btn btn-default">Contact</button>-->
-                    <!--</p>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
     </div>
+	<hr ng-repeat-end ng-hide="filter != '' && filter != o.type" />
 </div>
-<script type="text/javascript">
-    var mul_table = [
-        512, 512, 456, 512, 328, 456, 335, 512, 405, 328, 271, 456, 388, 335, 292, 512,
-        454, 405, 364, 328, 298, 271, 496, 456, 420, 388, 360, 335, 312, 292, 273, 512,
-        482, 454, 428, 405, 383, 364, 345, 328, 312, 298, 284, 271, 259, 496, 475, 456,
-        437, 420, 404, 388, 374, 360, 347, 335, 323, 312, 302, 292, 282, 273, 265, 512,
-        497, 482, 468, 454, 441, 428, 417, 405, 394, 383, 373, 364, 354, 345, 337, 328,
-        320, 312, 305, 298, 291, 284, 278, 271, 265, 259, 507, 496, 485, 475, 465, 456,
-        446, 437, 428, 420, 412, 404, 396, 388, 381, 374, 367, 360, 354, 347, 341, 335,
-        329, 323, 318, 312, 307, 302, 297, 292, 287, 282, 278, 273, 269, 265, 261, 512,
-        505, 497, 489, 482, 475, 468, 461, 454, 447, 441, 435, 428, 422, 417, 411, 405,
-        399, 394, 389, 383, 378, 373, 368, 364, 359, 354, 350, 345, 341, 337, 332, 328,
-        324, 320, 316, 312, 309, 305, 301, 298, 294, 291, 287, 284, 281, 278, 274, 271,
-        268, 265, 262, 259, 257, 507, 501, 496, 491, 485, 480, 475, 470, 465, 460, 456,
-        451, 446, 442, 437, 433, 428, 424, 420, 416, 412, 408, 404, 400, 396, 392, 388,
-        385, 381, 377, 374, 370, 367, 363, 360, 357, 354, 350, 347, 344, 341, 338, 335,
-        332, 329, 326, 323, 320, 318, 315, 312, 310, 307, 304, 302, 299, 297, 294, 292,
-        289, 287, 285, 282, 280, 278, 275, 273, 271, 269, 267, 265, 263, 261, 259
-    ];
-
-
-    var shg_table = [
-        9, 11, 12, 13, 13, 14, 14, 15, 15, 15, 15, 16, 16, 16, 16, 17,
-        17, 17, 17, 17, 17, 17, 18, 18, 18, 18, 18, 18, 18, 18, 18, 19,
-        19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 20, 20, 20,
-        20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 21,
-        21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21,
-        21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 22, 22, 22, 22, 22, 22,
-        22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22,
-        22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 23,
-        23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
-        23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
-        23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
-        23, 23, 23, 23, 23, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24,
-        24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24,
-        24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24,
-        24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24,
-        24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24
-    ];
-
-
-    function stackBlurCanvasRGBA(canvas, top_x, top_y, width, height, radius) {
-        if (isNaN(radius) || radius < 1) return;
-        radius |= 0;
-
-        var context = canvas.getContext("2d");
-        var imageData;
-
-        try {
-            try {
-                imageData = context.getImageData(top_x, top_y, width, height);
-            } catch (e) {
-
-                // NOTE: this part is supposedly only needed if you want to work with local files
-                // so it might be okay to remove the whole try/catch block and just use
-                // imageData = context.getImageData( top_x, top_y, width, height );
-                try {
-                    netscape.security.PrivilegeManager.enablePrivilege("UniversalBrowserRead");
-                    imageData = context.getImageData(top_x, top_y, width, height);
-                } catch (e) {
-                    alert("Cannot access local image");
-                    throw new Error("unable to access local image data: " + e);
-                    return;
-                }
-            }
-        } catch (e) {
-            alert("Cannot access image");
-            throw new Error("unable to access image data: " + e);
-        }
-
-        var pixels = imageData.data;
-
-        var x, y, i, p, yp, yi, yw, r_sum, g_sum, b_sum, a_sum,
-                r_out_sum, g_out_sum, b_out_sum, a_out_sum,
-                r_in_sum, g_in_sum, b_in_sum, a_in_sum,
-                pr, pg, pb, pa, rbs;
-
-        var div = radius + radius + 1;
-        var w4 = width << 2;
-        var widthMinus1 = width - 1;
-        var heightMinus1 = height - 1;
-        var radiusPlus1 = radius + 1;
-        var sumFactor = radiusPlus1 * ( radiusPlus1 + 1 ) / 2;
-
-        var stackStart = new BlurStack();
-        var stack = stackStart;
-        for (i = 1; i < div; i++) {
-            stack = stack.next = new BlurStack();
-            if (i == radiusPlus1) var stackEnd = stack;
-        }
-        stack.next = stackStart;
-        var stackIn = null;
-        var stackOut = null;
-
-        yw = yi = 0;
-
-        var mul_sum = mul_table[radius];
-        var shg_sum = shg_table[radius];
-
-        for (y = 0; y < height; y++) {
-            r_in_sum = g_in_sum = b_in_sum = a_in_sum = r_sum = g_sum = b_sum = a_sum = 0;
-
-            r_out_sum = radiusPlus1 * ( pr = pixels[yi] );
-            g_out_sum = radiusPlus1 * ( pg = pixels[yi + 1] );
-            b_out_sum = radiusPlus1 * ( pb = pixels[yi + 2] );
-            a_out_sum = radiusPlus1 * ( pa = pixels[yi + 3] );
-
-            r_sum += sumFactor * pr;
-            g_sum += sumFactor * pg;
-            b_sum += sumFactor * pb;
-            a_sum += sumFactor * pa;
-
-            stack = stackStart;
-
-            for (i = 0; i < radiusPlus1; i++) {
-                stack.r = pr;
-                stack.g = pg;
-                stack.b = pb;
-                stack.a = pa;
-                stack = stack.next;
-            }
-
-            for (i = 1; i < radiusPlus1; i++) {
-                p = yi + (( widthMinus1 < i ? widthMinus1 : i ) << 2 );
-                r_sum += ( stack.r = ( pr = pixels[p])) * ( rbs = radiusPlus1 - i );
-                g_sum += ( stack.g = ( pg = pixels[p + 1])) * rbs;
-                b_sum += ( stack.b = ( pb = pixels[p + 2])) * rbs;
-                a_sum += ( stack.a = ( pa = pixels[p + 3])) * rbs;
-
-                r_in_sum += pr;
-                g_in_sum += pg;
-                b_in_sum += pb;
-                a_in_sum += pa;
-
-                stack = stack.next;
-            }
-
-
-            stackIn = stackStart;
-            stackOut = stackEnd;
-            for (x = 0; x < width; x++) {
-                pixels[yi + 3] = pa = (a_sum * mul_sum) >> shg_sum;
-                if (pa != 0) {
-                    pa = 255 / pa;
-                    pixels[yi] = ((r_sum * mul_sum) >> shg_sum) * pa;
-                    pixels[yi + 1] = ((g_sum * mul_sum) >> shg_sum) * pa;
-                    pixels[yi + 2] = ((b_sum * mul_sum) >> shg_sum) * pa;
-                } else {
-                    pixels[yi] = pixels[yi + 1] = pixels[yi + 2] = 0;
-                }
-
-                r_sum -= r_out_sum;
-                g_sum -= g_out_sum;
-                b_sum -= b_out_sum;
-                a_sum -= a_out_sum;
-
-                r_out_sum -= stackIn.r;
-                g_out_sum -= stackIn.g;
-                b_out_sum -= stackIn.b;
-                a_out_sum -= stackIn.a;
-
-                p = ( yw + ( ( p = x + radius + 1 ) < widthMinus1 ? p : widthMinus1 ) ) << 2;
-
-                r_in_sum += ( stackIn.r = pixels[p]);
-                g_in_sum += ( stackIn.g = pixels[p + 1]);
-                b_in_sum += ( stackIn.b = pixels[p + 2]);
-                a_in_sum += ( stackIn.a = pixels[p + 3]);
-
-                r_sum += r_in_sum;
-                g_sum += g_in_sum;
-                b_sum += b_in_sum;
-                a_sum += a_in_sum;
-
-                stackIn = stackIn.next;
-
-                r_out_sum += ( pr = stackOut.r );
-                g_out_sum += ( pg = stackOut.g );
-                b_out_sum += ( pb = stackOut.b );
-                a_out_sum += ( pa = stackOut.a );
-
-                r_in_sum -= pr;
-                g_in_sum -= pg;
-                b_in_sum -= pb;
-                a_in_sum -= pa;
-
-                stackOut = stackOut.next;
-
-                yi += 4;
-            }
-            yw += width;
-        }
-
-
-        for (x = 0; x < width; x++) {
-            g_in_sum = b_in_sum = a_in_sum = r_in_sum = g_sum = b_sum = a_sum = r_sum = 0;
-
-            yi = x << 2;
-            r_out_sum = radiusPlus1 * ( pr = pixels[yi]);
-            g_out_sum = radiusPlus1 * ( pg = pixels[yi + 1]);
-            b_out_sum = radiusPlus1 * ( pb = pixels[yi + 2]);
-            a_out_sum = radiusPlus1 * ( pa = pixels[yi + 3]);
-
-            r_sum += sumFactor * pr;
-            g_sum += sumFactor * pg;
-            b_sum += sumFactor * pb;
-            a_sum += sumFactor * pa;
-
-            stack = stackStart;
-
-            for (i = 0; i < radiusPlus1; i++) {
-                stack.r = pr;
-                stack.g = pg;
-                stack.b = pb;
-                stack.a = pa;
-                stack = stack.next;
-            }
-
-            yp = width;
-
-            for (i = 1; i <= radius; i++) {
-                yi = ( yp + x ) << 2;
-
-                r_sum += ( stack.r = ( pr = pixels[yi])) * ( rbs = radiusPlus1 - i );
-                g_sum += ( stack.g = ( pg = pixels[yi + 1])) * rbs;
-                b_sum += ( stack.b = ( pb = pixels[yi + 2])) * rbs;
-                a_sum += ( stack.a = ( pa = pixels[yi + 3])) * rbs;
-
-                r_in_sum += pr;
-                g_in_sum += pg;
-                b_in_sum += pb;
-                a_in_sum += pa;
-
-                stack = stack.next;
-
-                if (i < heightMinus1) {
-                    yp += width;
-                }
-            }
-
-            yi = x;
-            stackIn = stackStart;
-            stackOut = stackEnd;
-            for (y = 0; y < height; y++) {
-                p = yi << 2;
-                pixels[p + 3] = pa = (a_sum * mul_sum) >> shg_sum;
-                if (pa > 0) {
-                    pa = 255 / pa;
-                    pixels[p] = ((r_sum * mul_sum) >> shg_sum ) * pa;
-                    pixels[p + 1] = ((g_sum * mul_sum) >> shg_sum ) * pa;
-                    pixels[p + 2] = ((b_sum * mul_sum) >> shg_sum ) * pa;
-                } else {
-                    pixels[p] = pixels[p + 1] = pixels[p + 2] = 0;
-                }
-
-                r_sum -= r_out_sum;
-                g_sum -= g_out_sum;
-                b_sum -= b_out_sum;
-                a_sum -= a_out_sum;
-
-                r_out_sum -= stackIn.r;
-                g_out_sum -= stackIn.g;
-                b_out_sum -= stackIn.b;
-                a_out_sum -= stackIn.a;
-
-                p = ( x + (( ( p = y + radiusPlus1) < heightMinus1 ? p : heightMinus1 ) * width )) << 2;
-
-                r_sum += ( r_in_sum += ( stackIn.r = pixels[p]));
-                g_sum += ( g_in_sum += ( stackIn.g = pixels[p + 1]));
-                b_sum += ( b_in_sum += ( stackIn.b = pixels[p + 2]));
-                a_sum += ( a_in_sum += ( stackIn.a = pixels[p + 3]));
-
-                stackIn = stackIn.next;
-
-                r_out_sum += ( pr = stackOut.r );
-                g_out_sum += ( pg = stackOut.g );
-                b_out_sum += ( pb = stackOut.b );
-                a_out_sum += ( pa = stackOut.a );
-
-                r_in_sum -= pr;
-                g_in_sum -= pg;
-                b_in_sum -= pb;
-                a_in_sum -= pa;
-
-                stackOut = stackOut.next;
-
-                yi += width;
-            }
-        }
-
-        context.putImageData(imageData, top_x, top_y);
-
-    }
-
-    function BlurStack() {
-        this.r = 0;
-        this.g = 0;
-        this.b = 0;
-        this.a = 0;
-        this.next = null;
-    }
-
-    $(document).ready(function () {
-        var BLUR_RADIUS = 40;
-        var sourceImages = [];
-
-        $('.src-image').each(function () {
-            sourceImages.push($(this).attr('src'));
-        });
-
-        $('.avatar img').each(function (index) {
-            $(this).attr('src', sourceImages[index]);
-        });
-
-        var drawBlur = function (canvas, image) {
-            var w = canvas.width;
-            var h = canvas.height;
-            var canvasContext = canvas.getContext('2d');
-            canvasContext.drawImage(image, 0, 0, w, h);
-            stackBlurCanvasRGBA(canvas, 0, 0, w, h, BLUR_RADIUS);
-        };
-
-
-        $('.card canvas').each(function (index) {
-            var canvas = $(this)[0];
-
-            var image = new Image();
-            image.src = sourceImages[index];
-
-            image.onload = function () {
-                drawBlur(canvas, image);
-            }
-        });
-    });
-</script>
-
-
-<!--<img class="src-image"-->
-     <!--src=""/>-->
-
-<!--<img class="src-image"-->
-     <!--src="data:image/jpg;base64,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"/>-->
-
-<!--<img class="src-image"-->
-     <!--src="data:image/jpeg;base64,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"/>-->
-<!--<img class="src-image"-->
-     <!--src="data:image/jpeg;base64,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"/>-->

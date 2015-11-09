@@ -1,44 +1,85 @@
+/*
+Table of Contents
+  * General
+  * Home
+  * Offices
+  * Candidate Page
+  * Mobile
+*/
+
+/* General */
 body {
-	padding-top: 70px;
-}
-
-.src-image {
-    display: none;
-}
-
-.card {
-    overflow: hidden;
-    position: relative;
-    border: 1px solid #CCC;
-    border-radius: 8px;
-    text-align: center;
+    margin: 0;
     padding: 0;
-    background-color: #bf3e11;
-    color: #ffffff;
+    background-color: #E5E9ED;
 }
 
-.card .header-bg {
-    /* This stretches the canvas across the entire hero unit */
-    position: absolute;
-    top: 0;
-    left: 0;
+body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, p, .p {
+	font-family: 'Droid Sans', sans-serif;
+}
+
+h1, .header-btns {
+	margin-top: 10px;
+}
+
+/* Home */
+
+/* Candidate Page */
+.cover-photo img{
     width: 100%;
-    height: 70px;
-    border-bottom: 1px #FFF solid;
-    /* This positions the canvas under the text */
-    z-index: 1;
+    height: 15em;
+    overflow: auto;
 }
-.card .avatar {
+.profile {
+    border-radius: 100%;
+    border: 1em solid white;
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/6/6b/Shirley_Ann_Jackson_World_Economic_Forum_2010.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 250px;
+    height: 250px;
+    margin: 0 auto;
     position: relative;
-    margin-top: 15px;
-    z-index: 100;
+    top: -6em;
+    margin-top: 4em;
+    margin-bottom: -200px;
+}
+#candidate {
+    background-color: #DD4814;
+    border-radius: 3em;
+    padding: 100px 1em;
+    color: white;
+    max-width: 1000px;
+}
+#candidate h1 {
+	margin-top: 40px;
+    text-align: center;
+}
+#candidate-content {
+    background-color: white;
+    padding: 5em 2em 1em 2em;
+    max-width: 900px;
+    position: relative;
+    top: -2em;
+    z-index: -1;
 }
 
-.card .avatar img {
-    width: 100px;
-    height: 100px;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    border-radius: 50%;
-    border: 5px solid rgba(0,0,30,0.8);
+/* Offices */
+.offices {
+	margin-top: -20px;
+	background-color: white;
+	padding-top: 20px;
+	padding-left: 40px;
+	padding-right: 40px;
 }
+
+
+/* Mobile */
+@media (min-width: 600px) {
+    .shadow {
+        -webkit-box-shadow: 0px 2px 11px -2px rgba(0,0,0,0.75);
+        -moz-box-shadow: 0px 2px 11px -2px rgba(0,0,0,0.75);
+        box-shadow: 0px 2px 11px -2px rgba(0,0,0,0.75);
+    }
+}
+.btn btn-default
