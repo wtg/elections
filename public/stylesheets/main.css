@@ -60,20 +60,36 @@ footer {
   background-color: #960e0e;
 }
 
+.btn-primary {
+    color: #ffffff;
+	background-color: #EB5E66;
+	border-color: #e34b54;
+}
+
+.btn-primary:hover {
+    color: #ffffff;
+    background-color: #ad1e10;
+    border-color: #960e0e;
+}
+
 /* Home */
 .carousel {
 	margin-top: -20px;
 	border-bottom: 6px solid #EB5E66;
+	background-color: white;
 }
 .carousel .item {
     width: 100%; /*slider width*/
-    max-height: 400px; /*slider height*/
-	vertical-align: bottom;
+	height: 400px; /*slider height*/
+	vertical-align: middle;
+    background-position: center;
 }
 
-.carousel .item img {
-    width: 100%; /*img width*/
-}
+.slide1 { background-image: url('/images/union_slide.jpg') }
+.slide2 { background-image: url('/images/quad_winter_slide.jpg') }
+.slide3 { background-image: url('/images/campus_from_ecav_slide.jpg') }
+.slide4 { background-image: url('/images/vcc_slide.jpg') }
+
 /*add some makeup*/
 .carousel .carousel-control {
     background: none;
@@ -82,7 +98,7 @@ footer {
 }
 
 .carousel-caption {
-	background: rgba(0,0,0,.4);
+	background: rgba(0,0,0,.6);
 	border-radius: 10px;
 }
 
@@ -93,6 +109,12 @@ footer {
 .home-sidebar {
 	border-left: thin solid #aaa;
 	margin-bottom: 20px;
+}
+
+@media (max-width: 991px) {
+	.home-sidebar {
+		border-left: none;
+	}
 }
 
 .spotlight-img {
