@@ -22,7 +22,126 @@ h1, .header-btns {
 	margin-top: 10px;
 }
 
+.page {
+	margin-top: -20px;
+	background-color: white;
+	padding-top: 20px;
+	padding-left: 40px;
+	padding-right: 40px;
+	margin-bottom: 20px;
+}
+
+@media (max-width: 600px) {
+	.page {
+		margin-top:0;
+	}
+	.carousel {
+		margin-top:20px;
+	}
+}
+
+footer {
+	padding-bottom: 15px;
+}
+
+.navbar-default {
+	background-color: #EB5E66;
+	border-color: #e34b54;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus {
+    color: #ffffff;
+    background-color: #ad1e10;
+}
+
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+  color: #ffffff;
+  background-color: #960e0e;
+}
+
+.btn-primary {
+    color: #ffffff;
+	background-color: #EB5E66;
+	border-color: #e34b54;
+}
+
+.btn-primary:hover {
+    color: #ffffff;
+    background-color: #ad1e10;
+    border-color: #960e0e;
+}
+
 /* Home */
+.carousel {
+	margin-top: -20px;
+	border-bottom: 6px solid #EB5E66;
+	background-color: white;
+}
+.carousel .item {
+    width: 100%; /*slider width*/
+	height: 400px; /*slider height*/
+	vertical-align: middle;
+    background-position: center;
+}
+
+.item:first-child  { background-image: url('/images/union_slide.jpg') }
+.item:nth-child(2) { background-image: url('/images/quad_winter_slide.jpg') }
+.item:nth-child(3) { background-image: url('/images/campus_from_ecav_slide.jpg') }
+.item:last-child   { background-image: url('/images/vcc_slide.jpg') }
+
+/*add some makeup*/
+.carousel .carousel-control {
+    background: none;
+    border: none;
+    top: 50%;
+}
+
+.carousel-caption {
+	background: rgba(0,0,0,.6);
+	border-radius: 10px;
+}
+
+.home {
+	padding-top:40px;
+}
+
+.home-sidebar {
+	border-left: thin solid #aaa;
+	margin-bottom: 20px;
+}
+
+@media (max-width: 991px) {
+	.home-sidebar {
+		border-left: none;
+	}
+}
+
+.spotlight-img {
+	margin-right: 10px;
+	margin-bottom: 5px;
+}
+
+.event-list, .election-tips {
+	list-style: none;
+	padding-left: 0;
+}
+
+.event-list > li {
+	padding-bottom: 7px;
+}
+
+.election-tips > li {
+    padding-bottom: 12px;
+}
+
+/*full width container*/
+@media (max-width: 767px) {
+    .block {
+        margin-left: -20px;
+        margin-right: -20px;
+    }
+}
 
 /* Candidate Page */
 .cover-photo img{
@@ -45,7 +164,7 @@ h1, .header-btns {
     margin-bottom: -200px;
 }
 #candidate {
-    background-color: #DD4814;
+    background-color: #EB5E66;
     border-radius: 3em;
     padding: 100px 1em;
     color: white;
@@ -65,13 +184,6 @@ h1, .header-btns {
 }
 
 /* Offices */
-.offices {
-	margin-top: -20px;
-	background-color: white;
-	padding-top: 20px;
-	padding-left: 40px;
-	padding-right: 40px;
-}
 
 
 /* Mobile */
@@ -82,4 +194,3 @@ h1, .header-btns {
         box-shadow: 0px 2px 11px -2px rgba(0,0,0,0.75);
     }
 }
-.btn btn-default

@@ -1,7 +1,117 @@
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <h1>Test</h1>
-        </div>
+<div id="myCarousel" class="carousel slide" data-ride="carousel">
+  <!-- Indicators -->
+  <ol class="carousel-indicators">
+    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+    <li data-target="#myCarousel" data-slide-to="1"></li>
+    <li data-target="#myCarousel" data-slide-to="2"></li>
+    <li data-target="#myCarousel" data-slide-to="3"></li>
+  </ol>
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner" role="listbox">
+  	<div ng-repeat="s in slides" class="item " ng-class="{'active': $index === 0}" >
+		<div class="carousel-caption">
+			<h1 ng-bind="s.header"></h1>
+			<p ng-bind="s.body"></p>
+		</div>
     </div>
+  </div>
+</div>
+<div class="container page shadow home">
+	<div class="row">
+        <div class="col-md-8">
+			<div class="row">
+		        <div class="col-md-12">
+					<h1 ng-bind="pageHeader"></h1>
+					<br />
+				</div>
+			</div>
+            <div class="row text-center" ng-repeat-start="num in [2,4]">
+				<div class="col-sm-6" ng-repeat="i in infoBlocks.slice(num == 4? 2 : 0,num)">
+					<span class="fa fa-4x" ng-class="i.icon"></span>
+					<h2 ng-bind="i.header"></h2>
+					<p ng-bind="i.body"></p>
+				</div>
+			</div>
+			<hr ng-repeat-end/>
+			<div class="row">
+				<div class="col-md-12">
+					<h1 ng-bind="electionTips.header">Election Rules and Tips</h1>
+					<ul class="election-tips">
+						<li ng-repeat="t in electionTips.list track by $index" ng-bind-html="trust(t)">
+							<b>Don't:</b> tear down posters, even if they appear to be
+							in violation of an RnE regulation.
+							<br/>
+							<b>Do:</b> report violations to RnE so they can take appropriate
+							action. Email reports to <a href="mailto:rne@union.rpi.edu">rne@union.rpi.edu</a>.
+						</li>
+					</ul>
+					<div class="btn-toolbar">
+						<button class="btn btn-default">
+							<span class="fa fa-list"></span> See more tips
+						</button>
+						<button class="btn btn-primary">
+							<span class="fa fa-book"></span> View the handbook
+						</button>
+					</div>
+				</div>
+			</div>
+        </div>
+		<div class="col-md-4 home-sidebar">
+			<h2 ng-bind="candidateHeader"></h2>
+			<img class="pull-left spotlight-img" ng-src="{{randomCandidate.img}}">
+			<h4 ng-bind="randomCandidate.name"></h4>
+			<h5>{{randomCandidate.position}} Candidate</h5>
+			<p ng-bind="randomCandidate.bio"></p>
+			<div class="btn-toolbar pull-right">
+				<button class="btn btn-default">
+					<span class="fa fa-random"></span> Refresh
+				</button>
+				<a class="btn btn-primary" ng-href="#/candidate/{{randomCandidate.rcsId}}">
+					<span class="fa fa-user"></span> View Platform
+				</a>
+			</div>
+			<div class="clearfix"></div>
+			<hr/>
+			<h2 ng-bind="eventHeader"></h2>
+			<ul class="event-list">
+				<li ng-repeat="e in events">
+					<p>
+						<strong ng-bind="e.name"></strong>
+						<span class="pull-right" ng-bind="e.date | date:'longDate'"></span>
+						<br/>
+						<span ng-bind="e.location"></span>
+						<span class="pull-right" ng-bind="e.date | date:'shortTime'">7:00 pm</span>
+					</p>
+					<p ng-bind="e.desc"></p>
+				</li>
+			</ul>
+			<div class="btn-toolbar">
+				<button class="btn btn-primary pull-right">
+					<span class="fa fa-calendar"></span> View More
+				</button>
+			</div>
+		</div>
+    </div>
+	<footer>
+		<hr/>
+		<div class="row">
+			<div class="col-sm-8 col-xs-12">
+				<small>
+					This website was created by the Web Technologies Group of
+					the Rensselaer Union Student Senate.<br/>
+					Content on this website is monitored by the Rules and Elections
+					Committee.<br/>Statements made by candidates do not represent
+					views of RPI, the Rensselaer Union, or the Student Senate.
+				</small>
+			</div>
+			<div class="col-xs-4 col-sm-2 col-xs-offset-2 col-sm-offset-0">
+				<img src="/images/rne.svg" class="img-responsive pull-right">
+			</div>
+			<div class="col-xs-4 col-sm-2">
+				<img src="/images/wtg.svg" class="img-responsive pull-right">
+			</div>
+		</div>
+
+	</footer>
 </div>
