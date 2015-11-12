@@ -122,13 +122,17 @@ footer {
 	margin-bottom: 5px;
 }
 
-.event-list {
+.event-list, .election-tips {
 	list-style: none;
 	padding-left: 0;
 }
 
 .event-list > li {
 	padding-bottom: 7px;
+}
+
+.election-tips > li {
+    padding-bottom: 12px;
 }
 
 /*full width container*/
