@@ -85,10 +85,10 @@ footer {
     background-position: center;
 }
 
-.slide1 { background-image: url('/images/union_slide.jpg') }
-.slide2 { background-image: url('/images/quad_winter_slide.jpg') }
-.slide3 { background-image: url('/images/campus_from_ecav_slide.jpg') }
-.slide4 { background-image: url('/images/vcc_slide.jpg') }
+.item:first-child  { background-image: url('/images/union_slide.jpg') }
+.item:nth-child(2) { background-image: url('/images/quad_winter_slide.jpg') }
+.item:nth-child(3) { background-image: url('/images/campus_from_ecav_slide.jpg') }
+.item:last-child   { background-image: url('/images/vcc_slide.jpg') }
 
 /*add some makeup*/
 .carousel .carousel-control {
