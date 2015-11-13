@@ -17,23 +17,24 @@ app.controller('OfficesController', ['$scope', '$routeParams', '$location', func
 	};
 
 	$scope.nominationPercentage = function(obtained, required) {
-		// if(obtained > required) {
-		// 	return 100;
-		// } else if(obtained < 0) {
-		// 	return 0;
-		// } else if(required == 0) {
-		// 	if(obtained == 0) {
-		// 		return 100;
-		// 	} else {
-		// 		return 0;
-		// 	}
-		// }
+		if(obtained > required) {
+			return 100;
+		} else if(obtained < 0) {
+			return 0;
+		} else if(required == 0) {
+			if(obtained == 0) {
+				return 100;
+			} else {
+				return 0;
+			}
+		}
 
 		return Math.round((obtained/required)*100) + '%';
 	}
 
 	$scope.offices = [
         {
+        	id: 1,
             title: "Grand Marshal",
             description: "",
 			type: "all",
@@ -75,10 +76,12 @@ app.controller('OfficesController', ['$scope', '$routeParams', '$location', func
             ]
         },
 		{
+        	id: 2,
             title: "President of the Union",
             description: "",
 			type: "all",
             numberOpenings: 1,
+			nominationsRequired: 600,
             candidates: [
                 {
                     candidateId: 1,
@@ -125,18 +128,22 @@ app.controller('OfficesController', ['$scope', '$routeParams', '$location', func
             ]
         },
 		{
+        	id: 3,
 			title: "Independent Senator",
 			type: "independent"
 		},
 		{
+        	id: 4,
 			title: "Greek Senator: IFC",
 			type: "greek"
 		},
 		{
+        	id: 5,
 			title: "Greek Senator: Panhellenic",
 			type: "greek"
 		},
 		{
+        	id: 6,
             title: "Class of 2017 President",
             description: "",
 			type: "2017",
@@ -173,72 +180,91 @@ app.controller('OfficesController', ['$scope', '$routeParams', '$location', func
             ]
         },
 		{
+        	id: 7,
 			title: "Class of 2017 Vice-President",
 			type: "2017"
 		},
 		{
+        	id: 8,
 			title: "Class of 2017 Senator",
 			type: "2017"
 	 	},
 		{
+        	id: 9,
 			title: "Class of 2017 Representative",
 			type: "2017"
 		},
 		{
+        	id: 10,
 			title: "Class of 2018 President",
 			type: "2018"
 		},
 		{
+        	id: 11,
 			title: "Class of 2018 Vice-President",
 			type: "2018"
 		},
 		{
+        	id: 12,
 			title: "Class of 2018 Senator",
 			type: "2018"
 		},
 		{
+        	id: 13,
 			title: "Class of 2018 Representative",
 			type: "2018"
 		},
 		{
+        	id: 14,
 			title: "Class of 2019 President",
 			type: "2019"
 		},
 		{
+        	id: 15,
 			title: "Class of 2019 Vice-President",
 			type: "2019"
 		},
 		{
+        	id: 16,
 			title: "Class of 2019 Senator",
 			type: "2019"
 		},
 		{
+        	id: 17,
 			title: "Class of 2019 Representative",
 			type: "2019"
 		},
 		{
+        	id: 18,
 			title: "Class of 2016 Alumni President",
 			type: "2016"
 		},
 		{
+        	id: 19,
 			title: "Class of 2016 Alumni Vice-President",
 			type: "2016"
 		},
 		{
+        	id: 20,
 			title: "Class of 2016 Alumni Secretary",
 			type: "2016"
 		},
 		{
+        	id: 21,
 			title: "Class of 2016 Alumni Treasurer",
 			type: "2016"
 		},
 		{
+        	id: 22,
 			title: "Graduate Class Senator",
 			type: "graduate"
 		},
 		{
+        	id: 23,
 			title: "Graduate Class Representative",
 			type: "graduate"
 		}
     ];
+
+	$scope.currentEditId = $scope.offices[0].id;
 }]);

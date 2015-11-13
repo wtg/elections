@@ -3,4 +3,5 @@ app.controller('MainController', ['$scope', '$location', function($scope,$locati
 		console.log($location.path().split('/')[1]);
 		return $location.path().split('/')[1] == path;
 	}
+	$scope.isRNE = true;
 }]);

@@ -37,6 +37,10 @@
 						ng-class="{'active': filter == 'graduate'}">
 					Graduate
 				</button>
+				<button class="btn btn-primary" ng-if="isRNE" ng-click="setFilter('edit')"
+						ng-class="{'active': filter == 'edit'}">
+					Edit Offices
+				</button>
 			</div>
 		</div>
 	</div>
@@ -73,8 +77,10 @@
                                 <h5><a ng-href="{{c.rcsId}}@rpi.edu">
 									<i class="fa fa-envelope-o fa-fw text-muted"></i> {{c.rcsId}}@rpi.edu
 								</a></h5>
-								<div class="progress text-center">
+								<h5 class="text-center" ng-if="o.nominationsRequired === undefined || o.nominationsRequired <= 0">No nominations required</h5>
+								<div class="progress text-center" ng-if="o.nominationsRequired !== undefined">
 									<span ng-if="c.nominations/o.nominationsRequired < .33">{{c.nominations}}/{{o.nominationsRequired}}</span>
+									<span ng-if="c.nominations === undefined && o.nominationsRequired !== undefined">0/{{o.nominationsRequired}}</span>
 									<div class="progress-bar" role="progressbar" aria-valuenow="{{c.nominations}}" aria-valuemin="0"
 								  	   aria-valuemax="{{o.nominationsRequired}}" ng-style="{'width': nominationPercentage(c.nominations, o.nominationsRequired)}">
 									   <span ng-if="c.nominations/o.nominationsRequired >= .33">{{c.nominations}}/{{o.nominationsRequired}}</span>
@@ -132,6 +138,75 @@
         </div>
     </div>
 	<hr ng-repeat-end ng-if="filter == '' || filter == o.type" />
+    <div class="row" ng-if="isRNE && filter == 'edit'">
+    	<hr/>
+    	<div class="col-md-3">
+    		<ul class="nav nav-pills nav-stacked">
+    			<li role="presentation" ng-repeat="o in offices"><a href="#">{{o.title}}</a></li>
+    		</ul>
+    	</div>
+    	<div class="col-md-9" ng-repeat="o in offices" ng-show="currentEditId == o.id">
+    		<h2><i class="text-muted">Editing:</i> <span ng-bind="o.title"></span></h2>
+    		<hr/>
+    		<form class="form-horizontal">
+    			<div class="form-group">
+    				<label for="posTitle" class="col-sm-3 control-label">Office Title</label>
+    				<div class="col-sm-9">
+    					<input class="form-control" type="text" name="posTitle" id="posTitle" ng-model="o.title"/>
+    				</div>
+    			</div>
+    			<div class="form-group">
+    				<label for="posDesc" class="col-sm-3 control-label">Office Description</label>
+    				<div class="col-sm-9">
+    					<textarea class="form-control" name="posDesc" id="posDesc"/>
+    				</div>
+    			</div>
+    			<div class="form-group">
+    				<label for="posNomReq" class="col-sm-3 control-label">Required Nominations</label>
+    				<div class="col-sm-9">
+    					<input class="form-control" type="number" name="posNomReq" id="posNomReq"/>
+    					<span id="helpBlock" class="help-block">For a position with no required nominations, enter 0.</span>
+    				</div>
+    			</div>
+    		</form>
+    		<hr/>
+    		<h3>Candidates</h3>
+    		<p class="text-muted">
+    			<span class="text-success">Green</span> rows denote candidates that have achieved 100% of the necessary nominations.
+    			<span class="text-warning">Yellow</span> rows denote candidates that have collected less than the necessary nominations.
+    		</p>
+    		<ul class="list-group">
+				<li class="list-group-item list-group-item-success">
+					<button class="btn btn-default btn-xs pull-right"><span class="fa fa-times"></span></button>
+					Person Name <span class="text-muted">(namep)</span>
+				</li>
+				<li class="list-group-item list-group-item-success">
+					<button class="btn btn-default btn-xs pull-right"><span class="fa fa-times"></span></button>
+					Person Name <span class="text-muted">(namep)</span>
+				</li>
+				<li class="list-group-item list-group-item-warning">
+					<button class="btn btn-default btn-xs pull-right"><span class="fa fa-times"></span></button>
+					Person Name <span class="text-muted">(namep)</span>
+				</li>
+				<li class="list-group-item">
+					<button class="btn btn-default btn-xs pull-right"><span class="fa fa-times"></span></button>
+					Person Name <span class="text-muted">(namep)</span>
+				</li>
+				<li class="list-group-item">
+					<button class="btn btn-default btn-xs pull-right"><span class="fa fa-times"></span></button>
+					Person Name <span class="text-muted">(namep)</span>
+				</li>
+			</ul>
+			<div class="input-group">
+				<input class="form-control" type="text" placeholder="New candidate's RIN or RCS ID"/>
+				<span class="input-group-btn">
+		        	<button class="btn btn-primary" type="button">Add</button>
+		      	</span>
+			</div>
+			<hr/>
+    	</div>
+    </div>
+    <hr ng-if="filter == 'edit'"/>
 	<footer>
 		<div class="row">
 			<div class="col-sm-8 col-xs-12">
