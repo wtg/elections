@@ -22,6 +22,14 @@ h1, .header-btns {
 	margin-top: 10px;
 }
 
+a {
+	color:#EB5E66;
+}
+a:hover {
+	text-decoration: none;
+	color: #960e0e;
+}
+
 .page {
 	margin-top: -20px;
 	background-color: white;

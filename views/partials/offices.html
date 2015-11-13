@@ -1,9 +1,9 @@
 <div class="container page shadow">
 	<div class="row">
-		<div class="col-xs-12 col-sm-6">
+		<div class="col-sm-12 col-md-2">
 			<h1>Offices</h1>
 		</div>
-		<div class="col-xs-12 col-sm-6">
+		<div class="col-sm-12 col-md-10">
 			<div class="btn-group pull-right header-btns">
 				<button class="btn btn-default" ng-click="setFilter()"
 						ng-class="{'active': filter == ''}">
@@ -33,6 +33,10 @@
 						ng-class="{'active': filter == '2019'}">
 					2019
 				</button>
+				<button class="btn btn-default" ng-click="setFilter('graduate')"
+						ng-class="{'active': filter == 'graduate'}">
+					Graduate
+				</button>
 			</div>
 		</div>
 	</div>
@@ -50,7 +54,7 @@
 		<div class="col-xs-12" ng-if="o.candidates === undefined || o.candidates.length == 0">
 			<p>No candidates are running for this position!</p>
 		</div>
-        <div class="col-sm-3" ng-repeat="c in o.candidates">
+        <div class="col-md-3 col-sm-6 col-xs-12" ng-repeat="c in o.candidates">
 			<div class="card-container manual-flip">
                 <div class="card">
                     <div class="front">
@@ -63,10 +67,19 @@
                         <div class="content">
                             <div class="main">
                                 <h3 class="name">{{c.name}}</h3>
-                                <p class="profession"></p>
+                                <p ng-if="c.party === undefined || c.party == ''" class="profession">Unaffiliated</p>
+                                <p ng-if="c.party !== undefined && c.party != ''" class="profession" ng-bind="c.party"></p>
                                 <h5><i class="fa fa-graduation-cap fa-fw text-muted"></i> Mechanical Enginering </h5>
-                                <h5><i class="fa fa-map-marker fa-fw text-muted"></i> Bucharest, Romania</h5>
-                                <h5><i class="fa fa-envelope-o fa-fw text-muted"></i> {{c.rcsId}}@rpi.edu</h5>
+                                <h5><a ng-href="{{c.rcsId}}@rpi.edu">
+									<i class="fa fa-envelope-o fa-fw text-muted"></i> {{c.rcsId}}@rpi.edu
+								</a></h5>
+								<div class="progress text-center">
+									<span ng-if="c.nominations/o.nominationsRequired < .33">{{c.nominations}}/{{o.nominationsRequired}}</span>
+									<div class="progress-bar" role="progressbar" aria-valuenow="{{c.nominations}}" aria-valuemin="0"
+								  	   aria-valuemax="{{o.nominationsRequired}}" ng-style="{'width': nominationPercentage(c.nominations, o.nominationsRequired)}">
+									   <span ng-if="c.nominations/o.nominationsRequired >= .33">{{c.nominations}}/{{o.nominationsRequired}}</span>
+								   </div>
+								</div>
                             </div>
                             <div class="footer">
                                 <button class="btn btn-simple" onclick="rotateCard(this)">
@@ -118,5 +131,25 @@
             </div> -->
         </div>
     </div>
-	<hr ng-repeat-end ng-hide="filter != '' && filter != o.type" />
+	<hr ng-repeat-end ng-if="filter == '' || filter == o.type" />
+	<footer>
+		<div class="row">
+			<div class="col-sm-8 col-xs-12">
+				<small>
+					This website was created by the Web Technologies Group of
+					the Rensselaer Union Student Senate.<br/>
+					Content on this website is monitored by the Rules and Elections
+					Committee.<br/>Statements made by candidates do not represent
+					views of RPI, the Rensselaer Union, or the Student Senate.
+				</small>
+			</div>
+			<div class="col-xs-4 col-sm-2 col-xs-offset-2 col-sm-offset-0">
+				<img src="/images/rne.svg" class="img-responsive pull-right">
+			</div>
+			<div class="col-xs-4 col-sm-2">
+				<img src="/images/wtg.svg" class="img-responsive pull-right">
+			</div>
+		</div>
+
+	</footer>
 </div>
