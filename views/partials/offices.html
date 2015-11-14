@@ -5,37 +5,9 @@
 		</div>
 		<div class="col-sm-12 col-md-10">
 			<div class="btn-group pull-right header-btns">
-				<button class="btn btn-default" ng-click="setFilter()"
-						ng-class="{'active': filter == ''}">
-					All offices
-				</button>
-				<button class="btn btn-default" ng-click="setFilter('greek')"
-						ng-class="{'active': filter == 'greek'}">
-					Greek
-				</button>
-				<button class="btn btn-default" ng-click="setFilter('independent')"
-						ng-class="{'active': filter == 'independent'}">
-					Independent
-				</button>
-				<button class="btn btn-default" ng-click="setFilter('2016')"
-						ng-class="{'active': filter == '2016'}">
-					2016
-				</button>
-				<button class="btn btn-default" ng-click="setFilter('2017')"
-						ng-class="{'active': filter == '2017'}">
-					2017
-				</button>
-				<button class="btn btn-default" ng-click="setFilter('2018')"
-						ng-class="{'active': filter == '2018'}">
-					2018
-				</button>
-				<button class="btn btn-default" ng-click="setFilter('2019')"
-						ng-class="{'active': filter == '2019'}">
-					2019
-				</button>
-				<button class="btn btn-default" ng-click="setFilter('graduate')"
-						ng-class="{'active': filter == 'graduate'}">
-					Graduate
+				<button class="btn btn-default" ng-repeat="f in filterOptions"
+						ng-click="setFilter(f.slug)" ng-class="{'active': filter == f.slug}">
+					{{f.label}}
 				</button>
 				<button class="btn btn-primary" ng-if="isRNE" ng-click="setFilter('edit')"
 						ng-class="{'active': filter == 'edit'}">
@@ -122,31 +94,23 @@
                     </div> <!-- end back panel -->
                 </div> <!-- end card -->
             </div>
-			<!-- <div class="card">
-                <div class="header-bg" width="250" height="70"></div>
-                <div class="avatar">
-                    <img ng-src="{{c.profileImage}}" alt=""/>
-                </div>
-                <div class="content">
-                    <h4>{{c.name}}</h4>
-
-                    <p>
-                        <button type="button" class="btn btn-default">View Profile</button>
-                    </p>
-                </div>
-            </div> -->
         </div>
     </div>
 	<hr ng-repeat-end ng-if="filter == '' || filter == o.type" />
     <div class="row" ng-if="isRNE && filter == 'edit'">
     	<hr/>
     	<div class="col-md-3">
+    		<div class="btn-group btn-group-justified">
+    			<a class="btn btn-primary btn-justified">Create office</a>
+    		</div>
+    		<br/>
     		<ul class="nav nav-pills nav-stacked">
-    			<li role="presentation" ng-repeat="o in offices"><a href="#">{{o.title}}</a></li>
+    			<li role="presentation" ng-repeat="o in offices"
+    				ng-class="{'active': o.id==currentEditId}" ng-click="setEditId(o.id)"><a>{{o.title}}</a></li>
     		</ul>
     	</div>
     	<div class="col-md-9" ng-repeat="o in offices" ng-show="currentEditId == o.id">
-    		<h2><i class="text-muted">Editing:</i> <span ng-bind="o.title"></span></h2>
+    		<h2><i class="text-muted">Editing:</i> <span ng-bind="o.title"></span><button class="btn btn-success pull-right">Save</button></h2>
     		<hr/>
     		<form class="form-horizontal">
     			<div class="form-group">
@@ -158,13 +122,13 @@
     			<div class="form-group">
     				<label for="posDesc" class="col-sm-3 control-label">Office Description</label>
     				<div class="col-sm-9">
-    					<textarea class="form-control" name="posDesc" id="posDesc"/>
+    					<textarea class="form-control" name="posDesc" id="posDesc" ng-model="o.desc"/>
     				</div>
     			</div>
     			<div class="form-group">
     				<label for="posNomReq" class="col-sm-3 control-label">Required Nominations</label>
     				<div class="col-sm-9">
-    					<input class="form-control" type="number" name="posNomReq" id="posNomReq"/>
+    					<input class="form-control" type="number" name="posNomReq" id="posNomReq" ng-model="o.nominationsRequired"/>
     					<span id="helpBlock" class="help-block">For a position with no required nominations, enter 0.</span>
     				</div>
     			</div>
@@ -176,34 +140,27 @@
     			<span class="text-warning">Yellow</span> rows denote candidates that have collected less than the necessary nominations.
     		</p>
     		<ul class="list-group">
-				<li class="list-group-item list-group-item-success">
+				<li class="list-group-item" ng-repeat="c in o.candidates | orderBy:'-nominations'"
+					ng-class="{'list-group-item-success': c.nominations >= o.nominationsRequired,
+							   'list-group-item-warning': c.nominations > 0 && c.nominations < o.nominationsRequired}">
 					<button class="btn btn-default btn-xs pull-right"><span class="fa fa-times"></span></button>
-					Person Name <span class="text-muted">(namep)</span>
-				</li>
-				<li class="list-group-item list-group-item-success">
-					<button class="btn btn-default btn-xs pull-right"><span class="fa fa-times"></span></button>
-					Person Name <span class="text-muted">(namep)</span>
-				</li>
-				<li class="list-group-item list-group-item-warning">
-					<button class="btn btn-default btn-xs pull-right"><span class="fa fa-times"></span></button>
-					Person Name <span class="text-muted">(namep)</span>
-				</li>
-				<li class="list-group-item">
-					<button class="btn btn-default btn-xs pull-right"><span class="fa fa-times"></span></button>
-					Person Name <span class="text-muted">(namep)</span>
-				</li>
-				<li class="list-group-item">
-					<button class="btn btn-default btn-xs pull-right"><span class="fa fa-times"></span></button>
-					Person Name <span class="text-muted">(namep)</span>
+					<span ng-bind="c.name"></span> <span class="text-muted" ng-bind="'('+c.rcsId+')'"></span>
 				</li>
 			</ul>
 			<div class="input-group">
-				<input class="form-control" type="text" placeholder="New candidate's RIN or RCS ID"/>
+				<input class="form-control" type="text" placeholder="New candidate's RIN or RCS ID" ng-model="addCandidateField"/>
 				<span class="input-group-btn">
-		        	<button class="btn btn-primary" type="button">Add</button>
+		        	<button class="btn btn-primary" type="button" ng-disabled="addCandidateField == ''">Add</button>
 		      	</span>
 			</div>
 			<hr/>
+			<h3>Dangerous Actions</h3>
+			<br/>
+			<p><button class="btn btn-danger" ng-click="disablePetition(o.id)">Disable Position</button></p>
+			<p class="text-muted">This action will hide this office from the RPI Elections site and can be reactivated on the Disabled Offices page. Useful for first-year election cycles.</p>
+			<br/>
+			<p><button class="btn btn-danger" ng-click="deleteOffice(o.id)">Delete Position</button></p>
+			<p class="text-muted"><span class="text-danger">Caution:</span> this action will <b>permanently</b> delete this office from the Elections site.</p>
     	</div>
     </div>
     <hr ng-if="filter == 'edit'"/>
