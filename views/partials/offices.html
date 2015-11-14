@@ -9,14 +9,14 @@
 						ng-click="setFilter(f.slug)" ng-class="{'active': filter == f.slug}">
 					{{f.label}}
 				</button>
-				<button class="btn btn-primary" ng-if="isRNE" ng-click="setFilter('edit')"
+				<button class="btn btn-primary" ng-if="editPermissions" ng-click="setFilter('edit')"
 						ng-class="{'active': filter == 'edit'}">
 					Edit Offices
 				</button>
 			</div>
 		</div>
 	</div>
-	<div class="row" ng-repeat-start="o in offices" ng-hide="filter != '' && filter != o.type">
+	<div class="row" ng-repeat-start="o in offices" ng-hide="(filter != '' && filter != o.type) || o.disabled">
         <div class="col-xs-11">
             <h2>
                 {{o.title}}
@@ -96,8 +96,8 @@
             </div>
         </div>
     </div>
-	<hr ng-repeat-end ng-if="filter == '' || filter == o.type" />
-    <div class="row" ng-if="isRNE && filter == 'edit'">
+	<hr ng-repeat-end ng-if="(filter == '' || filter == o.type) && !o.disabled" />
+    <div class="row" ng-if="editPermissions && filter == 'edit'">
     	<hr/>
     	<div class="col-md-3">
     		<div class="btn-group btn-group-justified">
@@ -106,11 +106,21 @@
     		<br/>
     		<ul class="nav nav-pills nav-stacked">
     			<li role="presentation" ng-repeat="o in offices"
-    				ng-class="{'active': o.id==currentEditId}" ng-click="setEditId(o.id)"><a>{{o.title}}</a></li>
+    				ng-class="{'active': o.id==currentEditId}" ng-click="setEditId(o.id)">
+    				<a>
+    					<span ng-bind="o.title" ng-hide="o.disabled"></span>
+    					<strike ng-bind="o.title" ng-show="o.disabled" class="text-muted"></strike>
+    				</a>
+    			</li>
     		</ul>
     	</div>
     	<div class="col-md-9" ng-repeat="o in offices" ng-show="currentEditId == o.id">
-    		<h2><i class="text-muted">Editing:</i> <span ng-bind="o.title"></span><button class="btn btn-success pull-right">Save</button></h2>
+    		<h2>
+    			<i class="text-muted">Editing:</i>
+    			<span ng-bind="o.title"></span>
+    			<span class="text-muted" ng-show="o.disabled">(disabled)</span>
+    			<button class="btn btn-success pull-right">Save</button>
+    		</h2>
     		<hr/>
     		<form class="form-horizontal">
     			<div class="form-group">
@@ -122,7 +132,7 @@
     			<div class="form-group">
     				<label for="posDesc" class="col-sm-3 control-label">Office Description</label>
     				<div class="col-sm-9">
-    					<textarea class="form-control" name="posDesc" id="posDesc" ng-model="o.desc"/>
+    					<textarea class="form-control" name="posDesc" id="posDesc" ng-model="o.description"/>
     				</div>
     			</div>
     			<div class="form-group">
@@ -156,8 +166,10 @@
 			<hr/>
 			<h3>Dangerous Actions</h3>
 			<br/>
-			<p><button class="btn btn-danger" ng-click="disablePetition(o.id)">Disable Position</button></p>
-			<p class="text-muted">This action will hide this office from the RPI Elections site and can be reactivated on the Disabled Offices page. Useful for first-year election cycles.</p>
+			<p ng-if="!o.disabled"><button class="btn btn-danger" ng-click="disablePetition(o.id)">Disable Position</button></p>
+			<p ng-if="!o.disabled" class="text-muted">This action will hide this office from the RPI Elections site.</p>
+			<p ng-if="o.disabled"><button class="btn btn-success" ng-click="enablePetition(o.id)">Enable Position</button></p>
+			<p ng-if="o.disabled" class="text-muted">This action will make this office visible on the RPI Elections site.</p>
 			<br/>
 			<p><button class="btn btn-danger" ng-click="deleteOffice(o.id)">Delete Position</button></p>
 			<p class="text-muted"><span class="text-danger">Caution:</span> this action will <b>permanently</b> delete this office from the Elections site.</p>

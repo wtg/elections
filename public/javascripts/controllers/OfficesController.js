@@ -1,6 +1,7 @@
 app.controller('OfficesController', ['$scope', '$routeParams', '$location', function($scope, $routeParams, $location) {
-	if($routeParams.filter === undefined || $routeParams.filter === "") {
+	if($routeParams.filter === undefined || $routeParams.filter === "" || ($routeParams.filter === 'edit' && !$scope.editPermissions)) {
 		$scope.filter = "";
+		$location.url('/offices');
 	} else {
 		$scope.filter = $routeParams.filter;
 	}
@@ -165,17 +166,24 @@ app.controller('OfficesController', ['$scope', '$routeParams', '$location', func
 		{
         	id: 3,
 			title: "Independent Senator",
-			type: "independent"
+			type: "independent",
+			nominationsRequired: 125,
+			disabled: true,
+			description: "The Senate is the chief legislative and representative body of the Union, presided over by the Grand Marshal. It consists of six graduate senators, four senators from each undergraduate class, senators representing the Interfraternity and Panhellenic Councils, and two Independent senators directly elected by Independent students. Each senator must serve on at least two committees or chair one committee of the Senate. Weekly time commitment is at least five to eight hours per week in addition to Class Council or Undergraduate Council commitments. For more information, contact the Grand Marshal at gm@rpi.edu."
 		},
 		{
         	id: 4,
 			title: "Greek Senator: IFC",
-			type: "greek"
+			type: "greek",
+			nominationsRequired: 125,
+			description: "The Senate is the chief legislative and representative body of the Union, presided over by the Grand Marshal. It consists of six graduate senators, four senators from each undergraduate class, senators representing the Interfraternity and Panhellenic Councils, and two Independent senators directly elected by Independent students. Each senator must serve on at least two committees or chair one committee of the Senate. Weekly time commitment is at least five to eight hours per week in addition to Class Council or Undergraduate Council commitments. For more information, contact the Grand Marshal at gm@rpi.edu."
 		},
 		{
         	id: 5,
 			title: "Greek Senator: Panhellenic",
-			type: "greek"
+			type: "greek",
+			nominationsRequired: 125,
+			description: "The Senate is the chief legislative and representative body of the Union, presided over by the Grand Marshal. It consists of six graduate senators, four senators from each undergraduate class, senators representing the Interfraternity and Panhellenic Councils, and two Independent senators directly elected by Independent students. Each senator must serve on at least two committees or chair one committee of the Senate. Weekly time commitment is at least five to eight hours per week in addition to Class Council or Undergraduate Council commitments. For more information, contact the Grand Marshal at gm@rpi.edu."
 		},
 		{
         	id: 6,
