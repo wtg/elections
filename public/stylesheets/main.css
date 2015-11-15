@@ -192,7 +192,14 @@ footer {
 }
 
 /* Offices */
-
+.nav-pills>li>a, .office-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.office-title {
+  max-width: 810px;
+}
 
 /* Mobile */
 @media (min-width: 600px) {

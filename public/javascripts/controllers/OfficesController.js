@@ -73,7 +73,7 @@ app.controller('OfficesController', ['$scope', '$routeParams', '$location', func
         	id: 1,
             title: "Grand Marshal",
             description: "",
-			type: "all",
+			type: "",
             numberOpenings: 1,
 			nominationsRequired: 600,
             candidates: [
@@ -115,7 +115,7 @@ app.controller('OfficesController', ['$scope', '$routeParams', '$location', func
         	id: 2,
             title: "President of the Union",
             description: "",
-			type: "all",
+			type: "",
             numberOpenings: 1,
 			nominationsRequired: 600,
             candidates: [

@@ -109,15 +109,18 @@
     				ng-class="{'active': o.id==currentEditId}" ng-click="setEditId(o.id)">
     				<a>
     					<span ng-bind="o.title" ng-hide="o.disabled"></span>
+						<span ng-if="o.title.length === 0" ng-hide="o.disabled">Untitled office</span>
     					<strike ng-bind="o.title" ng-show="o.disabled" class="text-muted"></strike>
+						<strike ng-if="o.title.length === 0" ng-show="o.disabled" class="text-muted">Untitled office</strike>
     				</a>
     			</li>
     		</ul>
     	</div>
     	<div class="col-md-9" ng-repeat="o in offices" ng-show="currentEditId == o.id">
-    		<h2>
+    		<h2 class="office-title">
     			<i class="text-muted">Editing:</i>
     			<span ng-bind="o.title"></span>
+    			<span ng-if="o.title.length === 0">Untitled office</span>
     			<span class="text-muted" ng-show="o.disabled">(disabled)</span>
     			<button class="btn btn-success pull-right">Save</button>
     		</h2>
@@ -132,7 +135,7 @@
     			<div class="form-group">
     				<label for="posDesc" class="col-sm-3 control-label">Office Description</label>
     				<div class="col-sm-9">
-    					<textarea class="form-control" name="posDesc" id="posDesc" ng-model="o.description"/>
+    					<textarea class="form-control" name="posDesc" id="posDesc" ng-model="o.description"></textarea>
     				</div>
     			</div>
     			<div class="form-group">
@@ -140,6 +143,14 @@
     				<div class="col-sm-9">
     					<input class="form-control" type="number" name="posNomReq" id="posNomReq" ng-model="o.nominationsRequired"/>
     					<span id="helpBlock" class="help-block">For a position with no required nominations, enter 0.</span>
+    				</div>
+    			</div>
+    			<div class="form-group">
+    				<label for="posTitle" class="col-sm-3 control-label">Filter Category</label>
+    				<div class="col-sm-9">
+    					<select class="form-control" type="text" name="posTitle" id="posTitle" ng-model="o.type">
+    						<option ng-repeat="f in filterOptions" value="{{f.slug}}" ng-bind="f.label" ng-selected="o.type===f.slug"></option>
+    					</select>
     				</div>
     			</div>
     		</form>
@@ -166,12 +177,12 @@
 			<hr/>
 			<h3>Dangerous Actions</h3>
 			<br/>
-			<p ng-if="!o.disabled"><button class="btn btn-danger" ng-click="disablePetition(o.id)">Disable Position</button></p>
+			<p ng-if="!o.disabled"><button class="btn btn-danger" ng-click="disablePetition(o.id)">Disable Office</button></p>
 			<p ng-if="!o.disabled" class="text-muted">This action will hide this office from the RPI Elections site.</p>
-			<p ng-if="o.disabled"><button class="btn btn-success" ng-click="enablePetition(o.id)">Enable Position</button></p>
+			<p ng-if="o.disabled"><button class="btn btn-success" ng-click="enablePetition(o.id)">Enable Office</button></p>
 			<p ng-if="o.disabled" class="text-muted">This action will make this office visible on the RPI Elections site.</p>
 			<br/>
-			<p><button class="btn btn-danger" ng-click="deleteOffice(o.id)">Delete Position</button></p>
+			<p><button class="btn btn-danger" ng-click="deleteOffice(o.id)">Delete Office</button></p>
 			<p class="text-muted"><span class="text-danger">Caution:</span> this action will <b>permanently</b> delete this office from the Elections site.</p>
     	</div>
     </div>
