@@ -31,7 +31,7 @@ app.controller('OfficesController', ['$scope', '$routeParams', '$location', func
 		}
 
 		return Math.round((obtained/required)*100) + '%';
-	}
+	};
 
 	$scope.filterOptions = [
 		{
@@ -315,5 +315,39 @@ app.controller('OfficesController', ['$scope', '$routeParams', '$location', func
 	$scope.setEditId = function(newId) {
 		$scope.currentEditId = newId;
 		$scope.addCandidateField = "";
-	}
+	};
+
+	$scope.removeCandidate = function(rcsId, officeId) {
+		var confirmation = confirm("Are you sure you want to remove " + rcsId + " from this office?");
+
+		if(confirmation) {
+			$scope.offices.forEach(function (o) {
+				var indexToRemove = -1;
+				if(o.id === officeId) {
+					o.candidates.forEach(function (c, index) {
+						if(c.rcsId === rcsId) {
+							indexToRemove = index;
+						}
+					});
+				}
+				if(indexToRemove > -1) {
+					o.candidates.splice(indexToRemove, 1);
+				}
+			});
+		}
+	};
+
+	$scope.addCandidate = function(officeId) {
+		console.log($scope.addCandidateField);
+		$scope.offices.forEach(function (o) {
+			if (o.id === officeId) {
+				o.candidates.push({
+					name: "Test",
+					party: "",
+					rcsId: $scope.addCandidateField
+				});
+				$scope.addCandidateField = "";
+			}
+		});
+	};
 }]);

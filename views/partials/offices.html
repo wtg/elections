@@ -1,37 +1,37 @@
 <div class="container page shadow">
-	<div class="row">
-		<div class="col-sm-12 col-md-2">
-			<h1>Offices</h1>
-		</div>
-		<div class="col-sm-12 col-md-10">
-			<div class="btn-group pull-right header-btns">
-				<button class="btn btn-default" ng-repeat="f in filterOptions"
-						ng-click="setFilter(f.slug)" ng-class="{'active': filter == f.slug}">
-					{{f.label}}
-				</button>
-				<button class="btn btn-primary" ng-if="editPermissions" ng-click="setFilter('edit')"
-						ng-class="{'active': filter == 'edit'}">
-					Edit Offices
-				</button>
-			</div>
-		</div>
-	</div>
-	<div class="row" ng-repeat-start="o in offices" ng-hide="(filter != '' && filter != o.type) || o.disabled">
+    <div class="row">
+        <div class="col-sm-12 col-md-2">
+            <h1>Offices</h1>
+        </div>
+        <div class="col-sm-12 col-md-10">
+            <div class="btn-group pull-right header-btns">
+                <button class="btn btn-default" ng-repeat="f in filterOptions"
+                        ng-click="setFilter(f.slug)" ng-class="{'active': filter == f.slug}">
+                    {{f.label}}
+                </button>
+                <button class="btn btn-primary" ng-if="editPermissions" ng-click="setFilter('edit')"
+                        ng-class="{'active': filter == 'edit'}">
+                    Edit Offices
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-repeat-start="o in offices" ng-hide="(filter != '' && filter != o.type) || o.disabled">
         <div class="col-xs-11">
             <h2>
                 {{o.title}}
             </h2>
         </div>
-		<div class="col-xs-1">
-			<button class="btn btn-simple btn-lg">
-				<h2 class="fa fa-info-circle"></h2>
-			</button>
-		</div>
-		<div class="col-xs-12" ng-if="o.candidates === undefined || o.candidates.length == 0">
-			<p>No candidates are running for this position!</p>
-		</div>
+        <div class="col-xs-1">
+            <button class="btn btn-simple btn-lg">
+                <h2 class="fa fa-info-circle"></h2>
+            </button>
+        </div>
+        <div class="col-xs-12" ng-if="o.candidates === undefined || o.candidates.length == 0">
+            <p>No candidates are running for this position!</p>
+        </div>
         <div class="col-md-3 col-sm-6 col-xs-12" ng-repeat="c in o.candidates">
-			<div class="card-container manual-flip">
+            <div class="card-container manual-flip">
                 <div class="card">
                     <div class="front">
                         <div class="cover">
@@ -43,168 +43,211 @@
                         <div class="content">
                             <div class="main">
                                 <h3 class="name">{{c.name}}</h3>
+
                                 <p ng-if="c.party === undefined || c.party == ''" class="profession">Unaffiliated</p>
-                                <p ng-if="c.party !== undefined && c.party != ''" class="profession" ng-bind="c.party"></p>
+
+                                <p ng-if="c.party !== undefined && c.party != ''" class="profession"
+                                   ng-bind="c.party"></p>
                                 <h5><i class="fa fa-graduation-cap fa-fw text-muted"></i> Mechanical Enginering </h5>
                                 <h5><a ng-href="{{c.rcsId}}@rpi.edu">
-									<i class="fa fa-envelope-o fa-fw text-muted"></i> {{c.rcsId}}@rpi.edu
-								</a></h5>
-								<h5 class="text-center" ng-if="o.nominationsRequired === undefined || o.nominationsRequired <= 0">No nominations required</h5>
-								<div class="progress text-center" ng-if="o.nominationsRequired !== undefined">
-									<span ng-if="c.nominations/o.nominationsRequired < .33">{{c.nominations}}/{{o.nominationsRequired}}</span>
-									<span ng-if="c.nominations === undefined && o.nominationsRequired !== undefined">0/{{o.nominationsRequired}}</span>
-									<div class="progress-bar" role="progressbar" aria-valuenow="{{c.nominations}}" aria-valuemin="0"
-								  	   aria-valuemax="{{o.nominationsRequired}}" ng-style="{'width': nominationPercentage(c.nominations, o.nominationsRequired)}">
-									   <span ng-if="c.nominations/o.nominationsRequired >= .33">{{c.nominations}}/{{o.nominationsRequired}}</span>
-								   </div>
-								</div>
+                                    <i class="fa fa-envelope-o fa-fw text-muted"></i> {{c.rcsId}}@rpi.edu
+                                </a></h5>
+                                <h5 class="text-center"
+                                    ng-if="o.nominationsRequired === undefined || o.nominationsRequired <= 0">No
+                                    nominations required</h5>
+
+                                <div class="progress text-center" ng-if="o.nominationsRequired !== undefined">
+                                    <span ng-if="c.nominations/o.nominationsRequired < .33">{{c.nominations}}/{{o.nominationsRequired}}</span>
+                                    <span ng-if="c.nominations === undefined && o.nominationsRequired !== undefined">0/{{o.nominationsRequired}}</span>
+
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="{{c.nominations}}"
+                                         aria-valuemin="0"
+                                         aria-valuemax="{{o.nominationsRequired}}"
+                                         ng-style="{'width': nominationPercentage(c.nominations, o.nominationsRequired)}">
+                                        <span ng-if="c.nominations/o.nominationsRequired >= .33">{{c.nominations}}/{{o.nominationsRequired}}</span>
+                                    </div>
+                                </div>
                             </div>
                             <div class="footer">
                                 <button class="btn btn-simple" onclick="rotateCard(this)">
                                     <i class="fa fa-plus"></i> More
                                 </button>
-								<a class="btn btn-simple" ng-href="#/candidate/{{c.rcsId}}">
+                                <a class="btn btn-simple" ng-href="#/candidate/{{c.rcsId}}">
                                     <i class="fa fa-user"></i> View Platform
                                 </a>
                             </div>
                         </div>
-                    </div> <!-- end front panel -->
+                    </div>
+                    <!-- end front panel -->
                     <div class="back">
                         <div class="header">
-                            <h5 class="motto">"To be or not to be, this is my awesome motto!"</h5>
+                            <h5 class="motto" ng-bind="c.name"></h5>
                         </div>
                         <div class="content">
                             <div class="main">
-                                <h4 class="text-center">Experince</h4>
+                                <h4 class="text-center">Experience</h4>
+
                                 <p>Mike was working with our team since 2012.</p>
                                 <h4 class="text-center">Areas of Expertise</h4>
+
                                 <p>Web design, Adobe Photoshop, HTML5, CSS3, Corel and many others...</p>
                             </div>
                         </div>
                         <div class="footer">
-                            <button class="btn btn-simple" rel="tooltip" title="" onclick="rotateCard(this)" data-original-title="Flip Card">
+                            <button class="btn btn-simple" rel="tooltip" title="" onclick="rotateCard(this)"
+                                    data-original-title="Flip Card">
                                 <i class="fa fa-reply"></i> Back
                             </button>
                             <div class="social-links pull-right">
-                                <a href="http://cretive-tim.com" class="facebook"><i class="fa fa-facebook fa-fw"></i></a>
+                                <a href="http://cretive-tim.com" class="facebook"><i
+                                        class="fa fa-facebook fa-fw"></i></a>
                                 <a href="http://cretive-tim.com" class="google"><i class="fa fa-google-plus fa-fw"></i></a>
                                 <a href="http://cretive-tim.com" class="twitter"><i class="fa fa-twitter fa-fw"></i></a>
                             </div>
                         </div>
-                    </div> <!-- end back panel -->
-                </div> <!-- end card -->
+                    </div>
+                    <!-- end back panel -->
+                </div>
+                <!-- end card -->
             </div>
         </div>
     </div>
-	<hr ng-repeat-end ng-if="(filter == '' || filter == o.type) && !o.disabled" />
+    <hr ng-repeat-end ng-if="(filter == '' || filter == o.type) && !o.disabled"/>
     <div class="row" ng-if="editPermissions && filter == 'edit'">
-    	<hr/>
-    	<div class="col-md-3">
-    		<div class="btn-group btn-group-justified">
-    			<a class="btn btn-primary btn-justified">Create office</a>
-    		</div>
-    		<br/>
-    		<ul class="nav nav-pills nav-stacked">
-    			<li role="presentation" ng-repeat="o in offices"
-    				ng-class="{'active': o.id==currentEditId}" ng-click="setEditId(o.id)">
-    				<a>
-    					<span ng-bind="o.title" ng-hide="o.disabled"></span>
-						<span ng-if="o.title.length === 0" ng-hide="o.disabled">Untitled office</span>
-    					<strike ng-bind="o.title" ng-show="o.disabled" class="text-muted"></strike>
-						<strike ng-if="o.title.length === 0" ng-show="o.disabled" class="text-muted">Untitled office</strike>
-    				</a>
-    			</li>
-    		</ul>
-    	</div>
-    	<div class="col-md-9" ng-repeat="o in offices" ng-show="currentEditId == o.id">
-    		<h2 class="office-title">
-    			<i class="text-muted">Editing:</i>
-    			<span ng-bind="o.title"></span>
-    			<span ng-if="o.title.length === 0">Untitled office</span>
-    			<span class="text-muted" ng-show="o.disabled">(disabled)</span>
-    			<button class="btn btn-success pull-right">Save</button>
-    		</h2>
-    		<hr/>
-    		<form class="form-horizontal">
-    			<div class="form-group">
-    				<label for="posTitle" class="col-sm-3 control-label">Office Title</label>
-    				<div class="col-sm-9">
-    					<input class="form-control" type="text" name="posTitle" id="posTitle" ng-model="o.title"/>
-    				</div>
-    			</div>
-    			<div class="form-group">
-    				<label for="posDesc" class="col-sm-3 control-label">Office Description</label>
-    				<div class="col-sm-9">
-    					<textarea class="form-control" name="posDesc" id="posDesc" ng-model="o.description"></textarea>
-    				</div>
-    			</div>
-    			<div class="form-group">
-    				<label for="posNomReq" class="col-sm-3 control-label">Required Nominations</label>
-    				<div class="col-sm-9">
-    					<input class="form-control" type="number" name="posNomReq" id="posNomReq" ng-model="o.nominationsRequired"/>
-    					<span id="helpBlock" class="help-block">For a position with no required nominations, enter 0.</span>
-    				</div>
-    			</div>
-    			<div class="form-group">
-    				<label for="posTitle" class="col-sm-3 control-label">Filter Category</label>
-    				<div class="col-sm-9">
-    					<select class="form-control" type="text" name="posTitle" id="posTitle" ng-model="o.type">
-    						<option ng-repeat="f in filterOptions" value="{{f.slug}}" ng-bind="f.label" ng-selected="o.type===f.slug"></option>
-    					</select>
-    				</div>
-    			</div>
-    		</form>
-    		<hr/>
-    		<h3>Candidates</h3>
-    		<p class="text-muted">
-    			<span class="text-success">Green</span> rows denote candidates that have achieved 100% of the necessary nominations.
-    			<span class="text-warning">Yellow</span> rows denote candidates that have collected less than the necessary nominations.
-    		</p>
-    		<ul class="list-group">
-				<li class="list-group-item" ng-repeat="c in o.candidates | orderBy:'-nominations'"
-					ng-class="{'list-group-item-success': c.nominations >= o.nominationsRequired,
+        <hr/>
+        <div class="col-md-3">
+            <div class="btn-group btn-group-justified">
+                <a class="btn btn-primary btn-justified">Create office</a>
+            </div>
+            <br/>
+            <ul class="nav nav-pills nav-stacked">
+                <li role="presentation" ng-repeat="o in offices"
+                    ng-class="{'active': o.id==currentEditId}" ng-click="setEditId(o.id)">
+                    <a>
+                        <span ng-bind="o.title" ng-hide="o.disabled"></span>
+                        <span ng-if="o.title.length === 0" ng-hide="o.disabled">Untitled office</span>
+                        <strike ng-bind="o.title" ng-show="o.disabled" class="text-muted"></strike>
+                        <strike ng-if="o.title.length === 0" ng-show="o.disabled" class="text-muted">Untitled
+                            office</strike>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-9" ng-repeat="o in offices" ng-show="currentEditId == o.id">
+            <h2 class="office-title">
+                <i class="text-muted">Editing:</i>
+                <span ng-bind="o.title"></span>
+                <span ng-if="o.title.length === 0">Untitled office</span>
+                <span class="text-muted" ng-show="o.disabled">(disabled)</span>
+                <button class="btn btn-success pull-right">Save</button>
+            </h2>
+            <hr/>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="posTitle" class="col-sm-3 control-label">Office Title</label>
+
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" name="posTitle" id="posTitle" ng-model="o.title"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="posDesc" class="col-sm-3 control-label">Office Description</label>
+
+                    <div class="col-sm-9">
+                        <textarea class="form-control" name="posDesc" id="posDesc" ng-model="o.description"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="posNomReq" class="col-sm-3 control-label">Required Nominations</label>
+
+                    <div class="col-sm-9">
+                        <input class="form-control" type="number" name="posNomReq" id="posNomReq"
+                               ng-model="o.nominationsRequired"/>
+                        <span id="helpBlock"
+                              class="help-block">For a position with no required nominations, enter 0.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="posCategory" class="col-sm-3 control-label">Filter Category</label>
+
+                    <div class="col-sm-9">
+                        <select class="form-control" type="text" name="posCategory" id="posCategory" ng-model="o.type">
+                            <option ng-repeat="f in filterOptions" value="{{f.slug}}" ng-bind="f.label"
+                                    ng-selected="o.type===f.slug"></option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+            <hr/>
+            <h3>Candidates</h3>
+
+            <p class="text-muted">
+                <span class="text-success">Green</span> rows denote candidates that have achieved 100% of the necessary
+                nominations.
+                <span class="text-warning">Yellow</span> rows denote candidates that have collected less than the
+                necessary nominations.
+            </p>
+            <ul class="list-group">
+                <li class="list-group-item" ng-repeat="c in o.candidates | orderBy:'-nominations'"
+                    ng-class="{'list-group-item-success': c.nominations >= o.nominationsRequired,
 							   'list-group-item-warning': c.nominations > 0 && c.nominations < o.nominationsRequired}">
-					<button class="btn btn-default btn-xs pull-right"><span class="fa fa-times"></span></button>
-					<span ng-bind="c.name"></span> <span class="text-muted" ng-bind="'('+c.rcsId+')'"></span>
-				</li>
-			</ul>
-			<div class="input-group">
-				<input class="form-control" type="text" placeholder="New candidate's RIN or RCS ID" ng-model="addCandidateField"/>
+                    <button class="btn btn-default btn-xs pull-right" ng-click="removeCandidate(c.rcsId, o.id)">
+                        <span class="fa fa-times"></span>
+                    </button>
+                    <span ng-bind="c.name"></span> <span class="text-muted" ng-bind="'('+c.rcsId+')'"></span>
+                </li>
+            </ul>
+            <div class="input-group">
+                <input class="form-control" type="text" placeholder="New candidate's RIN or RCS ID"
+                       ng-model="addCandidateField"/>
 				<span class="input-group-btn">
-		        	<button class="btn btn-primary" type="button" ng-disabled="addCandidateField == ''">Add</button>
+		        	<button class="btn btn-primary" type="button" ng-click="addCandidate(o.id)"
+                            ng-disabled="addCandidateField == ''">
+                        Add
+                    </button>
 		      	</span>
-			</div>
-			<hr/>
-			<h3>Dangerous Actions</h3>
-			<br/>
-			<p ng-if="!o.disabled"><button class="btn btn-danger" ng-click="disablePetition(o.id)">Disable Office</button></p>
-			<p ng-if="!o.disabled" class="text-muted">This action will hide this office from the RPI Elections site.</p>
-			<p ng-if="o.disabled"><button class="btn btn-success" ng-click="enablePetition(o.id)">Enable Office</button></p>
-			<p ng-if="o.disabled" class="text-muted">This action will make this office visible on the RPI Elections site.</p>
-			<br/>
-			<p><button class="btn btn-danger" ng-click="deleteOffice(o.id)">Delete Office</button></p>
-			<p class="text-muted"><span class="text-danger">Caution:</span> this action will <b>permanently</b> delete this office from the Elections site.</p>
-    	</div>
+            </div>
+            <hr/>
+            <h3>Dangerous Actions</h3>
+            <br/>
+            <p>
+                <button ng-if="!o.disabled" class="btn btn-danger" ng-click="disablePetition(o.id)">Disable Office</button>
+                <button ng-if="o.disabled" class="btn btn-success" ng-click="enablePetition(o.id)">Enable Office</button>
+            </p>
+            <p  class="text-muted">
+                This action will
+                <span ng-if="!o.disabled">hide</span>
+                <span ng-if="o.disabled">show</span>
+                this office on the RPI Elections site.
+            </p>
+            <br/>
+
+            <p>
+                <button class="btn btn-danger" ng-click="deleteOffice(o.id)">Delete Office</button>
+            </p>
+            <p class="text-muted"><span class="text-danger">Caution:</span> this action will <b>permanently</b> delete
+                this office from the Elections site.</p>
+        </div>
     </div>
     <hr ng-if="filter == 'edit'"/>
-	<footer>
-		<div class="row">
-			<div class="col-sm-8 col-xs-12">
-				<small>
-					This website was created by the Web Technologies Group of
-					the Rensselaer Union Student Senate.<br/>
-					Content on this website is monitored by the Rules and Elections
-					Committee.<br/>Statements made by candidates do not represent
-					views of RPI, the Rensselaer Union, or the Student Senate.
-				</small>
-			</div>
-			<div class="col-xs-4 col-sm-2 col-xs-offset-2 col-sm-offset-0">
-				<img src="/images/rne.svg" class="img-responsive pull-right">
-			</div>
-			<div class="col-xs-4 col-sm-2">
-				<img src="/images/wtg.svg" class="img-responsive pull-right">
-			</div>
-		</div>
+    <footer>
+        <div class="row">
+            <div class="col-sm-8 col-xs-12">
+                <small>
+                    This website was created by the Web Technologies Group of
+                    the Rensselaer Union Student Senate.<br/>
+                    Content on this website is monitored by the Rules and Elections
+                    Committee.<br/>Statements made by candidates do not represent
+                    views of RPI, the Rensselaer Union, or the Student Senate.
+                </small>
+            </div>
+            <div class="col-xs-4 col-sm-2 col-xs-offset-2 col-sm-offset-0">
+                <img src="/images/rne.svg" class="img-responsive pull-right">
+            </div>
+            <div class="col-xs-4 col-sm-2">
+                <img src="/images/wtg.svg" class="img-responsive pull-right">
+            </div>
+        </div>
 
-	</footer>
+    </footer>
 </div>

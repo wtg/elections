@@ -170,25 +170,22 @@ footer {
     top: -6em;
     margin-top: 4em;
     margin-bottom: -200px;
+    z-index: 10000;
 }
 #candidate {
     background-color: #EB5E66;
     border-radius: 3em;
-    padding: 100px 1em;
+    padding: 50px 1em 0 0;
     color: white;
     max-width: 1000px;
+    z-index:100;
 }
 #candidate h1 {
 	margin-top: 40px;
     text-align: center;
 }
 #candidate-content {
-    background-color: white;
-    padding: 5em 2em 1em 2em;
-    max-width: 900px;
-    position: relative;
-    top: -2em;
-    z-index: -1;
+    padding-top: 120px;
 }
 
 /* Offices */
