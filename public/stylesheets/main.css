@@ -22,6 +22,10 @@ h1, .header-btns {
 	margin-top: 10px;
 }
 
+.no-margin-top {
+	margin-top: 0 !important;
+}
+
 a {
 	color:#EB5E66;
 }
