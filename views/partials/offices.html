@@ -16,6 +16,14 @@
             </div>
         </div>
     </div>
+	<div class="row" ng-if="filter != '' && filter != 'edit' && numOffices(filter) == 0">
+		<div class="col-xs-12">
+			<br/>
+			<h3>No offices were found for this filter!</h3>
+			<br/>
+			<hr/>
+		</div>
+	</div>
     <div class="row" ng-repeat-start="o in offices" ng-hide="(filter != '' && filter != o.type) || o.disabled">
         <div class="col-xs-11">
             <h2>

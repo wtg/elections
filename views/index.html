@@ -32,30 +32,30 @@
                 <li ng-class="{'active':isCurrentPage('offices')}"><a href="#/offices">Offices <span class="sr-only">(current)</span></a></li>
                 <li ng-class="{'active':isCurrentPage('events')}"><a href="#/events">Events</a></li>
                 <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Run for Office <span class="caret"></span></a>
+                  <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Run for Office <span class="caret"></span></a>
                   <ul class="dropdown-menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
+                    <li><a href="#/">Necessary Forms</a></li>
+                    <li><a href="#/">GM Week Handbook</a></li>
+                    <li><a href="#/">Election Do's and Dont's</a></li>
                     <li role="separator" class="divider"></li>
-                    <li><a href="#">Separated link</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#">One more separated link</a></li>
+                    <li><a href="#/">Sanctions &amp; Decisions</a></li>
+                    <li><a href="#/">Updates</a></li>
+                    <li><a href="#/">About RnE</a></li>
                   </ul>
                 </li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Candidate Login</a></li>
-                <!--<li class="dropdown">-->
-                  <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>-->
-                  <!--<ul class="dropdown-menu">-->
-                    <!--<li><a href="#">Action</a></li>-->
-                    <!--<li><a href="#">Another action</a></li>-->
-                    <!--<li><a href="#">Something else here</a></li>-->
-                    <!--<li role="separator" class="divider"></li>-->
-                    <!--<li><a href="#">Separated link</a></li>-->
-                  <!--</ul>-->
-                <!--</li>-->
+                <!-- <li><a href="#">Candidate Login</a></li> -->
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Signed in as <i>etzinj</i> <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a href="#/">Edit Content</a></li>
+						<li><a href="#/">Moderate Submissions</a></li>
+						<li><a href="#/">Admin Tasks</a></li>
+						<li role="separator" class="divider"></li>
+						<li><a href="#/">Sign out</a></li>
+					</ul>
+                </li>
               </ul>
             </div>
         </div>
@@ -69,11 +69,15 @@
             crossorigin="anonymous"></script>
     <script src="components/angular/angular.min.js"></script>
     <script src="components/angular-route/angular-route.min.js"></script>
+    <script src="components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="components/showdown/dist/showdown.min.js"></script>
+    <script src="components/ng-showdown/dist/ng-showdown.min.js"></script>
     <script src="/javascripts/app.js"></script>
     <script src="/javascripts/controllers/MainController.js"></script>
     <script src="/javascripts/controllers/HomeController.js"></script>
     <script src="/javascripts/controllers/OfficesController.js"></script>
     <script src="/javascripts/controllers/CandidateController.js"></script>
+    <script src="/javascripts/controllers/EventsController.js"></script>
 	<script type="text/javascript">
 		function rotateCard(btn){
 			var $card = $(btn).closest('.card-container');

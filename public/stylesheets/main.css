@@ -11,7 +11,8 @@ Table of Contents
 body {
     margin: 0;
     padding: 0;
-    background-color: #E5E9ED;
+	background-color: #757575;
+	background-image: url(http://www.transparenttextures.com/patterns/bright-squares.png);
 }
 
 body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, p, .p {
@@ -24,6 +25,15 @@ h1, .header-btns {
 
 .no-margin-top {
 	margin-top: 0 !important;
+}
+
+.text-primary {
+	color:#EB5E66;
+}
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+    color: #ffffff;
+    background-color: #EB5E66;
 }
 
 a {
@@ -61,15 +71,27 @@ footer {
 	border-color: #e34b54;
 }
 
+/*Navbar active tab styles*/
 .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus {
     color: #ffffff;
-    background-color: #ad1e10;
+    background-color: #780909;
 }
 
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus {
   color: #ffffff;
   background-color: #960e0e;
+}
+
+.dropdown-menu>li>a:hover,
+.dropdown-menu>li>a:focus {
+	background-color: #960e0e;
+}
+
+/*Navbar dropdown open tab styles*/
+.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:hover, .navbar-default .navbar-nav>.open>a:focus {
+    background-color: #780909;
+    color: #ffffff;
 }
 
 .btn-primary {
@@ -80,8 +102,8 @@ footer {
 
 .btn-primary:hover {
     color: #ffffff;
-    background-color: #ad1e10;
-    border-color: #960e0e;
+    background-color: #960e0e;
+    border-color: #780909;
 }
 
 /* Home */
@@ -164,7 +186,7 @@ footer {
 .profile {
     border-radius: 100%;
     border: 1em solid white;
-    background-image: url('https://upload.wikimedia.org/wikipedia/commons/6/6b/Shirley_Ann_Jackson_World_Economic_Forum_2010.jpg');
+    background-image: url('../rotating_card_profile2.png');
     background-size: cover;
     background-repeat: no-repeat;
     width: 250px;
