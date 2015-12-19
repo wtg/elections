@@ -1,3 +1,6 @@
+# Database configuration
+db.js
+
 # Logs
 logs
 *.log
