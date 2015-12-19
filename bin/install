@@ -40,6 +40,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`offices` (" +
   "`name` VARCHAR(255) NOT NULL COMMENT ''," +
   "`description` VARCHAR(1000) NOT NULL COMMENT ''," +
   "`openings` INT NOT NULL COMMENT ''," +
+  "`nominations_required` INT NOT NULL COMMENT ''," +
   "`type` VARCHAR(45) NOT NULL COMMENT ''," +
   "`disabled` TINYINT(1) NOT NULL DEFAULT 0 COMMENT ''," +
   "PRIMARY KEY (`office_id`)  COMMENT ''," +
