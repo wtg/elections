@@ -241,6 +241,15 @@
 }
 /*       Fix bug for IE      */
 
+.progress {
+	margin-top:20px;
+	margin-bottom: 0px;
+}
+
+.progress-bar {
+	background-color: #EB5E66;
+}
+
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
     .front, .back{
         -ms-backface-visibility: visible;

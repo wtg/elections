@@ -1,0 +1,121 @@
+var mysql = require('mysql');
+
+var errorCallback = function(err, rows, fields) {
+  if(err) throw err;
+};
+
+var connection = mysql.createConnection(require('../db.js'));
+
+connection.connect({
+  multipleStatements: true
+});
+
+connection.query("SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;", errorCallback);
+connection.query("SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;", errorCallback);
+connection.query("SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE=\'TRADITIONAL,ALLOW_INVALID_DATES\';", errorCallback); 
+ 
+connection.query("CREATE SCHEMA IF NOT EXISTS `rpielections` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci", errorCallback);
+connection.query("USE `rpielections`", errorCallback);
+
+/**
+ * Execute the creation of of the elections table.
+ */
+connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`elections` (" +
+  "`election_id` INT NOT NULL COMMENT ''," +
+  "`election_name` VARCHAR(45) NOT NULL COMMENT ''," +
+  "`primary_date` DATE NOT NULL COMMENT ''," +
+  "`final_date` DATE NOT NULL COMMENT ''," +
+  "`runoff_date` DATE NOT NULL COMMENT ''," +
+  "PRIMARY KEY (`election_id`)  COMMENT '')" +
+  "ENGINE = InnoDB", errorCallback);
+
+connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`offices` (" +
+  "`office_id` INT NOT NULL AUTO_INCREMENT COMMENT ''," +
+  "`election_id` INT NOT NULL COMMENT ''," +
+  "`name` VARCHAR(255) NOT NULL COMMENT ''," +
+  "`description` VARCHAR(1000) NOT NULL COMMENT ''," +
+  "`openings` INT NOT NULL COMMENT ''," +
+  "`type` VARCHAR(45) NOT NULL COMMENT ''," +
+  "`disabled` TINYINT(1) NOT NULL DEFAULT 0 COMMENT ''," +
+  "PRIMARY KEY (`office_id`)  COMMENT ''," +
+  "INDEX `offices_fk1_idx` (`election_id` ASC)  COMMENT ''," +
+  "CONSTRAINT `offices_fk1`" +
+  "  FOREIGN KEY (`election_id`)" +
+  "  REFERENCES `rpielections`.`elections` (`election_id`)" +
+  "  ON DELETE NO ACTION" +
+  "  ON UPDATE NO ACTION)", errorCallback);
+
+connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`candidates` (" +
+  "`rcs_id` VARCHAR(45) NOT NULL COMMENT ''," +
+  "`office_id` INT NOT NULL COMMENT ''," +
+  "`election_id` INT NOT NULL COMMENT ''," +
+  "`preferred_name` VARCHAR(45) NULL COMMENT ' '," +
+  "`first_name` VARCHAR(45) NULL COMMENT ''," +
+  "`middle_name` VARCHAR(45) NULL COMMENT ''," +
+  "`last_name` VARCHAR(45) NULL COMMENT ''," +
+  "`greek_affiliated` TINYINT(1) NOT NULL DEFAULT 0 COMMENT ''," +
+  "`entry_date` VARCHAR(45) NOT NULL COMMENT ''," +
+  "`class_by_credit` VARCHAR(45) NOT NULL COMMENT ''," +
+  "`grad_date` VARCHAR(45) NOT NULL COMMENT ''," +
+  "`rin` VARCHAR(9) NOT NULL COMMENT ''," +
+  "PRIMARY KEY (`rcs_id`, `office_id`)  COMMENT ''," +
+  "INDEX `candidates_fk2_idx` (`election_id` ASC)  COMMENT ''," +
+  "CONSTRAINT `candidates_fk1`" +
+  "  FOREIGN KEY (`office_id`)" +
+  "  REFERENCES `rpielections`.`offices` (`office_id`)" +
+  "  ON DELETE NO ACTION" +
+  "  ON UPDATE NO ACTION," +
+  "CONSTRAINT `candidates_fk2`" +
+  "  FOREIGN KEY (`election_id`)" +
+  "  REFERENCES `rpielections`.`elections` (`election_id`)" +
+  "  ON DELETE NO ACTION" +
+  "  ON UPDATE NO ACTION)" +
+  "ENGINE = InnoDB", errorCallback);
+
+connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`nominations` (" +
+  "`nomination_id` INT NOT NULL COMMENT ''," +
+  "`election_id` INT NOT NULL COMMENT ''," +
+  "`rcs_id` VARCHAR(45) NOT NULL COMMENT ''," +
+  "`office_id` INT NOT NULL COMMENT ''," +
+  "`nomination_rin` VARCHAR(9) NOT NULL COMMENT '  '," +
+  "`date` DATETIME NOT NULL COMMENT ''," +
+  "INDEX `nominations_fk2_idx` (`office_id` ASC)  COMMENT ''," +
+  "PRIMARY KEY (`nomination_id`)  COMMENT ''," +
+  "INDEX `nominations_fk3_idx` (`election_id` ASC)  COMMENT ''," +
+  "CONSTRAINT `nominations_fk1`" +
+  "  FOREIGN KEY (`rcs_id` , `office_id`)" +
+  "  REFERENCES `rpielections`.`candidates` (`rcs_id` , `office_id`)" +
+  "  ON DELETE NO ACTION" +
+  "  ON UPDATE NO ACTION," +
+  "CONSTRAINT `nominations_fk2`" +
+  "  FOREIGN KEY (`office_id`)" +
+  "  REFERENCES `rpielections`.`offices` (`office_id`)" +
+  "  ON DELETE NO ACTION" +
+  "  ON UPDATE NO ACTION," +
+  "CONSTRAINT `nominations_fk3`" +
+  "  FOREIGN KEY (`election_id`)" +
+  "  REFERENCES `rpielections`.`elections` (`election_id`)" +
+  "  ON DELETE NO ACTION" +
+  "  ON UPDATE NO ACTION)" +
+  "ENGINE = InnoDB", errorCallback);
+
+connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`log` (" +
+  "`log_id` INT NOT NULL COMMENT ''," +
+  "`rcs_id` VARCHAR(45) NOT NULL COMMENT ''," +
+  "`type` VARCHAR(45) NOT NULL COMMENT ' '," +
+  "`description` VARCHAR(255) NOT NULL COMMENT ''," +
+  "`time` DATETIME NOT NULL COMMENT ''," +
+  "PRIMARY KEY (`log_id`)  COMMENT '')" +
+  "ENGINE = InnoDB;", errorCallback);
+
+connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`administrators` (" +
+  "`rcs_id` VARCHAR(45) NOT NULL COMMENT ''," +
+  "`admin_type` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '0 = no admin\n1 = RnE\n2 = WTG\n3 = Full Admin'," +
+  "PRIMARY KEY (`rcs_id`)  COMMENT '')" +
+  "ENGINE = InnoDB", errorCallback);
+
+connection.query("SET SQL_MODE=@OLD_SQL_MODE", errorCallback);
+connection.query("SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS", errorCallback);
+connection.query("SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS", errorCallback);
+
+connection.end();

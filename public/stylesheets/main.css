@@ -11,7 +11,8 @@ Table of Contents
 body {
     margin: 0;
     padding: 0;
-    background-color: #E5E9ED;
+	background-color: #757575;
+	background-image: url(http://www.transparenttextures.com/patterns/bright-squares.png);
 }
 
 body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, p, .p {
@@ -20,6 +21,27 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, p, .p {
 
 h1, .header-btns {
 	margin-top: 10px;
+}
+
+.no-margin-top {
+	margin-top: 0 !important;
+}
+
+.text-primary {
+	color:#EB5E66;
+}
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+    color: #ffffff;
+    background-color: #EB5E66;
+}
+
+a {
+	color:#EB5E66;
+}
+a:hover {
+	text-decoration: none;
+	color: #960e0e;
 }
 
 .page {
@@ -49,15 +71,27 @@ footer {
 	border-color: #e34b54;
 }
 
+/*Navbar active tab styles*/
 .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus {
     color: #ffffff;
-    background-color: #ad1e10;
+    background-color: #780909;
 }
 
 .navbar-default .navbar-nav > li > a:hover,
 .navbar-default .navbar-nav > li > a:focus {
   color: #ffffff;
   background-color: #960e0e;
+}
+
+.dropdown-menu>li>a:hover,
+.dropdown-menu>li>a:focus {
+	background-color: #960e0e;
+}
+
+/*Navbar dropdown open tab styles*/
+.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:hover, .navbar-default .navbar-nav>.open>a:focus {
+    background-color: #780909;
+    color: #ffffff;
 }
 
 .btn-primary {
@@ -68,8 +102,8 @@ footer {
 
 .btn-primary:hover {
     color: #ffffff;
-    background-color: #ad1e10;
-    border-color: #960e0e;
+    background-color: #960e0e;
+    border-color: #780909;
 }
 
 /* Home */
@@ -152,7 +186,7 @@ footer {
 .profile {
     border-radius: 100%;
     border: 1em solid white;
-    background-image: url('https://upload.wikimedia.org/wikipedia/commons/6/6b/Shirley_Ann_Jackson_World_Economic_Forum_2010.jpg');
+    background-image: url('../rotating_card_profile2.png');
     background-size: cover;
     background-repeat: no-repeat;
     width: 250px;
@@ -162,29 +196,33 @@ footer {
     top: -6em;
     margin-top: 4em;
     margin-bottom: -200px;
+    z-index: 10000;
 }
 #candidate {
     background-color: #EB5E66;
     border-radius: 3em;
-    padding: 100px 1em;
+    padding: 50px 1em 0 0;
     color: white;
     max-width: 1000px;
+    z-index:100;
 }
 #candidate h1 {
 	margin-top: 40px;
     text-align: center;
 }
 #candidate-content {
-    background-color: white;
-    padding: 5em 2em 1em 2em;
-    max-width: 900px;
-    position: relative;
-    top: -2em;
-    z-index: -1;
+    padding-top: 120px;
 }
 
 /* Offices */
-
+.nav-pills>li>a, .office-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.office-title {
+  max-width: 810px;
+}
 
 /* Mobile */
 @media (min-width: 600px) {

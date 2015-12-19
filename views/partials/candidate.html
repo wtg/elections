@@ -1,46 +1,158 @@
-
+<!--<div class="profile"></div>-->
+<!--<div id="candidate" class="container shadow">-->
+<!--<h1>Resilience, Resilience, Massive Cash</h1>-->
+<!--</div>-->
 <div class="profile"></div>
-<div id="candidate" class="container shadow">
-  <h1>Resilience, Resilience, Massive Cash</h1>
-</div>
-<div id="candidate-content" class="container shadow">
-  <p>
-    Advanced extended doubtful he he blessing together. Introduced far law gay considered frequently entreaties difficulty. Eat him four are rich nor calm. By an packages rejoiced exercise. To ought on am marry rooms doubt music. Mention entered an through company as. Up arrived no painful between. It declared is prospect an insisted pleasure.
-  </p>
+<div id="candidate-content" class="container page shadow">
+    <div class="row">
+        <div class="col-xs-12">
+            <h1 class="text-center">Candidate Name</h1>
+        </div>
+        <div class="col-xs-12">
+            <h3 class="text-center text-muted" style="margin-top:5px">Running for Grand Marshal</h3>
+        </div>
+        <div class="col-xs-12">
+            <h4 class="text-center text-muted" style="margin-top:5px">Member of the <span class="text-primary">Party</span> Party</h4>
+        </div>
+	</div>
+    <hr/>
+	<div class="row">
+        <div class="col-md-4 col-md-offset-4 col-xs-11 col-xs-offset-0">
+            <ul class="nav nav-pills nav-justified">
+                <li role="presentation" ng-class="{'active': currentSection === 'about'}">
+					<a href="#/candidate/{{candidate.rcsId}}/about">About me</a>
+				</li>
+                <li role="presentation" ng-class="{'active': currentSection === 'platform'}">
+					<a href="#/candidate/{{candidate.rcsId}}/platform">Platform</a>
+				</li>
+                <li role="presentation" ng-class="{'active': currentSection === 'ama'}">
+					<a href="#/candidate/{{candidate.rcsId}}/ama">AMA</a>
+				</li>
+                <li role="presentation" ng-class="{'active': currentSection === 'contact'}">
+					<a href="#/candidate/{{candidate.rcsId}}/contact">Contact</a>
+				</li>
+            </ul>
+        </div>
+		<div class="col-md-1 col-md-offset-3 col-xs-1 col-xs-offset-0">
+			<a class="btn btn-primary pull-right" href="#/candidate/{{candidate.rcsId}}/edit">Edit</a>
+		</div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-md-5">
+			<div class="embed-responsive embed-responsive-16by9">
+				<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/vQFqRX0Qh6A" frameborder="0" allowfullscreen></iframe>
+			</div>
+			<hr />
+			<h3>
+				Nominations
+				<span class="text-muted pull-right">330/600</span>
+			</h3>
+			<div class="progress">
+				<div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+				</div>
+			</div>
+			<hr />
+            <h3>Candidate Facts</h3>
+			<dl class="dl-horizontal">
+				<dt>Nominations</dt><dd>330/600</dd>
+				<dt>Hometown</dt><dd>New York, NY</dd>
+				<dt>Class year</dt><dd>2017</dd>
+				<dt>Majors</dt><dd>First Major<br/>Second Major</dd>
+				<dt>Favorite food</dt><dd>Apples</dd>
+				<dt>Favorite song</dt><dd>"Beautiful Day" &ndash; U2</dd>
+				<dt>Current involvement</dt><dd>Senator, Vice-president of Club name, Fraternity name, another club</dd>
+			</dl>
+        </div>
+        <div class="col-md-7" ng-if="currentSection == 'about'">
+			<h2 class="no-margin-top">About me</h2>
+            <div ng-bind-html="convertMarkdown(candidate.about)"></div>
+        </div>
+		<div class="col-md-7" ng-if="currentSection == 'platform'">
+			<h2 class="no-margin-top">Platform</h2>
+			<div ng-bind-html="convertMarkdown(candidate.platform)"></div>
+		</div>
+		<div class="col-md-7" ng-if="currentSection == 'ama'">
+			<h2 class="no-margin-top">Ask Me Anything</h2>
+			<div class="form-group">
+				<textarea class="form-control" placeholder="Question"></textarea>
+			</div>
+			<div class="form-group">
+				<p class="text-muted pull-left">
+					Note: questions that violate the Terms of Use will be removed.
+				</p>
+				<button class="btn btn-primary btn-sm pull-right">Ask</button>
+			</div>
+			<div class="clearfix"></div>
+			<hr />
+			<div class="media" ng-repeat="r in [0,1,2,3,4]">
+				<div class="media-body">
+					<h4 class="media-heading">What is your stance on Arizona in Fathers?</h4>
+					<p class="text-muted small">Asked by rcsId
+						<span class="pull-right">April 11, 2015 | 3 pm</span>
+						</p>
+					<p>
+						I think that this issue is super important, and I will
+						do whatever I can to make this thing be a thing. I promise
+						to always be transparent, clear, visible, and open all
+						the time with everything I do, even when I'm not being
+						in student government stuff.
+					</p>
+				</div>
+			</div>
+			<button class="btn btn-default btn-sm">
+				<span class="fa fa-arrow-down"></span>
+				Show more
+			</button>
+		</div>
+		<div class="col-md-7" ng-if="currentSection == 'contact'">
+			<h3>Contact me</h3>
+			<form class="form-horizontal">
+				<div class="form-group">
+					<label for="contactName" class="col-sm-3 control-label">Your name</label>
+					<div class="col-sm-9">
+						<input type="name" class="form-control" id="contactName" placeholder="Your name">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputEmail3" class="col-sm-3 control-label">Your email</label>
+					<div class="col-sm-9">
+						<input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="contactMessage" class="col-sm-3 control-label">Message</label>
+					<div class="col-sm-9">
+						<textarea class="form-control" id="contactMessage" placeholder="Message"></textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-9 col-sm-3">
+						<button type="submit" class="btn btn-primary pull-right">Send message</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<hr/>
+	<footer>
+        <div class="row">
+            <div class="col-sm-8 col-xs-12">
+                <small>
+                    This website was created by the Web Technologies Group of
+                    the Rensselaer Union Student Senate.<br/>
+                    Content on this website is monitored by the Rules and Elections
+                    Committee.<br/>Statements made by candidates do not represent
+                    views of RPI, the Rensselaer Union, or the Student Senate.
+                </small>
+            </div>
+            <div class="col-xs-4 col-sm-2 col-xs-offset-2 col-sm-offset-0">
+                <img src="/images/rne.svg" class="img-responsive pull-right">
+            </div>
+            <div class="col-xs-4 col-sm-2">
+                <img src="/images/wtg.svg" class="img-responsive pull-right">
+            </div>
+        </div>
 
-  <p>
-    To they four in love. Settling you has separate supplied bed. Concluded resembled suspected his resources curiosity joy. Led all cottage met enabled attempt through talking delight. Dare he feet my tell busy. Considered imprudence of he friendship boisterous.
-  </p>
-
-  <p>
-    Him rendered may attended concerns jennings reserved now. Sympathize did now preference unpleasing mrs few. Mrs for hour game room want are fond dare. For detract charmed add talking age. Shy resolution instrument unreserved man few. She did open find pain some out. If we landlord stanhill mr whatever pleasure supplied concerns so. Exquisite by it admitting cordially september newspaper an. Acceptance middletons am it favourable. It it oh happen lovers afraid.
-  </p>
-
-  <p>
-    Was justice improve age article between. No projection as up preference reasonably delightful celebrated. Preserved and abilities assurance tolerably breakfast use saw. And painted letters forming far village elderly compact. Her rest west each spot his and you knew. Estate gay wooded depart six far her. Of we be have it lose gate bred. Do separate removing or expenses in. Had covered but evident chapter matters anxious.
-  </p>
-
-  <p>
-    May indulgence difficulty ham can put especially. Bringing remember for supplied her why was confined. Middleton principle did she procuring extensive believing add. Weather adapted prepare oh is calling. These wrong of he which there smile to my front. He fruit oh enjoy it of whose table. Cultivated occasional old her unpleasing unpleasant. At as do be against pasture covered viewing started. Enjoyed me settled mr respect no spirits civilly.
-  </p>
-
-  <p>
-    Boy desirous families prepared gay reserved add ecstatic say. Replied joy age visitor nothing cottage. Mrs door paid led loud sure easy read. Hastily at perhaps as neither or ye fertile tedious visitor. Use fine bed none call busy dull when. Quiet ought match my right by table means. Principles up do in me favourable affronting. Twenty mother denied effect we to do on.
-  </p>
-
-  <p>
-    Up maids me an ample stood given. Certainty say suffering his him collected intention promotion. Hill sold ham men made lose case. Views abode law heard jokes too. Was are delightful solicitude discovered collecting man day. Resolving neglected sir tolerably but existence conveying for. Day his put off unaffected literature partiality inhabiting.
-  </p>
-
-  <p>
-    Frankness applauded by supported ye household. Collected favourite now for for and rapturous repulsive consulted. An seems green be wrote again. She add what own only like. Tolerably we as extremity exquisite do commanded. Doubtful offended do entrance of landlord moreover is mistress in. Nay was appear entire ladies. Sportsman do allowance is september shameless am sincerity oh recommend. Gate tell man day that who.
-  </p>
-
-  <p>
-    Considered an invitation do introduced sufficient understood instrument it. Of decisively friendship in as collecting at. No affixed be husband ye females brother garrets proceed. Least child who seven happy yet balls young. Discovery sweetness principle discourse shameless bed one excellent. Sentiments of surrounded friendship dispatched connection is he. Me or produce besides hastily up as pleased. Bore less when had and john shed hope.
-  </p>
-
-  <p>
-    Endeavor bachelor but add eat pleasure doubtful sociable. Age forming covered you entered the examine. Blessing scarcely confined her contempt wondered shy. Dashwoods contented sportsmen at up no convinced cordially affection. Am so continued resembled frankness disposing engrossed dashwoods. Earnest greater on no observe fortune norland. Hunted mrs ham wishes stairs. Continued he as so breakfast shameless. All men drew its post knew. Of talking of calling however civilly wishing resolve.
-  </p>
+    </footer>
 </div>

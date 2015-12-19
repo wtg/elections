@@ -1,5 +1,5 @@
 var dependencies = [
-    'ngRoute'
+    'ngRoute', 'ng-showdown'
 ];
 
 var app = angular.module('Elections', dependencies);
@@ -31,6 +31,18 @@ app.config(['$routeProvider', function ($routeProvider) {
         when('/candidate/:rcs', {
             templateUrl: 'partials/candidate.html',
             controller: 'CandidateController'
+        }).
+        when('/candidate/:rcs/edit', {
+            templateUrl: 'partials/editcandidate.html',
+            controller: 'CandidateController'
+        }).
+        when('/candidate/:rcs/:section', {
+            templateUrl: 'partials/candidate.html',
+            controller: 'CandidateController'
+        }).
+        when('/events', {
+            templateUrl: 'partials/events.html',
+            controller: 'EventsController'
         }).
         otherwise({
             redirectTo: '/home'
