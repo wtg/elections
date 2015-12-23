@@ -154,7 +154,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`administrators` (" 
 /**
  * Execute the creation of a views table. This table stores public pages that administrators can add, delete, and modify
  */
-connection.query("CREATE TABLE IF NOT EXISTS `mydb`.`pages` (" +
+connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`pages` (" +
     "`page_id` INT NOT NULL AUTO_INCREMENT," +
     "`title` VARCHAR(45) NOT NULL," +
     "`slug` VARCHAR(45) NOT NULL," +
