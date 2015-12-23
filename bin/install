@@ -83,6 +83,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`candidates` (" +
     "`class_by_credit` VARCHAR(45) NOT NULL," +
     "`grad_date` VARCHAR(45) NOT NULL," +
     "`rin` VARCHAR(9) NOT NULL," +
+    "`nominations` INT NOT NULL DEFAULT 0" +
     "PRIMARY KEY (`rcs_id`, `office_id`) ," +
     "INDEX `candidates_fk2_idx` (`election_id` ASC) ," +
     "CONSTRAINT `candidates_fk1`" +
