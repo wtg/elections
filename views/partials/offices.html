@@ -16,14 +16,15 @@
             </div>
         </div>
     </div>
-	<div class="row" ng-if="filter != 'all' && filter != 'edit' && numOffices(filter) == 0">
-		<div class="col-xs-12">
-			<br/>
-			<h3>No offices were found for this filter!</h3>
-			<br/>
-			<hr/>
-		</div>
-	</div>
+    <div class="row" ng-if="(filter != 'all' && filter != 'edit' && numOffices(filter) == 0) || (filter == 'all' && offices.length === 0)">
+        <div class="col-xs-12">
+            <br/>
+            <h3 ng-if="filter != 'all' && filter != 'edit' && numOffices(filter) == 0">No offices were found for this filter!</h3>
+            <h3 ng-if="filter == 'all' && offices.length === 0">No offices were found!</h3>
+            <br/>
+            <hr/>
+        </div>
+    </div>
     <div class="row" ng-repeat-start="o in offices" ng-hide="(filter != 'all' && filter != o.type) || o.disabled">
         <div class="col-xs-11">
             <h2>
@@ -209,7 +210,7 @@
                 <span ng-bind="o.title"></span>
                 <span ng-if="o.title.length === 0">Untitled office</span>
                 <span class="text-muted" ng-show="o.disabled">(disabled)</span>
-                <button class="btn btn-success pull-right">Save</button>
+                <button class="btn btn-success pull-right" ng-click="saveEdits()">Save</button>
             </h2>
             <hr/>
             <form class="form-horizontal">
@@ -281,8 +282,8 @@
             <h3>Dangerous Actions</h3>
             <br/>
             <p>
-                <button ng-if="!o.disabled" class="btn btn-danger" ng-click="disablePetition(o.id)">Disable Office</button>
-                <button ng-if="o.disabled" class="btn btn-success" ng-click="enablePetition(o.id)">Enable Office</button>
+                <button ng-if="!o.disabled" class="btn btn-danger" ng-click="toggleDisabled(o.id)">Disable Office</button>
+                <button ng-if="o.disabled" class="btn btn-success" ng-click="toggleDisabled(o.id)">Enable Office</button>
             </p>
             <p  class="text-muted">
                 This action will

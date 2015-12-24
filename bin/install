@@ -191,12 +191,17 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`party_officers` (" 
  * Execute the creation of the assistants table. This table maintains all candidate assistants for all candidates
  */
 connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`assistants` (" +
-    "`assistant_id` INT NOT NULL," +
+    "`assistant_id` INT NOT NULL AUTO_INCREMENT," +
     "`rcs_id` VARCHAR(45) NOT NULL," +
-    "`candidate` VARCHAR(45) NOT NULL," +
+    "`candidate_rcs_id` VARCHAR(45) NOT NULL," +
+    "`first_name` VARCHAR(45) NOT NULL," +
+    "`middle_name` VARCHAR(45) NOT NULL," +
+    "`last_name` VARCHAR(45) NOT NULL," +
+    "`preferred_name` VARCHAR(45) NULL," +
+    "`rin` VARCHAR(9) NOT NULL," +
     "PRIMARY KEY (`assistant_id`)," +
-    "INDEX `assistants_fk1_idx` (`rcs_id` ASC)," +
-    "CONSTRAINT `assistants_fk1`" +
+    "INDEX `assistant_fk1_idx` (`rcs_id` ASC)," +
+    "CONSTRAINT `assistant_fk1`" +
     "  FOREIGN KEY (`rcs_id`)" +
     "  REFERENCES `rpielections`.`candidates` (`rcs_id`)" +
     "  ON DELETE NO ACTION" +
