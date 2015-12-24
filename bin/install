@@ -84,15 +84,6 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`candidates` (" +
     "`office_id` INT NOT NULL," +
     "`election_id` INT NOT NULL," +
     "`party_id` INT NULL," +
-    "`preferred_name` VARCHAR(45) NULL," +
-    "`first_name` VARCHAR(45) NULL," +
-    "`middle_name` VARCHAR(45) NULL," +
-    "`last_name` VARCHAR(45) NULL," +
-    "`greek_affiliated` TINYINT(1) NOT NULL DEFAULT 0," +
-    "`entry_date` VARCHAR(45) NOT NULL," +
-    "`class_by_credit` VARCHAR(45) NOT NULL," +
-    "`grad_date` VARCHAR(45) NOT NULL," +
-    "`rin` VARCHAR(9) NOT NULL," +
     "`nominations` INT NOT NULL DEFAULT 0," +
     "PRIMARY KEY (`rcs_id`, `office_id`) ," +
     "INDEX `candidates_fk2_idx` (`election_id` ASC) ," +
@@ -109,6 +100,32 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`candidates` (" +
     "CONSTRAINT `candidates_fk3`" +
     "  FOREIGN KEY (`party_id`)" +
     "  REFERENCES `rpielections`.`parties` (`party_id`)" +
+    "  ON DELETE NO ACTION" +
+    "  ON UPDATE NO ACTION)" +
+    "ENGINE = InnoDB", errorCallback);
+
+/**
+ * Execute the creation of the candidate_data table
+ */
+connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`candidate_data` (" +
+    "`rcs_id` VARCHAR(45) NOT NULL," +
+    "`preferred_name` VARCHAR(45) NULL," +
+    "`first_name` VARCHAR(45) NULL," +
+    "`middle_name` VARCHAR(45) NULL," +
+    "`last_name` VARCHAR(45) NULL," +
+    "`greek_affiliated` TINYINT(1) NOT NULL DEFAULT 0," +
+    "`entry_date` VARCHAR(45) NOT NULL," +
+    "`class_by_credit` VARCHAR(45) NOT NULL," +
+    "`grad_date` VARCHAR(45) NOT NULL," +
+    "`rin` VARCHAR(9) NOT NULL," +
+    "`major` VARCHAR(45) NOT NULL," +
+    "`about` TEXT DEFAULT NULL," +
+    "`plaform` TEXT DEFAULT NULL," +
+    "`video_url` VARCHAR(2000) DEFAULT NULL," +
+    "PRIMARY KEY (`rcs_id`) ," +
+    "CONSTRAINT `candidate_data_fk1`" +
+    "  FOREIGN KEY (`rcs_id`)" +
+    "  REFERENCES `rpielections`.`candidates` (`rcs_id`)" +
     "  ON DELETE NO ACTION" +
     "  ON UPDATE NO ACTION)" +
     "ENGINE = InnoDB", errorCallback);
