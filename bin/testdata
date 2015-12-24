@@ -1,0 +1,65 @@
+#!/usr/bin/env node
+
+/**
+ * Dependencies
+ */
+var mysql = require('mysql');
+var connection = mysql.createConnection(require('../db.js'));
+
+/**
+ * Generic callback to handle any errors returned by the executed MySQL Queries
+ */
+var errorCallback = function (err, rows, fields) {
+    if (err) throw err;
+};
+
+/**
+ * Connect to the database
+ */
+connection.connect();
+
+/**
+ * Designate the database for use
+ */
+connection.query("USE `rpielections`", errorCallback);
+
+/**
+ * Add example elections into the elections table
+ */
+connection.query("INSERT INTO `elections` VALUES " +
+    "(1,'GM Week 2016','2016-04-20','2016-04-24','2016-04-29')," +
+    "(2,'Class of 2020 Elections','2016-09-30','2016-10-02','2016-10-05')", errorCallback);
+
+/**
+ * Add example offices into the offices table
+ */
+connection.query("INSERT INTO `offices` VALUES " +
+    "(1,1,'Grand Marshal','Something about the position',1,600,'all',0)," +
+    "(2,1,'President of the Union','Something about the position',1,600,'all',0)," +
+    "(3,1,'Undergraduate President','Something about the position',1,300,'all',0)," +
+    "(4,1,'Independent Senator','Something about the position',2,125,'independent',0)," +
+    "(5,1,'Greek Senator (IFC)','Something about the position',1,125,'greek',0)," +
+    "(6,1,'Greek Senator (Panhel)','Something about the position',1,125,'greek',0)," +
+    "(7,1,'Class of 2017 Senator','Something about the position',4,75,'2017',0)," +
+    "(8,1,'Class of 2017 Representative','Something about the position',8,30,'2017',0)," +
+    "(9,1,'Class of 2017 Vice President','Something about the position',1,75,'2017',0)," +
+    "(10,1,'Class of 2017 President','Something about the position',1,75,'2017',0)," +
+    "(11,1,'Class of 2018 Senator','Something about the position',4,125,'2018',0)," +
+    "(12,1,'Class of 2018 Representative','Something about the position',8,50,'2018',0)," +
+    "(13,1,'Class of 2018 Vice President','Something about the position',1,125,'2018',0)," +
+    "(14,1,'Class of 2018 President','Something about the position',1,125,'2018',0)," +
+    "(15,1,'Class of 2019 Senator','Something about the position',4,125,'2019',0)," +
+    "(16,1,'Class of 2019 Representative','Something about the position',8,50,'2019',0)," +
+    "(17,1,'Class of 2019 Vice President','Something about the position',1,125,'2019',0)," +
+    "(18,1,'Class of 2019 President','Something about the position',1,125,'2019',0)," +
+    "(19,1,'Graduate Representative','Something about the position',5,0,'graduate',0)," +
+    "(20,1,'Graduate Senator','Something about the position',6,10,'graduate',0)," +
+    "(21,1,'Alumni President','Something about the position',1,50,'2016',0)," +
+    "(22,1,'Alumni Vice President','Something about the position',1,50,'2016',0)," +
+    "(23,1,'Alumni Secretary','Something about the position',1,50,'2016',0)," +
+    "(24,1,'Alumni Treasurer','Something about the position',1,50,'2016',0)", errorCallback);
+
+/**
+ * Close the database connection
+ */
+connection.end();
