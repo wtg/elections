@@ -245,6 +245,15 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`pages` (" +
     "PRIMARY KEY (`page_id`))" +
     "ENGINE = InnoDB;", errorCallback);
 
+/**
+ * Execute the creation of a configurations table. This table holds sitewide settings, in the format of [key, value]
+ */
+connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`configurations` (" +
+    "`configuration_id` INT NOT NULL AUTO_INCREMENT," +
+    "`key` varchar(45) NOT NULL," +
+    "`value` varchar(200) NOT NULL," +
+    "PRIMARY KEY (`configuration_id`)" +
+    ") ENGINE=InnoDB;", errorCallback);
 
 /**
  * Re-enable the foreign key checks and standard precautions
