@@ -6,6 +6,7 @@
 var mysql = require('mysql');
 var connection = mysql.createConnection(require('../db.js'));
 
+
 /**
  * Generic callback to handle any errors returned by the executed MySQL Queries
  */
@@ -13,10 +14,12 @@ var errorCallback = function (err, rows, fields) {
     if (err) throw err;
 };
 
+
 /**
  * Connect to the database
  */
 connection.connect();
+
 
 /**
  * Disable foreign key checks and standard precautions (will be re-enabled after installation)
@@ -25,11 +28,13 @@ connection.query("SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;", err
 connection.query("SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;", errorCallback);
 connection.query("SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE=\'TRADITIONAL,ALLOW_INVALID_DATES\';", errorCallback);
 
+
 /**
  * Establish the database and use it for subsequent queries
  */
 connection.query("CREATE SCHEMA IF NOT EXISTS `rpielections` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci", errorCallback);
 connection.query("USE `rpielections`", errorCallback);
+
 
 /**
  * Execute the creation of the elections table. This table keeps track of individual elections (i.e. GM Week 20xx, etc.)
@@ -66,13 +71,16 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`offices` (" +
     "  ON DELETE NO ACTION" +
     "  ON UPDATE NO ACTION)", errorCallback);
 
+
+/**
+ * Execute the creation of the parties table. This table maintains the parties active in an election
+ */
 connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`parties` (" +
     "`party_id` INT NOT NULL AUTO_INCREMENT," +
     "`name` VARCHAR(45) NOT NULL," +
     "`platform` TEXT NOT NULL," +
     "PRIMARY KEY (`party_id`))" +
     "ENGINE = InnoDB;", errorCallback);
-
 
 
 /**
@@ -104,8 +112,10 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`candidates` (" +
     "  ON UPDATE NO ACTION)" +
     "ENGINE = InnoDB", errorCallback);
 
+
 /**
- * Execute the creation of the candidate_data table
+ * Execute the creation of the candidate_data table. This table maintains the metadata for candidates, that shouldn't
+ * be duplicated (if a candidate is running for multiple positions)
  */
 connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`candidate_data` (" +
     "`rcs_id` VARCHAR(45) NOT NULL," +
@@ -123,12 +133,8 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`candidate_data` (" 
     "`plaform` TEXT DEFAULT NULL," +
     "`video_url` VARCHAR(2000) DEFAULT NULL," +
     "PRIMARY KEY (`rcs_id`) ," +
-    "CONSTRAINT `candidate_data_fk1`" +
-    "  FOREIGN KEY (`rcs_id`)" +
-    "  REFERENCES `rpielections`.`candidates` (`rcs_id`)" +
-    "  ON DELETE NO ACTION" +
-    "  ON UPDATE NO ACTION)" +
     "ENGINE = InnoDB", errorCallback);
+
 
 /**
  * Execute the creation of the nominations table. This table maintains all nominations for all candidates (using
@@ -161,6 +167,10 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`nominations` (" +
     "  ON UPDATE NO ACTION)" +
     "ENGINE = InnoDB", errorCallback);
 
+
+/**
+ * Execute the creation of the party_officers table. This table maintains all party officers for all parties
+ */
 connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`party_officers` (" +
     "`party_officer_id` INT NOT NULL AUTO_INCREMENT," +
     "`party_id` INT NOT NULL," +
@@ -176,6 +186,10 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`party_officers` (" 
     "  ON UPDATE NO ACTION)" +
     "ENGINE = InnoDB;", errorCallback);
 
+
+/**
+ * Execute the creation of the assistants table. This table maintains all candidate assistants for all candidates
+ */
 connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`assistants` (" +
     "`assistant_id` INT NOT NULL," +
     "`rcs_id` VARCHAR(45) NOT NULL," +
@@ -188,6 +202,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`assistants` (" +
     "  ON DELETE NO ACTION" +
     "  ON UPDATE NO ACTION)" +
     "ENGINE = InnoDB;", errorCallback);
+
 
 /**
  * Execute the creation of a log table. This table is used to log actions taken by users and administrators, to ensure
@@ -202,6 +217,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`log` (" +
     "PRIMARY KEY (`log_id`) )" +
     "ENGINE = InnoDB;", errorCallback);
 
+
 /**
  * Execute the creation of an adminsitrators table. This table tracks who has adminsitrative access, and what level of
  * access
@@ -211,6 +227,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`administrators` (" 
     "`admin_type` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '0 = no admin\n1 = RnE\n2 = WTG\n3 = Full Admin'," +
     "PRIMARY KEY (`rcs_id`) )" +
     "ENGINE = InnoDB", errorCallback);
+
 
 /**
  * Execute the creation of a views table. This table stores public pages that administrators can add, delete, and modify
@@ -228,12 +245,14 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`pages` (" +
     "PRIMARY KEY (`page_id`))" +
     "ENGINE = InnoDB;", errorCallback);
 
+
 /**
  * Re-enable the foreign key checks and standard precautions
  */
 connection.query("SET SQL_MODE=@OLD_SQL_MODE", errorCallback);
 connection.query("SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS", errorCallback);
 connection.query("SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS", errorCallback);
+
 
 /**
  * Close the database connection

@@ -16,16 +16,30 @@ var dbConnect = function(res) {
 };
 
 router.get('/', function (req, res) {
+    var includeData = (req.body.includeData !== undefined ? req.body.includeData : true);
+
     var connection = dbConnect(res);
 
-    connection.query("SELECT * FROM `candidates`", function(err, result) {
-        if(err) {
-            console.error(err);
-            res.status(500);
-        }
+    if(!includeData) {
+        connection.query("SELECT * FROM `candidates`", function (err, result) {
+            if (err) {
+                console.error(err);
+                res.status(500);
+            }
 
-        res.json(result);
-    });
+            res.json(result);
+        });
+    } else {
+        connection.query("SELECT * FROM `candidates` C LEFT JOIN `candidate_data` D ON C.rcs_id = D.rcs_id " +
+            "UNION SELECT * FROM `candidates` C RIGHT JOIN `candidate_data` D ON C.rcs_id = D.rcs_id;", function (err, result) {
+            if (err) {
+                console.error(err);
+                res.status(500);
+            }
+
+            res.json(result);
+        });
+    }
 
     connection.end();
 });
@@ -35,8 +49,8 @@ router.get('/office/:office_id', function (req, res) {
 
     var office_id = req.params.office_id;
 
-    connection.query("SELECT * FROM `candidates` WHERE office_id = " + mysql.escape(office_id), function(err, result) {
-        if(err) {
+    connection.query("SELECT * FROM `candidates` WHERE office_id = " + mysql.escape(office_id), function (err, result) {
+        if (err) {
             console.error(err);
             res.status(500);
         }
