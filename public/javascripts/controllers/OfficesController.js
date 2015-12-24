@@ -39,17 +39,21 @@ app.controller('OfficesController', ['$scope', '$routeParams', '$location', '$fi
 				});
 			});
 
+			var filterOpt = [];
+
+			responses[2].data.forEach(function(elem) {
+				filterOpt.push({
+					slug: elem.type,
+					label: elem.type[0].toUpperCase() + elem.type.substr(1)
+				});
+			});
+
 			$scope.filterOptions.push({
 				slug: 'all',
 				label: 'All offices'
 			});
 
-			responses[2].data.forEach(function(elem) {
-				$scope.filterOptions.push({
-					slug: elem.type,
-					label: elem.type[0].toUpperCase() + elem.type.substr(1)
-				});
-			});
+			$scope.filterOptions = $scope.filterOptions.concat($filter('orderBy')(filterOpt, "slug"));
 		}, function (status, error) {
 			alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
 		});
