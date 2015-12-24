@@ -1,14 +1,15 @@
-# Elections Dashboard
-A modern platform for conducting elections, designed specifically for GM week at RPI.
+# RPI Elections
+A modern platform for managing elections, designed specifically for GM Week and other student government elections at RPI.
 
 ## Features
+
 * Simpler nominations
 * Accessible candidate and party information
 * Modern web goodness
 
-### Deployment
+## Deployment
 
-This website is built in the MEAN stack (MongoDB, Express.js, Angular.js, and Node.js), and can be deployed using the following steps:
+This website is built in a modified MEAN stack (MySQL, Express.js, Angular.js, and Node.js), and can be deployed using the following steps:
 
 1. Clone this git repository by running the following command in a Git-enabled terminal:
     * `> git clone https://github.com/wtg/elections.git`
@@ -18,24 +19,23 @@ This website is built in the MEAN stack (MongoDB, Express.js, Angular.js, and No
 
 3. If NodeJS and Bower are both installed on your computer, skip this step.
     * Install NodeJS [here](https://nodejs.org/en/download/).
-    * Install Bower through Node Package Manager (npm) by running: `npm install -g bower`.
+    * Install Bower through Node Package Manager (npm) by running: `npm install -g bower`. *Note: bower is used for obtaining new libraries, but all existing bower dependencies are committed into the repository*
 
 4. Install all necessary dependencies by running the following commands:
     * `> npm install`
-    * `> bower install`
 
-5. If MongoDB is both installed on your computer, skip this step. (INSERT DB INSTRUCTIONS HERE)
+5. If MySQL is installed on your computer, skip this step. Install MySQL, or MariaDB (the open-source equivalent).
 
-6. Run the server: `node server.js`
+6. Make a copy of `db.example.js` and name it `db.js`. Provide details about the database connection (host, port, username, password), as shown in the example.
 
+7. Run the server: `npm start`. This command will also create the database for the site if it doesn't currently exist.
 
------------------------------------------------------
+## Credits
 
-### Credits
+This project was created by the [Web Technologies Group](http://www.rpiwtg.com/).
 
-This project was created by the [Web Technologies Group](http://stugov.union.rpi.edu/senate/projects/wtg).
-
-#### Developers 
+### Developers 
+* [Justin Etzine](http://github.com/justetz)
 * [Erica Braunschweig](http://github.com/braune13)
 * [Ylonka Machado](http://github.com/machay)
 * [Rob Russo](http://github.com/rickrizzo)
