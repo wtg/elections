@@ -1,63 +1,35 @@
 var express = require('express'),
     router = express.Router(),
     mysql = require('mysql'),
-    db = require('../db.js');
+    functions = require('../functions.js');
 
-var dbConnect = function(res) {
-    var connection = mysql.createConnection(db);
-    connection.connect();
-    connection.query("USE `rpielections`;", function(err) {
-        if(err) {
-            console.error(err);
-            res.status(500);
-        }
-    });
-    return connection;
+var queries = {
+    all: "SELECT * FROM `offices`",
+    election: " WHERE election_id = ",
+    types: "SELECT DISTINCT type FROM `offices` WHERE NOT type = 'all'"
 };
 
 router.get('/', function (req, res) {
-    var connection = dbConnect(res);
+    var connection = functions.dbConnect(res);
 
-    connection.query("SELECT * FROM `offices`", function(err, result) {
-        if(err) {
-            console.error(err);
-            res.status(500);
-        }
-
-        res.json(result);
-    });
+    connection.query(queries.all, functions.defaultJSONCallback(res));
 
     connection.end();
 });
 
 router.get('/election/:election_id', function (req, res) {
-    var connection = dbConnect(res);
+    var connection = functions.dbConnect(res),
+        election_id = req.params.election_id;
 
-    var election_id = req.params.election_id;
-
-    connection.query("SELECT * FROM `offices` WHERE election_id = " + mysql.escape(election_id), function(err, result) {
-        if(err) {
-            console.error(err);
-            res.status(500);
-        }
-
-        res.json(result);
-    });
+    connection.query(queries.all + queries.election + mysql.escape(election_id), functions.defaultJSONCallback(res));
 
     connection.end();
 });
 
 router.get('/types', function (req, res) {
-    var connection = dbConnect(res);
+    var connection = functions.dbConnect(res);
 
-    connection.query("SELECT DISTINCT type FROM `offices` WHERE NOT type = 'all'", function(err, result) {
-        if(err) {
-            console.error(err);
-            res.status(500);
-        }
-
-        res.json(result);
-    });
+    connection.query(queries.types, functions.defaultJSONCallback(res));
 
     connection.end();
 });

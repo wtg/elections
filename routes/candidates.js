@@ -1,62 +1,45 @@
 var express = require('express'),
     router = express.Router(),
     mysql = require('mysql'),
-    db = require('../db.js');
+    functions = require('../functions.js');
 
-var dbConnect = function(res) {
-    var connection = mysql.createConnection(db);
-    connection.connect();
-    connection.query("USE `rpielections`;", function(err) {
-        if(err) {
-            console.error(err);
-            res.status(500);
-        }
-    });
-    return connection;
+var queries = {
+    allNoData: "SELECT * FROM `candidates`",
+    allWithData: "SELECT C.*, D.preferred_name, D.first_name, D.middle_name, D.last_name, D.greek_affiliated," +
+    " D.entry_date, D.class_by_credit, D.grad_date, D.rin, D.major, D.about, D.platform, D.video_url " +
+    "FROM `candidates` C LEFT JOIN `candidate_data` D ON C.rcs_id = D.rcs_id",
+
+    rcs: " WHERE C.rcs_id = ",
+    office: " WHERE C.office_id = "
+};
+
+var useData = function(req) {
+    var includeData = (req.body.includeData !== undefined ? req.body.includeData : true);
+    return (!includeData ? queries.allNoData : queries.allWithData);
 };
 
 router.get('/', function (req, res) {
-    var includeData = (req.body.includeData !== undefined ? req.body.includeData : true);
+    var connection = functions.dbConnect(res);
 
-    var connection = dbConnect(res);
+    connection.query(useData(req), functions.defaultJSONCallback(res));
 
-    if(!includeData) {
-        connection.query("SELECT * FROM `candidates`", function (err, result) {
-            if (err) {
-                console.error(err);
-                res.status(500);
-            }
+    connection.end();
+});
 
-            res.json(result);
-        });
-    } else {
-        connection.query("SELECT * FROM `candidates` C LEFT JOIN `candidate_data` D ON C.rcs_id = D.rcs_id " +
-            "UNION SELECT * FROM `candidates` C RIGHT JOIN `candidate_data` D ON C.rcs_id = D.rcs_id;", function (err, result) {
-            if (err) {
-                console.error(err);
-                res.status(500);
-            }
+router.get('/rcs/:rcs_id', function (req, res) {
+    var connection = functions.dbConnect(res),
+        rcs_id = req.params.rcs_id;
 
-            res.json(result);
-        });
-    }
+    connection.query(useData(req) + queries.rcs + mysql.escape(rcs_id), functions.defaultJSONCallback(res));
 
     connection.end();
 });
 
 router.get('/office/:office_id', function (req, res) {
-    var connection = dbConnect(res);
+    var connection = functions.dbConnect(res),
+        office_id = req.params.office_id;
 
-    var office_id = req.params.office_id;
-
-    connection.query("SELECT * FROM `candidates` WHERE office_id = " + mysql.escape(office_id), function (err, result) {
-        if (err) {
-            console.error(err);
-            res.status(500);
-        }
-
-        res.json(result);
-    });
+    connection.query(useData(req) + queries.office + mysql.escape(office_id), functions.defaultJSONCallback(res));
 
     connection.end();
 });
