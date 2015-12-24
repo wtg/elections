@@ -125,7 +125,9 @@
         <hr/>
         <div class="col-md-3">
             <div class="btn-group btn-group-justified">
-                <a class="btn btn-primary btn-justified">Create office</a>
+                <a class="btn btn-primary btn-justified" ng-click="setEditId('new')" ng-disabled="currentEditId=='new'">
+                    Create office
+                </a>
             </div>
             <br/>
             <ul class="nav nav-pills nav-stacked">
@@ -140,6 +142,66 @@
                     </a>
                 </li>
             </ul>
+        </div>
+        <div class="col-md-9" ng-show="currentEditId == 'new'">
+            <h2 class="office-title">
+                New office
+                <button class="btn btn-success pull-right" ng-click="createOffice()">Create</button>
+            </h2>
+            <hr/>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="posTitle" class="col-sm-3 control-label">Office Title</label>
+
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" name="newTitle" id="newTitle" ng-model="new.title"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="posDesc" class="col-sm-3 control-label">Office Description</label>
+
+                    <div class="col-sm-9">
+                        <textarea class="form-control" name="newDesc" id="newDesc" ng-model="new.description"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="posNomReq" class="col-sm-3 control-label">Required Nominations</label>
+
+                    <div class="col-sm-9">
+                        <input class="form-control" type="number" name="newNomReq" id="newNomReq"
+                               ng-model="new.nominationsRequired"/>
+                        <span id="helpBlock"
+                              class="help-block">For a position with no required nominations, enter 0.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="posNomReq" class="col-sm-3 control-label">Number of Openings</label>
+
+                    <div class="col-sm-9">
+                        <input class="form-control" type="number" name="newNumOpen" id="newNumOpen"
+                               ng-model="new.numberOpenings"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="posCategory" class="col-sm-3 control-label">Filter Category</label>
+
+                    <div class="col-sm-9">
+                        <select class="form-control" type="text" name="newCategory" id="newCategory" ng-model="new.type">
+                            <option ng-repeat="f in filterOptions" value="{{f.slug}}" ng-bind="f.label"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" ng-model="new.disabled"
+                                       name="newDisabled" id="newDisabled"> Disabled initially
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
         <div class="col-md-9" ng-repeat="o in offices" ng-show="currentEditId == o.id">
             <h2 class="office-title">

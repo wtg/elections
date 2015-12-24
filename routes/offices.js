@@ -49,11 +49,16 @@ router.get('/types', function (req, res) {
 router.post('/', function (req, res) {
     var connection = functions.dbConnect(res);
 
-    var data = req.body.data;
+    var data = req.body;
 
     if (!data) res.status(204);
 
-    var query = queries.post + "(" + data.election_id + ", '" + "Test', 'test', '1', '125', '2020', '1')";
+    var query = queries.post + functions.constructSQLArray([1, data.name, data.description,
+                                                  data.openings, data.nominations_required, data.type, data.disabled]);
+
+    connection.query(query, functions.defaultJSONCallback(res));
+
+    connection.end();
 });
 
 module.exports = router;

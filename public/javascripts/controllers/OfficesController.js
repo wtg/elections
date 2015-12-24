@@ -58,30 +58,6 @@ app.controller('OfficesController', ['$scope', '$routeParams', '$location', '$fi
 		}, function (status, error) {
 			alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
 		});
-
-		//$http.get('/api/offices/election/1').then(function (result) {
-		//	result.data.forEach(function (elem) {
-		//		$scope.offices.push({
-		//			id: elem.office_id,
-		//			title: elem.name,
-		//			description: elem.description,
-		//			disabled: elem.disabled == 1,
-		//			type: elem.type,
-		//			numberOpenings: elem.openings,
-		//			nominationsRequired: elem.nominations_required
-		//		});
-		//	});
-        //
-		//	$scope.currentEditId = $scope.offices[0].id;
-		//}, function (status, error) {
-		//	alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
-		//});
-
-		//$http.get('/api/offices/types').then(function (result) {
-        //
-		//}, function(status, error) {
-		//	alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
-		//})
 	};
 	loadData();
 
@@ -170,4 +146,21 @@ app.controller('OfficesController', ['$scope', '$routeParams', '$location', '$fi
 			}
 		});
 	};
+
+	$scope.new = { title: '', description: '', nominationsRequired: '', numberOpenings: '', type: '', disabled: false };
+
+	$scope.createOffice = function() {
+		var preparedData = {
+			name: $scope.new.title,
+			description: $scope.new.description,
+			nominations_required: $scope.new.nominationsRequired,
+			openings: $scope.new.numberOpenings,
+			type: $scope.new.type,
+			disabled: $scope.new.disabled
+		};
+
+		$http.post('/api/offices', preparedData).then(function() {
+			alert("added successfully!");
+		});
+	}
 }]);
