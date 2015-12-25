@@ -269,11 +269,10 @@
                 </li>
             </ul>
             <div class="input-group">
-                <input class="form-control" type="text" placeholder="New candidate's RIN or RCS ID"
-                       ng-model="addCandidateField"/>
+                <input class="form-control" type="text" placeholder="New candidate's RIN or RCS ID" ng-model="newCandidate.rcs" name="addCandidateField{{o.id}}" id="addCandidateField"{{o.id}}/>
 				<span class="input-group-btn">
 		        	<button class="btn btn-primary" type="button" ng-click="addCandidate(o.id)"
-                            ng-disabled="addCandidateField == ''">
+                            ng-disabled="newCandidate.rcs == ''">
                         Add
                     </button>
 		      	</span>

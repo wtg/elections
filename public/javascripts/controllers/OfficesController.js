@@ -106,11 +106,11 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
         return Math.round((obtained / required) * 100) + '%';
     };
 
-    $scope.addCandidateField = "";
+    $scope.newCandidate = {rcs: ""};
 
     $scope.setEditId = function (newId) {
         $scope.currentEditId = newId;
-        $scope.addCandidateField = "";
+        $scope.newCandidate.rcs = "";
     };
 
     $scope.removeCandidate = function (rcsId, officeId) {
@@ -127,23 +127,20 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                     });
                 }
                 if (indexToRemove > -1) {
-                    o.candidates.splice(indexToRemove, 1);
+                    $http.delete('/api/candidates/delete/' + rcsId + '/' + officeId + '/').then(function() {
+                        o.candidates.splice(indexToRemove, 1);
+                        alert("deleted successfully!");
+                    });
                 }
             });
         }
     };
 
-    $scope.addCandidate = function (officeId) {
-        console.log($scope.addCandidateField);
-        $scope.offices.forEach(function (o) {
-            if (o.id === officeId) {
-                o.candidates.push({
-                    name: "Test",
-                    party: "",
-                    rcsId: $scope.addCandidateField
-                });
-                $scope.addCandidateField = "";
-            }
+    $scope.addCandidate = function () {
+        $http.post('/api/candidates/create/' + $scope.newCandidate.rcs + '/' + $scope.currentEditId + '/').then(function() {
+            alert("candidate added successfully!");
+            $scope.newCandidate.rcs = "";
+            $route.reload();
         });
     };
 

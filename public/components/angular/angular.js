@@ -4461,7 +4461,7 @@ function createInjector(modulesToLoad, strictDi) {
         key = $inject[i];
         if (typeof key !== 'string') {
           throw $injectorMinErr('itkn',
-                  'Incorrect injection token! Expected service name as string, got {0}', key);
+                  'Incorrect injection token.js! Expected service name as string, got {0}', key);
         }
         args.push(
           locals && locals.hasOwnProperty(key)
@@ -9533,11 +9533,11 @@ function $HttpProvider() {
    * If you set the `defaults.cache = false` then only requests that specify their own custom
    * cache object will be cached. See {@link $http#caching $http Caching} for more information.
    *
-   * - **`defaults.xsrfCookieName`** - {string} - Name of cookie containing the XSRF token.
+   * - **`defaults.xsrfCookieName`** - {string} - Name of cookie containing the XSRF token.js.
    * Defaults value is `'XSRF-TOKEN'`.
    *
    * - **`defaults.xsrfHeaderName`** - {string} - Name of HTTP header to populate with the
-   * XSRF token. Defaults value is `'X-XSRF-TOKEN'`.
+   * XSRF token.js. Defaults value is `'X-XSRF-TOKEN'`.
    *
    * - **`defaults.headers`** - {Object} - Default headers for all $http requests.
    * Refer to {@link ng.$http#setting-http-headers $http} for documentation on
@@ -12824,7 +12824,7 @@ AST.prototype = {
     var value = this.program();
 
     if (this.tokens.length !== 0) {
-      this.throwError('is an unexpected token', this.tokens[0]);
+      this.throwError('is an unexpected token.js', this.tokens[0]);
     }
 
     return value;
