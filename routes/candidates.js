@@ -57,7 +57,15 @@ router.post('/create/:rcs_id/:office_id', function (req, res) {
     var rcs_id = req.params.rcs_id,
         office_id = req.params.office_id;
 
-    cms.getRCS(rcs_id).then(function (response) {
+    var promise;
+    if (isNaN(parseInt(rcs_id))) {
+        console.log("RCS ID, NOT RIN");
+        promise = cms.getRCS(rcs_id);
+    } else {
+        promise = cms.getRIN(rcs_id);
+    }
+
+    promise.then(function (response) {
         if (response.substr(0, 4) !== "<html>") {
             var cms_data = JSON.parse(response);
 
@@ -74,7 +82,7 @@ router.post('/create/:rcs_id/:office_id', function (req, res) {
                 if (err) throw err;
             });
 
-            values = functions.constructSQLArray([rcs_id, office_id]);
+            values = functions.constructSQLArray([cms_data.username, office_id]);
 
             query = queries.post + values.substr(0, values.length - 1) + ", " + queries.active_election + ")";
             console.log(query);
