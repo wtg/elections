@@ -57,7 +57,10 @@
 
                                 <p ng-if="c.party !== undefined && c.party != ''" class="profession"
                                    ng-bind="c.party"></p>
-                                <h5><i class="fa fa-graduation-cap fa-fw text-muted"></i> Mechanical Enginering </h5>
+                                <h5 ng-hide="!c.major">
+                                    <i class="fa fa-graduation-cap fa-fw text-muted"></i>
+                                    <span ng-bind="c.major"></span>
+                                </h5>
                                 <h5><a ng-href="{{c.rcsId}}@rpi.edu">
                                     <i class="fa fa-envelope-o fa-fw text-muted"></i> {{c.rcsId}}@rpi.edu
                                 </a></h5>
