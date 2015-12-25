@@ -1,5 +1,5 @@
 var dependencies = [
-    'ngRoute', 'ng-showdown'
+    'ngRoute', 'ng-showdown', 'ngCookies', 'selectize'
 ];
 
 var app = angular.module('Elections', dependencies);

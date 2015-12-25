@@ -156,7 +156,7 @@
 }
 .card .header {
     padding: 15px 20px;
-    height: 90px;
+    max-height: 90px;
 }
 .card .motto{
     border-bottom: 1px solid #EEEEEE;

@@ -17,7 +17,9 @@ var queries = {
     post: "INSERT INTO `rpielections`.`candidates` (`rcs_id`, `office_id`, `election_id`) VALUES ",
     postCMSData: "INSERT INTO `rpielections`.`candidate_data` (`rcs_id`, `preferred_name`, `first_name`, " +
     "`middle_name`, `last_name`, `greek_affiliated`, `entry_date`, `class_by_credit`, `grad_date`, `rin`) VALUES ",
-    remove: "DELETE FROM `rpielections`.`candidates` "
+    remove: "DELETE FROM `rpielections`.`candidates` ",
+
+    duplicateRCS: " ON DUPLICATE KEY UPDATE rcs_id = "
 };
 
 var useData = function (req) {
@@ -75,7 +77,7 @@ router.post('/create/:rcs_id/:office_id', function (req, res) {
                 cms_data.grad_date, cms_data.student_id
             ]);
 
-            var query = queries.postCMSData + values + " ON DUPLICATE KEY UPDATE rcs_id = " +
+            var query = queries.postCMSData + values + queries.duplicateRCS +
                 mysql.escape(cms_data.username);
 
             connection.query(query, function (err) {
@@ -84,7 +86,8 @@ router.post('/create/:rcs_id/:office_id', function (req, res) {
 
             values = functions.constructSQLArray([cms_data.username, office_id]);
 
-            query = queries.post + values.substr(0, values.length - 1) + ", " + queries.active_election + ")";
+            query = queries.post + values.substr(0, values.length - 1) + ", " + queries.active_election + ")" +
+                    queries.duplicateRCS + mysql.escape(cms_data.username) + ", office_id = " + office_id;
             console.log(query);
 
             connection.query(query, functions.defaultJSONCallback(res));
