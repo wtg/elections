@@ -60,6 +60,12 @@ connection.query("INSERT INTO `offices` VALUES " +
     "(24,1,'Alumni Treasurer','Something about the position',1,50,'2016',0)", errorCallback);
 
 /**
+ * Insert necessary configuration row
+ */
+connection.query("INSERT INTO `rpielections`.`configurations` (`key`, `value`) VALUES ('active_election_id', 1)",
+    errorCallback());
+
+/**
  * Close the database connection
  */
 connection.end();

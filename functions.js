@@ -22,5 +22,14 @@ module.exports = {
 
             res.json(result);
         };
+    },
+    constructSQLArray: function (values) {
+        var array = '(';
+
+        values.forEach(function(elem, index) {
+            array += mysql.escape(elem) + ( index < values.length -1 ? ', ' : ')');
+        });
+
+        return array;
     }
-}
+};
