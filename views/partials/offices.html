@@ -258,16 +258,20 @@
                     <label for="posCategory" class="col-sm-3 control-label">Filter Category</label>
 
                     <div class="col-sm-9">
-                        <selectize class="form-control" config="selectizeConfig"
-                                   name="posCategory" id="posCategory" ng-model="o.type">
+                        <select class="form-control" type="text" name="posCategory" id="posCategory" ng-model="o.type"
+                                ng-change="o.changesPending = true">
                             <option ng-repeat="f in filterOptions" value="{{f.slug}}" ng-bind="f.label"
-                            ng-selected="o.type===f.slug"></option>
-                        </selectize>
-                        <!--<select class="form-control" type="text" name="posCategory" id="posCategory" ng-model="o.type"-->
-                                <!--ng-change="o.changesPending = true">-->
-                            <!--<option ng-repeat="f in filterOptions" value="{{f.slug}}" ng-bind="f.label"-->
-                                    <!--ng-selected="o.type===f.slug"></option>-->
-                        <!--</select>-->
+                                    ng-selected="o.type===f.slug"></option>
+                            <option value="new">New category...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" ng-show="o.type == 'new'">
+                    <label for="posNewCategory" class="col-sm-3 control-label">New Category</label>
+
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" name="posNewCategory" id="posNewCategory"
+                               ng-model="o.newType" ng-change="o.changesPending = true"/>
                     </div>
                 </div>
             </form>
