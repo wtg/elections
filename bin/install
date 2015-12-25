@@ -128,7 +128,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`candidate_data` (" 
     "`class_by_credit` VARCHAR(45) NOT NULL," +
     "`grad_date` VARCHAR(45) NOT NULL," +
     "`rin` VARCHAR(9) NOT NULL," +
-    "`major` VARCHAR(45) NOT NULL," +
+    "`major` VARCHAR(45) NULL," +
     "`about` TEXT DEFAULT NULL," +
     "`platform` TEXT DEFAULT NULL," +
     "`video_url` VARCHAR(2000) DEFAULT NULL," +
