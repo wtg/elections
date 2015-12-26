@@ -17,7 +17,9 @@ var queries = {
     post: "INSERT INTO `rpielections`.`candidates` (`rcs_id`, `office_id`, `election_id`) VALUES ",
     postCMSData: "INSERT INTO `rpielections`.`candidate_data` (`rcs_id`, `preferred_name`, `first_name`, " +
     "`middle_name`, `last_name`, `greek_affiliated`, `entry_date`, `class_by_credit`, `grad_date`, `rin`) VALUES ",
-    remove: "DELETE FROM `rpielections`.`candidates` "
+    remove: "DELETE FROM `rpielections`.`candidates` ",
+
+    duplicateRCS: " ON DUPLICATE KEY UPDATE rcs_id = "
 };
 
 var useData = function (req) {
@@ -52,51 +54,72 @@ router.get('/office/:office_id', function (req, res) {
 });
 
 router.post('/create/:rcs_id/:office_id', function (req, res) {
-    var connection = functions.dbConnect(res);
+    var permissions = functions.verifyPermissions(req);
 
-    var rcs_id = req.params.rcs_id,
-        office_id = req.params.office_id;
+    if (permissions.admin) {
+        var connection = functions.dbConnect(res);
 
-    cms.getRCS(rcs_id).then(function (response) {
-        if (response.substr(0, 4) !== "<html>") {
-            var cms_data = JSON.parse(response);
+        var rcs_id = req.params.rcs_id,
+            office_id = req.params.office_id;
 
-            var values = functions.constructSQLArray([
-                cms_data.username, cms_data.preferred_name, cms_data.first_name, cms_data.middle_name,
-                cms_data.last_name, (cms_data.greek_affiliated ? 1 : 0), cms_data.entry_date, cms_data.class_by_credit,
-                cms_data.grad_date, cms_data.student_id
-            ]);
-
-            var query = queries.postCMSData + values + " ON DUPLICATE KEY UPDATE rcs_id = " +
-                mysql.escape(cms_data.username);
-
-            connection.query(query, function (err) {
-                if (err) throw err;
-            });
-
-            values = functions.constructSQLArray([rcs_id, office_id]);
-
-            query = queries.post + values.substr(0, values.length - 1) + ", " + queries.active_election + ")";
-            console.log(query);
-
-            connection.query(query, functions.defaultJSONCallback(res));
+        var promise;
+        if (isNaN(parseInt(rcs_id))) {
+            console.log("RCS ID, NOT RIN");
+            promise = cms.getRCS(rcs_id);
         } else {
-            console.log("Invalid RCS entered (" + rcs_id + "). The client was notified.");
-            res.status(301);
+            promise = cms.getRIN(rcs_id);
         }
-        connection.end();
-    });
+
+        promise.then(function (response) {
+            if (response.substr(0, 4) !== "<html>") {
+                var cms_data = JSON.parse(response);
+
+                var values = functions.constructSQLArray([
+                    cms_data.username, cms_data.preferred_name, cms_data.first_name, cms_data.middle_name,
+                    cms_data.last_name, (cms_data.greek_affiliated ? 1 : 0), cms_data.entry_date, cms_data.class_by_credit,
+                    cms_data.grad_date, cms_data.student_id
+                ]);
+
+                var query = queries.postCMSData + values + queries.duplicateRCS +
+                    mysql.escape(cms_data.username);
+
+                connection.query(query, function (err) {
+                    if (err) throw err;
+                });
+
+                values = functions.constructSQLArray([cms_data.username, office_id]);
+
+                query = queries.post + values.substr(0, values.length - 1) + ", " + queries.active_election + ")" +
+                    queries.duplicateRCS + mysql.escape(cms_data.username) + ", office_id = " + office_id;
+                console.log(query);
+
+                connection.query(query, functions.defaultJSONCallback(res));
+            } else {
+                console.log("Invalid RCS entered (" + rcs_id + "). The client was notified.");
+                res.status(301);
+            }
+            connection.end();
+        });
+    } else {
+        res.status(401);
+    }
 });
 
-router.delete('/delete/:rcs_id/:office_id', function(req, res) {
-    var connection = functions.dbConnect(res);
+router.delete('/delete/:rcs_id/:office_id', function (req, res) {
+    var permissions = functions.verifyPermissions(req);
 
-    var rcs_id = req.params.rcs_id,
-        office_id = req.params.office_id;
+    if (permissions.admin) {
+        var connection = functions.dbConnect(res);
 
-    var query = queries.remove + " WHERE rcs_id = " + mysql.escape(rcs_id) + " AND office_id = " + mysql.escape(office_id);
+        var rcs_id = req.params.rcs_id,
+            office_id = req.params.office_id;
 
-    connection.query(query, functions.defaultJSONCallback(res));
+        var query = queries.remove + " WHERE rcs_id = " + mysql.escape(rcs_id) + " AND office_id = " + mysql.escape(office_id);
+
+        connection.query(query, functions.defaultJSONCallback(res));
+    } else {
+        res.status(401);
+    }
 });
 
 module.exports = router;

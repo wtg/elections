@@ -57,7 +57,10 @@
 
                                 <p ng-if="c.party !== undefined && c.party != ''" class="profession"
                                    ng-bind="c.party"></p>
-                                <h5><i class="fa fa-graduation-cap fa-fw text-muted"></i> Mechanical Enginering </h5>
+                                <h5 ng-hide="!c.major">
+                                    <i class="fa fa-graduation-cap fa-fw text-muted"></i>
+                                    <span ng-bind="c.major"></span>
+                                </h5>
                                 <h5><a ng-href="{{c.rcsId}}@rpi.edu">
                                     <i class="fa fa-envelope-o fa-fw text-muted"></i> {{c.rcsId}}@rpi.edu
                                 </a></h5>
@@ -103,11 +106,12 @@
                             </div>
                         </div>
                         <div class="footer">
+                            <div class="col-xs-2"></div>
                             <button class="btn btn-simple" rel="tooltip" title="" onclick="rotateCard(this)"
                                     data-original-title="Flip Card">
                                 <i class="fa fa-reply"></i> Back
                             </button>
-                            <div class="social-links pull-right">
+                            <div class="social-links">
                                 <a href="http://cretive-tim.com" class="facebook"><i
                                         class="fa fa-facebook fa-fw"></i></a>
                                 <a href="http://cretive-tim.com" class="google"><i class="fa fa-google-plus fa-fw"></i></a>
@@ -143,6 +147,17 @@
                     </a>
                 </li>
             </ul>
+        </div>
+        <div class="col-md-9" ng-show="showAlerts" ng-repeat="a in alerts track by $index">
+            <div class="alert" ng-class="{'alert-danger': a.type == 'error', 'alert-success': a.type == 'success',
+                 'alert-info': a.type == 'info'}">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="removeAlert($index)">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <strong ng-if="a.type === 'success'">Success!</strong>
+                <strong ng-if="a.type === 'error'">Error!</strong>
+                <span ng-bind="a.message"></span>
+            </div>
         </div>
         <div class="col-md-9" ng-show="currentEditId == 'new'">
             <h2 class="office-title">
@@ -210,7 +225,7 @@
                 <span ng-bind="o.title"></span>
                 <span ng-if="o.title.length === 0">Untitled office</span>
                 <span class="text-muted" ng-show="o.disabled">(disabled)</span>
-                <button class="btn btn-success pull-right" ng-click="saveEdits()">Save</button>
+                <button class="btn btn-success pull-right" ng-click="saveEdits()" ng-disabled="!o.changesPending">Save</button>
             </h2>
             <hr/>
             <form class="form-horizontal">
@@ -218,14 +233,16 @@
                     <label for="posTitle" class="col-sm-3 control-label">Office Title</label>
 
                     <div class="col-sm-9">
-                        <input class="form-control" type="text" name="posTitle" id="posTitle" ng-model="o.title"/>
+                        <input class="form-control" type="text" name="posTitle" id="posTitle" ng-model="o.title"
+                            ng-change="o.changesPending = true"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="posDesc" class="col-sm-3 control-label">Office Description</label>
 
                     <div class="col-sm-9">
-                        <textarea class="form-control" name="posDesc" id="posDesc" ng-model="o.description"></textarea>
+                        <textarea class="form-control" name="posDesc" id="posDesc" ng-model="o.description"
+                                  ng-change="o.changesPending = true"></textarea>
                     </div>
                 </div>
                 <div class="form-group">
@@ -233,7 +250,7 @@
 
                     <div class="col-sm-9">
                         <input class="form-control" type="number" name="posNomReq" id="posNomReq"
-                               ng-model="o.nominationsRequired"/>
+                               ng-model="o.nominationsRequired" ng-change="o.changesPending = true"/>
                         <span id="helpBlock"
                               class="help-block">For a position with no required nominations, enter 0.</span>
                     </div>
@@ -242,10 +259,20 @@
                     <label for="posCategory" class="col-sm-3 control-label">Filter Category</label>
 
                     <div class="col-sm-9">
-                        <select class="form-control" type="text" name="posCategory" id="posCategory" ng-model="o.type">
+                        <select class="form-control" type="text" name="posCategory" id="posCategory" ng-model="o.type"
+                                ng-change="o.changesPending = true">
                             <option ng-repeat="f in filterOptions" value="{{f.slug}}" ng-bind="f.label"
                                     ng-selected="o.type===f.slug"></option>
+                            <option value="new">New category...</option>
                         </select>
+                    </div>
+                </div>
+                <div class="form-group" ng-show="o.type == 'new'">
+                    <label for="posNewCategory" class="col-sm-3 control-label">New Category</label>
+
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" name="posNewCategory" id="posNewCategory"
+                               ng-model="o.newType" ng-change="o.changesPending = true"/>
                     </div>
                 </div>
             </form>
@@ -256,7 +283,7 @@
                 <span class="text-success">Green</span> rows denote candidates that have achieved 100% of the necessary
                 nominations.
                 <span class="text-warning">Yellow</span> rows denote candidates that have collected less than the
-                necessary nominations.
+                necessary nominations, but have already earned nominations.
             </p>
             <ul class="list-group">
                 <li class="list-group-item" ng-repeat="c in o.candidates | orderBy:'-nominations'"
@@ -265,7 +292,7 @@
                     <button class="btn btn-default btn-xs pull-right" ng-click="removeCandidate(c.rcsId, o.id)">
                         <span class="fa fa-times"></span>
                     </button>
-                    <span ng-bind="c.name"></span> <span class="text-muted" ng-bind="'('+c.rcsId+')'"></span>
+                    <span ng-bind="c.name"></span> <span class="text-muted" ng-bind="'(' + c.rcsId + ')'"></span>
                 </li>
             </ul>
             <div class="input-group">
