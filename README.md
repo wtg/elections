@@ -28,7 +28,7 @@ This website is built in a modified MEAN stack (MySQL, Express.js, Angular.js, a
 
 6. Make a copy of `db.example.js` and name it `db.js`. Provide details about the database connection (host, port, username, password), as shown in the example.
 
-7. Make a copy of `token.example.js` and name it `token.js`. Replace `<token>` with your Club Management System API Token. To obtain a key, access [CMS](cms.union.rpi.edu) or contact the Union Systems Administrators.
+7. Make a copy of `token.example.js` and name it `token.js`. Replace `<token>` with your Club Management System API Token. To obtain a key, access [CMS](https://cms.union.rpi.edu) or contact the Union Systems Administrators.
 
 8. Run the server: `npm start`. This command will also create the database for the site if it doesn't currently exist.
 
