@@ -16,7 +16,11 @@
             </div>
         </div>
     </div>
-    <div class="row" ng-if="(filter != 'all' && filter != 'edit' && numOffices(filter) == 0) || (filter == 'all' && offices.length === 0)">
+    <div class="row" ng-if="!dataLoaded">
+        <div class="loader">Loading...</div>
+        <!--<hr/>-->
+    </div>
+    <div class="row" ng-if="dataLoaded && ((filter != 'all' && filter != 'edit' && numOffices(filter) == 0) || (filter == 'all' && offices.length === 0))">
         <div class="col-xs-12">
             <br/>
             <h3 ng-if="filter != 'all' && filter != 'edit' && numOffices(filter) == 0">No offices were found for this filter!</h3>
@@ -131,7 +135,7 @@
         </div>
     </div>
     <hr ng-repeat-end ng-if="(filter == 'all' || filter == o.type) && !o.disabled"/>
-    <div class="row" ng-if="editPermissions && filter == 'edit'">
+    <div class="row" ng-if="dataLoaded && editPermissions && filter == 'edit'">
         <hr/>
         <div class="col-md-3">
             <div class="btn-group btn-group-justified">
@@ -333,7 +337,7 @@
                 this office from the Elections site.</p>
         </div>
     </div>
-    <hr ng-if="filter == 'edit'"/>
+    <hr ng-if="filter == 'edit' || !dataLoaded"/>
     <footer>
         <div class="row">
             <div class="col-sm-8 col-xs-12">

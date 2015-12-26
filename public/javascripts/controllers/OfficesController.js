@@ -44,6 +44,12 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                     });
                 });
 
+                $scope.offices.forEach(function(o) {
+                    if(o.candidates) {
+                        shuffle(o.candidates);
+                    }
+                });
+
                 var filterOpt = [];
 
                 responses[2].data.forEach(function (elem) {
@@ -61,6 +67,8 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                 $scope.filterOptions = $scope.filterOptions.concat($filter('orderBy')(filterOpt, "slug"));
             }, function (status, error) {
                 alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
+            }).finally(function() {
+                $scope.dataLoaded = true;
             });
         };
         loadData();
@@ -80,6 +88,8 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
             $scope.new = {
                 title: '', description: '', nominationsRequired: '', numberOpenings: '', type: '', disabled: false
             };
+
+            $scope.dataLoaded = false;
         };
         instantiateVariables();
 
@@ -121,6 +131,25 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                 from: from
             });
             $cookies.putObject("officeAlerts", {array: $scope.alerts}, {expires: new Date(new Date().getTime() + 300000)});
+        };
+
+        var shuffle = function (array) {
+            var currentIndex = array.length, temporaryValue, randomIndex;
+
+            // While there remain elements to shuffle...
+            while (0 !== currentIndex) {
+
+                // Pick a remaining element...
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex -= 1;
+
+                // And swap it with the current element.
+                temporaryValue = array[currentIndex];
+                array[currentIndex] = array[randomIndex];
+                array[randomIndex] = temporaryValue;
+            }
+
+            return array;
         };
 
         /**
