@@ -12,6 +12,7 @@ var CASAuthentication = require('cas-authentication');
 var routes = require('./routes/index');
 var offices = require('./routes/offices');
 var candidates = require('./routes/candidates');
+var parties = require('./routes/parties');
 var cas_actions = require('./routes/users');
 
 var Q = require('q'),
@@ -51,7 +52,7 @@ app.use('/bower_components', express.static(__dirname + '/bower_components'));
 app.use('/', routes);
 app.use('/api/offices', offices);
 app.use('/api/candidates', candidates);
-
+app.use('/api/parties', parties);
 app.use('/api/users', cas_actions);
 
 app.get('/login', cas.bounce, function (req, res) {

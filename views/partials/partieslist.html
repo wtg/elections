@@ -4,20 +4,18 @@
             <h1>Political Parties</h1>
             <hr/>
             <div class="row">
-                <div class="col-md-6" ng-repeat="i in [0,1,2,3,4,5,6,7,8,9]">
-                    <div class="panel panel-default">
+                <div class="col-md-6" ng-repeat="i in [0,1]">
+                    <div class="panel panel-default" ng-repeat="p in parties track by $index" ng-if="$index % 2 == i">
                         <div class="panel-heading">
-                            <h2 class="panel-title"><a href="#/party/1">Party Name</a></h2>
+                            <h2 class="panel-title"><a ng-href="#/party/{{p.id}}" ng-bind="p.name"></a></h2>
                         </div>
                         <div class="panel-body">
                             <p>
-                                <strong>Party Leader:</strong> Person Name
+                                <strong>Party Leader:</strong>
+                                <span ng-bind="p.leader" ng-if="p.leader"></span>
+                                <span ng-if="!p.leader">N/A</span>
                             </p>
-                            <p>Material confined likewise it humanity raillery an unpacked as he. Three chief merit no
-                                if. Now how her edward engage not horses. Oh resolution he dissimilar precaution to
-                                comparison an. Matters engaged between he of pursuit manners we moments. Merit gay end
-                                sight front. Manor equal it on again ye folly by match. In so melancholy as an
-                                sentiments simplicity connection. Far supply depart branch agreed old get our.</p>
+                            <p ng-bind="p.platform"></p>
                         </div>
                     </div>
                 </div>
