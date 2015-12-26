@@ -22,7 +22,7 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                     });
                 });
 
-                $scope.currentEditId = $scope.offices[0].id;
+                $scope.currentEditId = $cookies.getObject("officesEditId") ? $cookies.getObject("officesEditId").val : $scope.offices[0].id;
 
                 responses[1].data.forEach(function (c_elem) {
                     $scope.offices.forEach(function (o_elem) {
@@ -93,7 +93,6 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
             } else {
                 $scope.showAlerts = true;
                 $scope.alerts = $cookies.getObject("officeAlerts").array;
-                console.log($cookies.getObject("officeAlerts").array);
             }
         };
         initiateAlerts();
@@ -132,6 +131,13 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
             $scope.alerts.splice(index, 1);
             $cookies.putObject("officeAlerts", {array: $scope.alerts}, {expires: new Date(new Date().getTime() + 300000)});
         };
+
+
+        $scope.$on('$routeChangeStart', function () {
+            if($scope.filter === 'edit') {
+                $cookies.putObject("officesEditId", { val: $scope.currentEditId });
+            }
+        });
 
         /**
          * Function that's called immediately to determine the filter selected
@@ -237,6 +243,12 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                         });
                     }
                 });
+            }
+        };
+
+        $scope.addCandidateKeypressEvent = function(keyEvent) {
+            if (keyEvent.which === 13 && $scope.newCandidate.rcs) {
+                $scope.addCandidate();
             }
         };
 

@@ -106,17 +106,22 @@
                             </div>
                         </div>
                         <div class="footer">
-                            <div class="col-xs-2"></div>
                             <button class="btn btn-simple" rel="tooltip" title="" onclick="rotateCard(this)"
                                     data-original-title="Flip Card">
                                 <i class="fa fa-reply"></i> Back
                             </button>
-                            <div class="social-links">
-                                <a href="http://cretive-tim.com" class="facebook"><i
-                                        class="fa fa-facebook fa-fw"></i></a>
-                                <a href="http://cretive-tim.com" class="google"><i class="fa fa-google-plus fa-fw"></i></a>
-                                <a href="http://cretive-tim.com" class="twitter"><i class="fa fa-twitter fa-fw"></i></a>
-                            </div>
+                            <button class="btn btn-simple"><i class="fa fa-facebook fa-fw"></i></button>
+                            <button class="btn btn-simple"><i class="fa fa-twitter fa-fw"></i></button>
+                            <!--<div class="social-links">-->
+                                <!--<a href="http://cretive-tim.com" class="facebook">-->
+                                    <!--<i class="fa fa-facebook fa-fw"></i>-->
+                                <!--</a>-->
+                                <!--<a href="http://cretive-tim.com" class="twitter">-->
+                                    <!--<i class="fa fa-twitter fa-fw"></i>-->
+                                <!--</a>-->
+                            <!--</div>-->
+
+                            <div class="clearfix"></div>
                         </div>
                     </div>
                     <!-- end back panel -->
@@ -296,7 +301,9 @@
                 </li>
             </ul>
             <div class="input-group">
-                <input class="form-control" type="text" placeholder="New candidate's RIN or RCS ID" ng-model="newCandidate.rcs" name="addCandidateField{{o.id}}" id="addCandidateField"{{o.id}}/>
+                <input class="form-control" type="text" placeholder="New candidate's RIN or RCS ID"
+                       ng-model="newCandidate.rcs" name="addCandidateField{{o.id}}" ng-keypress="addCandidateKeypressEvent($event)"
+                       id="addCandidateField"{{o.id}}/>
 				<span class="input-group-btn">
 		        	<button class="btn btn-primary" type="button" ng-click="addCandidate(o.id)"
                             ng-disabled="newCandidate.rcs == ''">

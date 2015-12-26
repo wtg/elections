@@ -70,22 +70,22 @@ router.post('/create/:rcs_id/:office_id', function (req, res) {
     var permissions = functions.verifyPermissions(req);
 
     if (permissions.admin) {
-        var connection = functions.dbConnect(res);
-
         var rcs_id = req.params.rcs_id,
             office_id = req.params.office_id;
 
         var promise;
         if (isNaN(parseInt(rcs_id))) {
-            console.log("RCS ID, NOT RIN");
             promise = cms.getRCS(rcs_id);
         } else {
             promise = cms.getRIN(rcs_id);
         }
 
         promise.then(function (response) {
-            if (response.substr(0, 4) !== "<html>") {
-                var cms_data = JSON.parse(response);
+            var cms_data;
+            try {
+                cms_data = JSON.parse(response);
+
+                var connection = functions.dbConnect(res);
 
                 var values = functions.constructSQLArray([
                     cms_data.username, cms_data.preferred_name, cms_data.first_name, cms_data.middle_name,
@@ -107,11 +107,14 @@ router.post('/create/:rcs_id/:office_id', function (req, res) {
                 console.log(query);
 
                 connection.query(query, functions.defaultJSONCallback(res));
-            } else {
+
+                connection.end();
+            } catch (e) {
                 console.log("Invalid RCS entered (" + rcs_id + "). The client was notified.");
-                res.status(301);
+                res.status(400);
             }
-            connection.end();
+        }, function() {
+            res.status(400);
         });
     } else {
         res.status(401);

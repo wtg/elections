@@ -68,11 +68,7 @@
         z-index: 3;
 }
 
-.back .btn-simple{
-    position: absolute;
-    left: 0;
-    bottom: 4px;
-}
+
 /*        Style       */
 
 
@@ -151,7 +147,7 @@
 .card .footer .social-links a{
     margin: 0 8px;
 }
-.card .footer .btn-simple{
+.card .front .footer .btn-simple{
     margin-top: -6px;
 }
 .card .header {

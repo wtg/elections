@@ -79,10 +79,11 @@ app.controller('HomeController', ['$scope', '$sce', '$http', function($scope, $s
 
 
 	$http.get('/api/candidates/random').then(function(response) {
-		console.log(response.data[0]);
-		$scope.randomCandidate.name = response.data[0].first_name + " " + response.data[0].last_name;
-		$scope.randomCandidate.position = response.data[0].name + " Candidate";
-		$scope.randomCandidate.rcsId = response.data[0].rcs_id;
+		if(response.data[0] != undefined) {
+			$scope.randomCandidate.name = response.data[0].first_name + " " + response.data[0].last_name;
+			$scope.randomCandidate.position = response.data[0].name + " Candidate";
+			$scope.randomCandidate.rcsId = response.data[0].rcs_id;
+		}
 
 		$scope.randomCandidate.loaded = true;
 	}, function() {
@@ -116,7 +117,7 @@ app.controller('HomeController', ['$scope', '$sce', '$http', function($scope, $s
 			location: "Student Government Suite",
 			desc: "Come by the Student Government Suite, and learn how to run for Student Government!"
 		}
-	]
+	];
 
 	$scope.trust = function(str) {
 		return $sce.trustAsHtml(str);
