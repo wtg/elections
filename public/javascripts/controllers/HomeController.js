@@ -1,4 +1,4 @@
-app.controller('HomeController', ['$scope', '$sce', function($scope, $sce) {
+app.controller('HomeController', ['$scope', '$sce', '$http', function($scope, $sce, $http) {
 	$scope.pageHeader = "GM Week Headquarters";
 	$scope.slides = [
 		{
@@ -67,16 +67,28 @@ app.controller('HomeController', ['$scope', '$sce', function($scope, $sce) {
 	};
 
 	$scope.candidateHeader = "Meet a Candidate";
+
 	$scope.randomCandidate = {
-		name: "Person Name",
-		position: "Grand Marshal",
-		bio: "Material confined likewise it humanity raillery an unpacked as he. Three chief merit no if. Now how her edward engage " + 
-		"not horses. Oh resolution he dissimilar precaution to comparison an. Matters engaged between he of pursuit manners we moments. " + 
-		"Merit gay end sight front. Manor equal it on again ye folly by match. In so melancholy as an sentiments simplicity connection. " + 
-		"Far supply depart branch agreed old get our.",
-		rcsId: "namep",
-		img: "/rotating_card_profile2.png"
+		name: "",
+		position: "",
+		bio: "",
+		rcsId: "",
+		img: "rotating_card_profile2.png",
+		loaded: false
 	};
+
+
+	$http.get('/api/candidates/random').then(function(response) {
+		console.log(response.data[0]);
+		$scope.randomCandidate.name = response.data[0].first_name + " " + response.data[0].last_name;
+		$scope.randomCandidate.position = response.data[0].name + " Candidate";
+		$scope.randomCandidate.rcsId = response.data[0].rcs_id;
+
+		$scope.randomCandidate.loaded = true;
+	}, function() {
+		$scope.randomCandidate.loaded = true;
+	});
+
 
 	$scope.eventHeader = "Upcoming Events";
 	$scope.events = [

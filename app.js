@@ -52,7 +52,7 @@ app.use('/', routes);
 app.use('/api/offices', offices);
 app.use('/api/candidates', candidates);
 
-app.use('/api/users', cas.block, cas_actions);
+app.use('/api/users', cas_actions);
 
 app.get('/login', cas.bounce, function (req, res) {
     if (!req.session || !req.session.cas_user) {

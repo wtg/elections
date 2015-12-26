@@ -13,6 +13,11 @@ var queries = {
 
     rcs: " WHERE C.rcs_id = ",
     office: " WHERE C.office_id = ",
+    random: "SELECT C.*, D.preferred_name, D.first_name, D.middle_name, D.last_name, D.greek_affiliated, " +
+    "D.entry_date, D.class_by_credit, D.grad_date, D.rin, D.major, D.about, D.platform, D.video_url FROM " +
+    "(SELECT O.*, R.rcs_id FROM (SELECT * FROM `candidates` WHERE RAND()<(SELECT ((1/COUNT(*))*10) FROM " +
+    "`candidates`) ORDER BY RAND() LIMIT 1) AS R INNER JOIN `offices` AS O WHERE O.office_id = R.office_id) " +
+    "AS C LEFT JOIN `candidate_data` AS D ON C.rcs_id = D.rcs_id",
 
     post: "INSERT INTO `rpielections`.`candidates` (`rcs_id`, `office_id`, `election_id`) VALUES ",
     postCMSData: "INSERT INTO `rpielections`.`candidate_data` (`rcs_id`, `preferred_name`, `first_name`, " +
@@ -31,6 +36,14 @@ router.get('/', function (req, res) {
     var connection = functions.dbConnect(res);
 
     connection.query(useData(req), functions.defaultJSONCallback(res));
+
+    connection.end();
+});
+
+router.get('/random', function (req, res) {
+    var connection = functions.dbConnect(res);
+
+    connection.query(queries.random, functions.defaultJSONCallback(res));
 
     connection.end();
 });

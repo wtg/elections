@@ -30,9 +30,15 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li ng-class="{'active':isCurrentPage('offices')}"><a href="#/offices">Offices <span class="sr-only">(current)</span></a>
+                <li ng-class="{'active':isCurrentPage('offices') || isCurrentPage('candidate')}">
+                    <a href="#/offices">Offices <span class="sr-only">(current)</span></a>
                 </li>
-                <li ng-class="{'active':isCurrentPage('events')}"><a href="#/events">Events</a></li>
+                <li ng-class="{'active':isCurrentPage('parties') || isCurrentPage('party')}">
+                    <a href="#/parties">Parties</a>
+                </li>
+                <li ng-class="{'active':isCurrentPage('events')}">
+                    <a href="#/events">Events</a>
+                </li>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Run for Office <span class="caret"></span></a>
@@ -87,6 +93,7 @@
 <script src="/javascripts/controllers/OfficesController.js"></script>
 <script src="/javascripts/controllers/CandidateController.js"></script>
 <script src="/javascripts/controllers/EventsController.js"></script>
+<script src="/javascripts/controllers/PartiesListController.js"></script>
 
 <script type="text/javascript">
     function rotateCard(btn) {

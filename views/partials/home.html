@@ -59,18 +59,24 @@
         </div>
 		<div class="col-md-4 home-sidebar">
 			<h2 ng-bind="candidateHeader"></h2>
-			<img class="pull-left spotlight-img" ng-src="{{randomCandidate.img}}">
-			<h4 ng-bind="randomCandidate.name"></h4>
-			<h5>{{randomCandidate.position}} Candidate</h5>
-			<p ng-bind="randomCandidate.bio"></p>
-			<div class="btn-toolbar pull-right">
-				<button class="btn btn-default">
-					<span class="fa fa-random"></span> Refresh
-				</button>
-				<a class="btn btn-primary" ng-href="#/candidate/{{randomCandidate.rcsId}}">
-					<span class="fa fa-user"></span> View Platform
-				</a>
+			<div ng-show="randomCandidate.rcsId">
+				<img class="pull-left spotlight-img" ng-src="{{randomCandidate.img}}">
+				<h4 ng-bind="randomCandidate.name"></h4>
+				<h5 ng-bind="randomCandidate.position"></h5>
+				<p ng-bind="randomCandidate.bio"></p>
+				<div class="btn-toolbar pull-right">
+					<button class="btn btn-default">
+						<span class="fa fa-random"></span> Refresh
+					</button>
+					<a class="btn btn-primary" ng-href="#/candidate/{{randomCandidate.rcsId}}">
+						<span class="fa fa-user"></span> View Platform
+					</a>
+				</div>
 			</div>
+			<div ng-show="!randomCandidate.rcsId && randomCandidate.loaded">
+				<h5>No candidates have signed up yet!</h5>
+			</div>
+
 			<div class="clearfix"></div>
 			<hr/>
 			<h2 ng-bind="eventHeader"></h2>
