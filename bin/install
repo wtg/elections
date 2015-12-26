@@ -218,7 +218,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`log` (" +
     "`rcs_id` VARCHAR(45) NOT NULL," +
     "`type` VARCHAR(45) NOT NULL," +
     "`description` VARCHAR(255) NOT NULL," +
-    "`time` DATETIME NOT NULL," +
+    "`time` DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL," +
     "PRIMARY KEY (`log_id`) )" +
     "ENGINE = InnoDB;", errorCallback);
 
