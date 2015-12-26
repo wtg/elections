@@ -30,7 +30,7 @@ This website is built in a modified MEAN stack (MySQL, Express.js, Angular.js, a
 
 7. Run the server: `npm start`. This command will also create the database for the site if it doesn't currently exist.
 
-8. Naviagte to localhost:3000 in your browser, and pat yourself on the back, your instance is deployed.
+8. Naviagte to `localhost:3000` in your browser, and pat yourself on the back, your instance is deployed.
 
 ## Credits
 
