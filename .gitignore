@@ -1,5 +1,6 @@
 # Database configuration
 db.js
+token.js
 
 # Logs
 logs
