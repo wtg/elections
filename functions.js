@@ -31,5 +31,20 @@ module.exports = {
         });
 
         return array;
+    },
+    verifyPermissions: function(req) {
+        if (!req.session || !req.session.cas_user || !req.session.is_authenticated) {
+            return {
+                'authenticated': false,
+                'username': null,
+                'admin': false
+            };
+        }
+
+        return {
+            authenticated: req.session.is_authenticated,
+            username: req.session.cas_user.toLowerCase(),
+            admin: req.session.admin_rights
+        };
     }
 };

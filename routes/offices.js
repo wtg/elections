@@ -1,7 +1,8 @@
 var express = require('express'),
     router = express.Router(),
     mysql = require('mysql'),
-    functions = require('../functions.js');
+    functions = require('../functions.js'),
+    cms = require('../cms.js');
 
 var queries = {
     all: "SELECT * FROM `offices`",
@@ -51,61 +52,85 @@ router.get('/types', function (req, res) {
 });
 
 router.post('/create', function (req, res) {
-    var connection = functions.dbConnect(res);
+    var permissions = functions.verifyPermissions(req);
 
-    var data = req.body;
+    if(permissions.admin) {
+        var connection = functions.dbConnect(res);
 
-    if (!data) res.status(204);
+        var data = req.body;
 
-    var query = queries.post + functions.constructSQLArray([1, data.name, data.description,
-                                                  data.openings, data.nominations_required, data.type, data.disabled]);
+        if (!data) res.status(204);
 
-    connection.query(query, functions.defaultJSONCallback(res));
+        var query = queries.post + functions.constructSQLArray([1, data.name, data.description,
+                data.openings, data.nominations_required, data.type, data.disabled]);
 
-    connection.end();
+        connection.query(query, functions.defaultJSONCallback(res));
+
+        connection.end();
+    } else {
+        res.status(401);
+    }
 });
 
 router.put('/update/:office_id', function(req, res) {
-    var connection = functions.dbConnect(res),
-        office_id = req.params.office_id;
+    var permissions = functions.verifyPermissions(req);
 
-    var data = req.body;
+    if(permissions.admin) {
+        var connection = functions.dbConnect(res),
+            office_id = req.params.office_id;
 
-    if (!data) res.status(204);
+        var data = req.body;
 
-    var assignments = "`name` = " + mysql.escape(data.name) + ", " +
-                      "`description` = " + mysql.escape(data.description) + ", " +
-                      "`openings` = " + mysql.escape(data.openings) + ", " +
-                      "`nominations_required` = " + mysql.escape(data.nominations_required) + ", " +
-                      "`type` = " + mysql.escape(data.type);
+        if (!data) res.status(204);
 
-    var query = queries.update.replace(/<>/g, assignments) + mysql.escape(office_id);
+        var assignments = "`name` = " + mysql.escape(data.name) + ", " +
+            "`description` = " + mysql.escape(data.description) + ", " +
+            "`openings` = " + mysql.escape(data.openings) + ", " +
+            "`nominations_required` = " + mysql.escape(data.nominations_required) + ", " +
+            "`type` = " + mysql.escape(data.type);
 
-    connection.query(query, functions.defaultJSONCallback(res));
+        var query = queries.update.replace(/<>/g, assignments) + mysql.escape(office_id);
 
-    connection.end();
+        connection.query(query, functions.defaultJSONCallback(res));
+
+        connection.end();
+    } else {
+        res.status(401);
+    }
 });
 
 router.put('/toggle/:office_id', function (req, res) {
-    var connection = functions.dbConnect(res),
-        office_id = req.params.office_id;
+    var permissions = functions.verifyPermissions(req);
 
-    var query = queries.toggle.replace(/@/g, mysql.escape(office_id));
+    if(permissions.admin) {
+        var connection = functions.dbConnect(res),
+            office_id = req.params.office_id;
 
-    connection.query(query, functions.defaultJSONCallback(res));
+        var query = queries.toggle.replace(/@/g, mysql.escape(office_id));
 
-    connection.end();
+        connection.query(query, functions.defaultJSONCallback(res));
+
+        connection.end();
+    } else {
+        res.status(401);
+    }
 });
 
 router.delete('/delete/:office_id', function (req, res) {
-    var connection = functions.dbConnect(res),
-        office_id = req.params.office_id;
+    var permissions = functions.verifyPermissions(req);
 
-    var query = queries.remove + queries.office + mysql.escape(office_id);
+    if(permissions.admin) {
+        var connection = functions.dbConnect(res),
+            office_id = req.params.office_id;
 
-    connection.query(query, functions.defaultJSONCallback(res));
+        var query = queries.remove + queries.office + mysql.escape(office_id);
 
-    connection.end();
+        connection.query(query, functions.defaultJSONCallback(res));
+
+        connection.end();
+    } else {
+        res.status(401);
+    }
 });
 
 module.exports = router;

@@ -121,7 +121,7 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                 message: message,
                 from: from
             });
-            $cookies.putObject("officeAlerts", {array: $scope.alerts});
+            $cookies.putObject("officeAlerts", {array: $scope.alerts}, {expires: new Date(new Date().getTime() + 300000)});
         };
 
         /**
@@ -130,7 +130,7 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
          */
         $scope.removeAlert = function (index) {
             $scope.alerts.splice(index, 1);
-            $cookies.putObject("officeAlerts", {array: $scope.alerts});
+            $cookies.putObject("officeAlerts", {array: $scope.alerts}, {expires: new Date(new Date().getTime() + 300000)});
         };
 
         /**
@@ -244,7 +244,12 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
          * Adds a new candidate to a given office
          */
         $scope.addCandidate = function () {
+            if(!$scope.newCandidate.rcs) {
+                return;
+            }
+
             var title = $scope.offices[findOffice($scope.currentEditId)].title;
+
             $http.post('/api/candidates/create/' + $scope.newCandidate.rcs + '/' + $scope.currentEditId + '/').then(function () {
                 addNewAlert("success", $scope.newCandidate.rcs + " was successfully added as a candidate for " + title + "!", "add_candidate");
                 $scope.newCandidate.rcs = "";
@@ -267,6 +272,23 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                 type: $scope.new.type,
                 disabled: $scope.new.disabled
             };
+
+            if (!preparedData.name) {
+                addNewAlert("error", "You didn't enter a title for the office!", "create");
+                return;
+            } else if (!preparedData.description) {
+                addNewAlert("error", "You didn't enter a description for the office!", "create");
+                return;
+            } else if (!preparedData.nominations_required) {
+                addNewAlert("error", "You didn't enter a required number of nominations for the office!", "create");
+                return;
+            } else if (!preparedData.openings) {
+                addNewAlert("error", "You didn't enter a number of openings for the office!", "create");
+                return;
+            } else if (!preparedData.type) {
+                addNewAlert("error", "You didn't select a category for the office!", "create");
+                return;
+            }
 
             $http.post('/api/offices/create', preparedData).then(function () {
                 addNewAlert("success", "The new office, entitled " + title + ", was created successfully!", "create");

@@ -50,7 +50,7 @@ var execute = function(path) {
     req.end();
 
     return deferred.promise;
-}
+};
 
 module.exports = {
     getRCS: function (rcs_id) {
@@ -58,5 +58,11 @@ module.exports = {
     },
     getRIN: function (rin) {
         return execute(endpoints.rin.replace(/%/g, rin));
+    },
+    getWTG: function(rcs_id) {
+        return execute(endpoints.wtg.replace(/%/g, rcs_id));
+    },
+    getRNE: function(rcs_id) {
+        return execute(endpoints.rne.replace(/%/g, rcs_id));
     }
 };
