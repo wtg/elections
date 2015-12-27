@@ -161,8 +161,18 @@ footer {
 	padding-left: 0;
 }
 
-.event-list > li {
-	padding-bottom: 7px;
+.event-list > li:before {
+	content: "";
+    display: block;
+    width: 80%;
+    height: 1px;
+    background: linear-gradient(to right, white, #EB5E66, white);
+    margin-bottom: 10px;
+    margin-left: 10%;
+}
+
+.event-list > li:first-child:before {
+    content: none;
 }
 
 .election-tips > li {
