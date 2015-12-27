@@ -146,7 +146,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`nominations` (" +
     "`rcs_id` VARCHAR(45) NOT NULL," +
     "`office_id` INT NOT NULL," +
     "`nomination_rin` VARCHAR(9) NOT NULL," +
-    "`date` DATETIME NOT NULL," +
+    "`date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
     "INDEX `nominations_fk2_idx` (`office_id` ASC) ," +
     "PRIMARY KEY (`nomination_id`) ," +
     "INDEX `nominations_fk3_idx` (`election_id` ASC) ," +
@@ -218,7 +218,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`log` (" +
     "`rcs_id` VARCHAR(45) NOT NULL," +
     "`type` VARCHAR(45) NOT NULL," +
     "`description` VARCHAR(255) NOT NULL," +
-    "`time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP," +
+    "`time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
     "PRIMARY KEY (`log_id`) )" +
     "ENGINE = InnoDB;", errorCallback);
 
@@ -243,9 +243,9 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`pages` (" +
     "`slug` VARCHAR(45) NOT NULL," +
     "`content` TEXT NOT NULL," +
     "`created_by` VARCHAR(45) NOT NULL," +
-    "`creation_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP," +
+    "`creation_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
     "`last_updated_by` VARCHAR(45) NOT NULL," +
-    "`last_updated_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP," +
+    "`last_updated_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP," +
     "`hidden` TINYINT(1) NOT NULL DEFAULT 0," +
     "PRIMARY KEY (`page_id`))" +
     "ENGINE = InnoDB;", errorCallback);
