@@ -243,7 +243,6 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`pages` (" +
     "`slug` VARCHAR(45) NOT NULL," +
     "`content` TEXT NOT NULL," +
     "`created_by` VARCHAR(45) NOT NULL," +
-    "`creation_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
     "`last_updated_by` VARCHAR(45) NOT NULL," +
     "`last_updated_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP," +
     "`hidden` TINYINT(1) NOT NULL DEFAULT 0," +
