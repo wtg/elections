@@ -5,7 +5,7 @@ var express = require('express'),
     cms = require('../cms.js');
 
 var queries = {
-    all: "SELECT * FROM `events`"
+    all: "SELECT * FROM `events` ORDER BY date, start, end"
 };
 
 router.get('/', function (req, res) {

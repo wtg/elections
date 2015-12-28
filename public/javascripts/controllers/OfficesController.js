@@ -14,6 +14,7 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                         id: elem.office_id,
                         title: elem.name,
                         description: elem.description,
+                        showDesc: false,
                         disabled: elem.disabled == 1,
                         type: elem.type,
                         numberOpenings: elem.openings,

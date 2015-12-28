@@ -30,20 +30,24 @@
         </div>
     </div>
     <div class="row" ng-repeat-start="o in offices" ng-hide="(filter != 'all' && filter != o.type) || o.disabled">
-        <div class="col-xs-11">
+        <div class="col-xs-10">
             <h2>
                 {{o.title}}
             </h2>
         </div>
-        <div class="col-xs-1">
-            <button class="btn btn-simple btn-lg">
+        <div class="col-xs-2">
+            <button class="btn btn-simple btn-lg pull-right" ng-click="o.showDesc = !o.showDesc">
                 <h2 class="fa fa-info-circle"></h2>
             </button>
         </div>
         <div class="col-xs-12" ng-if="o.candidates === undefined || o.candidates.length == 0">
             <p>No candidates are running for this position!</p>
         </div>
-        <div class="col-md-3 col-sm-6 col-xs-12" ng-repeat="c in o.candidates">
+        <div class="col-xs-12" ng-show="o.showDesc">
+            <p style="font-size: 16px"><strong>About this office: </strong>
+            <span ng-bind="o.description"></span></p>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12" ng-repeat="c in o.candidates" ng-hide="o.showDesc">
             <div class="card-container manual-flip">
                 <div class="card">
                     <div class="front">

@@ -52,85 +52,77 @@ router.get('/types', function (req, res) {
 });
 
 router.post('/create', function (req, res) {
-    var permissions = functions.verifyPermissions(req);
-
-    if(permissions.admin) {
-        var connection = functions.dbConnect(res);
-
-        var data = req.body;
-
-        if (!data) res.status(204);
-
-        var query = queries.post + functions.constructSQLArray([1, data.name, data.description,
-                data.openings, data.nominations_required, data.type, data.disabled]);
-
-        connection.query(query, functions.defaultJSONCallback(res));
-
-        connection.end();
-    } else {
+    if(!functions.verifyPermissions(req).admin) {
         res.status(401);
     }
+
+    var connection = functions.dbConnect(res);
+
+    var data = req.body;
+
+    if (!data) res.status(204);
+
+    var query = queries.post + functions.constructSQLArray([1, data.name, data.description,
+            data.openings, data.nominations_required, data.type, data.disabled]);
+
+    connection.query(query, functions.defaultJSONCallback(res));
+
+    connection.end();
 });
 
 router.put('/update/:office_id', function(req, res) {
-    var permissions = functions.verifyPermissions(req);
-
-    if(permissions.admin) {
-        var connection = functions.dbConnect(res),
-            office_id = req.params.office_id;
-
-        var data = req.body;
-
-        if (!data) res.status(204);
-
-        var assignments = "`name` = " + mysql.escape(data.name) + ", " +
-            "`description` = " + mysql.escape(data.description) + ", " +
-            "`openings` = " + mysql.escape(data.openings) + ", " +
-            "`nominations_required` = " + mysql.escape(data.nominations_required) + ", " +
-            "`type` = " + mysql.escape(data.type);
-
-        var query = queries.update.replace(/<>/g, assignments) + mysql.escape(office_id);
-
-        connection.query(query, functions.defaultJSONCallback(res));
-
-        connection.end();
-    } else {
+    if(!functions.verifyPermissions(req).admin) {
         res.status(401);
     }
+
+    var connection = functions.dbConnect(res),
+        office_id = req.params.office_id;
+
+    var data = req.body;
+
+    if (!data) res.status(204);
+
+    var assignments = "`name` = " + mysql.escape(data.name) + ", " +
+        "`description` = " + mysql.escape(data.description) + ", " +
+        "`openings` = " + mysql.escape(data.openings) + ", " +
+        "`nominations_required` = " + mysql.escape(data.nominations_required) + ", " +
+        "`type` = " + mysql.escape(data.type);
+
+    var query = queries.update.replace(/<>/g, assignments) + mysql.escape(office_id);
+
+    connection.query(query, functions.defaultJSONCallback(res));
+
+    connection.end();
 });
 
 router.put('/toggle/:office_id', function (req, res) {
-    var permissions = functions.verifyPermissions(req);
-
-    if(permissions.admin) {
-        var connection = functions.dbConnect(res),
-            office_id = req.params.office_id;
-
-        var query = queries.toggle.replace(/@/g, mysql.escape(office_id));
-
-        connection.query(query, functions.defaultJSONCallback(res));
-
-        connection.end();
-    } else {
+    if(!functions.verifyPermissions(req).admin) {
         res.status(401);
     }
+
+    var connection = functions.dbConnect(res),
+        office_id = req.params.office_id;
+
+    var query = queries.toggle.replace(/@/g, mysql.escape(office_id));
+
+    connection.query(query, functions.defaultJSONCallback(res));
+
+    connection.end();
 });
 
 router.delete('/delete/:office_id', function (req, res) {
-    var permissions = functions.verifyPermissions(req);
-
-    if(permissions.admin) {
-        var connection = functions.dbConnect(res),
-            office_id = req.params.office_id;
-
-        var query = queries.remove + queries.office + mysql.escape(office_id);
-
-        connection.query(query, functions.defaultJSONCallback(res));
-
-        connection.end();
-    } else {
+    if(!functions.verifyPermissions(req).admin) {
         res.status(401);
     }
+
+    var connection = functions.dbConnect(res),
+        office_id = req.params.office_id;
+
+    var query = queries.remove + queries.office + mysql.escape(office_id);
+
+    connection.query(query, functions.defaultJSONCallback(res));
+
+    connection.end();
 });
 
 module.exports = router;

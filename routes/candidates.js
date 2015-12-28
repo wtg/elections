@@ -67,75 +67,71 @@ router.get('/office/:office_id', function (req, res) {
 });
 
 router.post('/create/:rcs_id/:office_id', function (req, res) {
-    var permissions = functions.verifyPermissions(req);
-
-    if (permissions.admin) {
-        var rcs_id = req.params.rcs_id,
-            office_id = req.params.office_id;
-
-        var promise;
-        if (isNaN(parseInt(rcs_id))) {
-            promise = cms.getRCS(rcs_id);
-        } else {
-            promise = cms.getRIN(rcs_id);
-        }
-
-        promise.then(function (response) {
-            var cms_data;
-            try {
-                cms_data = JSON.parse(response);
-
-                var connection = functions.dbConnect(res);
-
-                var values = functions.constructSQLArray([
-                    cms_data.username, cms_data.preferred_name, cms_data.first_name, cms_data.middle_name,
-                    cms_data.last_name, (cms_data.greek_affiliated ? 1 : 0), cms_data.entry_date, cms_data.class_by_credit,
-                    cms_data.grad_date, cms_data.student_id
-                ]);
-
-                var query = queries.postCMSData + values + queries.duplicateRCS +
-                    mysql.escape(cms_data.username);
-
-                connection.query(query, function (err) {
-                    if (err) throw err;
-                });
-
-                values = functions.constructSQLArray([cms_data.username, office_id]);
-
-                query = queries.post + values.substr(0, values.length - 1) + ", " + queries.active_election + ")" +
-                    queries.duplicateRCS + mysql.escape(cms_data.username) + ", office_id = " + office_id;
-                console.log(query);
-
-                connection.query(query, functions.defaultJSONCallback(res));
-
-                connection.end();
-            } catch (e) {
-                console.log("Invalid RCS entered (" + rcs_id + "). The client was notified.");
-                res.status(400);
-            }
-        }, function() {
-            res.status(400);
-        });
-    } else {
+    if(!functions.verifyPermissions(req).admin) {
         res.status(401);
     }
+
+    var rcs_id = req.params.rcs_id,
+        office_id = req.params.office_id;
+
+    var promise;
+    if (isNaN(parseInt(rcs_id))) {
+        promise = cms.getRCS(rcs_id);
+    } else {
+        promise = cms.getRIN(rcs_id);
+    }
+
+    promise.then(function (response) {
+        var cms_data;
+        try {
+            cms_data = JSON.parse(response);
+
+            var connection = functions.dbConnect(res);
+
+            var values = functions.constructSQLArray([
+                cms_data.username, cms_data.preferred_name, cms_data.first_name, cms_data.middle_name,
+                cms_data.last_name, (cms_data.greek_affiliated ? 1 : 0), cms_data.entry_date, cms_data.class_by_credit,
+                cms_data.grad_date, cms_data.student_id
+            ]);
+
+            var query = queries.postCMSData + values + queries.duplicateRCS +
+                mysql.escape(cms_data.username);
+
+            connection.query(query, function (err) {
+                if (err) throw err;
+            });
+
+            values = functions.constructSQLArray([cms_data.username, office_id]);
+
+            query = queries.post + values.substr(0, values.length - 1) + ", " + queries.active_election + ")" +
+                queries.duplicateRCS + mysql.escape(cms_data.username) + ", office_id = " + office_id;
+            console.log(query);
+
+            connection.query(query, functions.defaultJSONCallback(res));
+
+            connection.end();
+        } catch (e) {
+            console.log("Invalid RCS entered (" + rcs_id + "). The client was notified.");
+            res.status(400);
+        }
+    }, function() {
+        res.status(400);
+    });
 });
 
 router.delete('/delete/:rcs_id/:office_id', function (req, res) {
-    var permissions = functions.verifyPermissions(req);
-
-    if (permissions.admin) {
-        var connection = functions.dbConnect(res);
-
-        var rcs_id = req.params.rcs_id,
-            office_id = req.params.office_id;
-
-        var query = queries.remove + " WHERE rcs_id = " + mysql.escape(rcs_id) + " AND office_id = " + mysql.escape(office_id);
-
-        connection.query(query, functions.defaultJSONCallback(res));
-    } else {
+    if(!functions.verifyPermissions(req).admin) {
         res.status(401);
     }
+
+    var connection = functions.dbConnect(res);
+
+    var rcs_id = req.params.rcs_id,
+        office_id = req.params.office_id;
+
+    var query = queries.remove + " WHERE rcs_id = " + mysql.escape(rcs_id) + " AND office_id = " + mysql.escape(office_id);
+
+    connection.query(query, functions.defaultJSONCallback(res));
 });
 
 module.exports = router;

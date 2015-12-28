@@ -7,6 +7,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var CASAuthentication = require('cas-authentication');
+var Q = require('q');
+var cms = require('./cms.js');
 
 // Routes 
 var routes = require('./routes/index');
@@ -16,9 +18,7 @@ var parties = require('./routes/parties');
 var events = require('./routes/events');
 var users = require('./routes/users');
 
-var Q = require('q'),
-    cms = require('./cms.js');
-
+// App initialization
 var app = express();
 
 // view engine setup
