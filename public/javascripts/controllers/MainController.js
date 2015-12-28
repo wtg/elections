@@ -12,4 +12,13 @@ app.controller('MainController', ['$scope', '$location', '$http', function($scop
 		$scope.authenticated = response.data.authenticated;
 		$scope.username = response.data.username;
 	});
+
+	$scope.formatTime = function(time) {
+		var components = time.split(":");
+		if(parseInt(components[0]) > 12) {
+			return (parseInt(components[0])-12) + ":" + components[1] + " PM";
+		} else {
+			return components[0] + ":" + components[1] + " AM";
+		}
+	};
 }]);

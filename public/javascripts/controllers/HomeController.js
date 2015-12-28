@@ -1,4 +1,36 @@
 app.controller('HomeController', ['$scope', '$sce', '$http', function($scope, $sce, $http) {
+	var loadData = function() {
+		$scope.events = [];
+
+		$http.get('/api/candidates/random').then(function(response) {
+			if(response.data[0] != undefined) {
+				$scope.randomCandidate.name = response.data[0].first_name + " " + response.data[0].last_name;
+				$scope.randomCandidate.position = response.data[0].name + " Candidate";
+				$scope.randomCandidate.rcsId = response.data[0].rcs_id;
+			}
+
+			$scope.randomCandidate.loaded = true;
+		}, function() {
+			$scope.randomCandidate.loaded = true;
+		});
+
+		$http.get('/api/events/limit/4').then(function(response) {
+			response.data.forEach(function(elem) {
+				$scope.events.push({
+					id: elem.event_id,
+					title: elem.title,
+					date: elem.date,
+					start: elem.start,
+					end: elem.end,
+					location: elem.location,
+					desc: elem.description
+				});
+			});
+			console.log($scope.events);
+		});
+	};
+	loadData();
+
 	$scope.pageHeader = "GM Week Headquarters";
 	$scope.slides = [
 		{
@@ -77,47 +109,34 @@ app.controller('HomeController', ['$scope', '$sce', '$http', function($scope, $s
 		loaded: false
 	};
 
-
-	$http.get('/api/candidates/random').then(function(response) {
-		if(response.data[0] != undefined) {
-			$scope.randomCandidate.name = response.data[0].first_name + " " + response.data[0].last_name;
-			$scope.randomCandidate.position = response.data[0].name + " Candidate";
-			$scope.randomCandidate.rcsId = response.data[0].rcs_id;
-		}
-
-		$scope.randomCandidate.loaded = true;
-	}, function() {
-		$scope.randomCandidate.loaded = true;
-	});
-
-
 	$scope.eventHeader = "Upcoming Events";
-	$scope.events = [
-		{
-			name: "Elections Info Session",
-			date: new Date("Wed Mar 9 2016 19:00:00 GMT-0500 (EST)"),
-			location: "Student Government Suite",
-			desc: "Come by the Student Government Suite, and learn how to run for Student Government!"
-		},
-		{
-			name: "Elections Info Session",
-			date: new Date("Wed Mar 9 2016 19:00:00 GMT-0500 (EST)"),
-			location: "Student Government Suite",
-			desc: "Come by the Student Government Suite, and learn how to run for Student Government!"
-		},
-		{
-			name: "Elections Info Session",
-			date: new Date("Wed Mar 9 2016 19:00:00 GMT-0500 (EST)"),
-			location: "Student Government Suite",
-			desc: "Come by the Student Government Suite, and learn how to run for Student Government!"
-		},
-		{
-			name: "Elections Info Session",
-			date: new Date("Wed Mar 9 2016 19:00:00 GMT-0500 (EST)"),
-			location: "Student Government Suite",
-			desc: "Come by the Student Government Suite, and learn how to run for Student Government!"
-		}
-	];
+
+	//$scope.events = [
+	//	{
+	//		name: "Elections Info Session",
+	//		date: new Date("Wed Mar 9 2016 19:00:00 GMT-0500 (EST)"),
+	//		location: "Student Government Suite",
+	//		desc: "Come by the Student Government Suite, and learn how to run for Student Government!"
+	//	},
+	//	{
+	//		name: "Elections Info Session",
+	//		date: new Date("Wed Mar 9 2016 19:00:00 GMT-0500 (EST)"),
+	//		location: "Student Government Suite",
+	//		desc: "Come by the Student Government Suite, and learn how to run for Student Government!"
+	//	},
+	//	{
+	//		name: "Elections Info Session",
+	//		date: new Date("Wed Mar 9 2016 19:00:00 GMT-0500 (EST)"),
+	//		location: "Student Government Suite",
+	//		desc: "Come by the Student Government Suite, and learn how to run for Student Government!"
+	//	},
+	//	{
+	//		name: "Elections Info Session",
+	//		date: new Date("Wed Mar 9 2016 19:00:00 GMT-0500 (EST)"),
+	//		location: "Student Government Suite",
+	//		desc: "Come by the Student Government Suite, and learn how to run for Student Government!"
+	//	}
+	//];
 
 	$scope.trust = function(str) {
 		return $sce.trustAsHtml(str);

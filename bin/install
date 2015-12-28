@@ -260,6 +260,20 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`configurations` (" 
     ") ENGINE=InnoDB;", errorCallback);
 
 /**
+ * Execute the creation of a events table. This table holds event information.
+ */
+connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`events` (" +
+    "`event_id` INT NOT NULL AUTO_INCREMENT," +
+    "`title` VARCHAR(45) NOT NULL," +
+    "`date` DATE NOT NULL," +
+    "`start` TIME NULL," +
+    "`end` TIME NULL," +
+    "`description` VARCHAR(2000) NULL," +
+    "`location` VARCHAR(200) NULL," +
+    "PRIMARY KEY (`event_id`))" +
+    "ENGINE = InnoDB", errorCallback);
+
+/**
  * Re-enable the foreign key checks and standard precautions
  */
 connection.query("SET SQL_MODE=@OLD_SQL_MODE", errorCallback);

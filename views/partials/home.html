@@ -84,11 +84,15 @@
 			<ul class="event-list">
 				<li ng-repeat="e in events">
 					<p>
-						<strong ng-bind="e.name"></strong>
+						<strong ng-bind="e.title"></strong>
 						<span class="pull-right" ng-bind="e.date | date:'longDate'"></span>
 						<br/>
 						<span ng-bind="e.location"></span>
-						<span class="pull-right" ng-bind="e.date | date:'shortTime'">7:00 pm</span>
+						<span class="pull-right">
+							<span ng-bind="formatTime(e.start)"></span>
+							<span ng-if="e.end">&ndash;</span>
+							<span ng-if="e.end" ng-bind="formatTime(e.end)"></span>
+						</span>
 					</p>
 					<p ng-bind="e.desc"></p>
 				</li>

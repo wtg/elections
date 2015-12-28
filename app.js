@@ -13,7 +13,8 @@ var routes = require('./routes/index');
 var offices = require('./routes/offices');
 var candidates = require('./routes/candidates');
 var parties = require('./routes/parties');
-var cas_actions = require('./routes/users');
+var events = require('./routes/events');
+var users = require('./routes/users');
 
 var Q = require('q'),
     cms = require('./cms.js');
@@ -53,7 +54,8 @@ app.use('/', routes);
 app.use('/api/offices', offices);
 app.use('/api/candidates', candidates);
 app.use('/api/parties', parties);
-app.use('/api/users', cas_actions);
+app.use('/api/events', events);
+app.use('/api/users', users);
 
 app.get('/login', cas.bounce, function (req, res) {
     if (!req.session || !req.session.cas_user) {
