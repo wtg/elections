@@ -8,7 +8,9 @@ module.exports = {
         connection.query("USE `rpielections`;", function (err) {
             if (err) {
                 console.error(err);
-                res.status(500);
+                if(res) {
+                    res.status(500);
+                }
             }
         });
         return connection;

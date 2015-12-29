@@ -1,9 +1,20 @@
 var mysql = require('mysql');
-var connection = mysql.createConnection(require('./db.js'));
+var functions = require('./functions.js');
 
 //Insert
 exports.write = function (connection, rcsid, type, description) {
+  var providedConnection = true;
+
+  if(!connection) {
+    providedConnection = false;
+    connection = functions.dbConnect();
+  }
+
   connection.query("INSERT INTO log (rcs_id, type, description) VALUES ('" + rcsid + "', '" + type + "', '" + description + "')");
+
+  if(!providedConnection) {
+    connection.end();
+  }
 };
 
 
