@@ -116,11 +116,7 @@ router.post('/create/:rcs_id/:office_id', function (req, res) {
         } catch (e) {
             console.log("Invalid RCS entered (" + rcs_id + "). The client was notified.");
 
-            var connection = functions.dbConnect(res);
-
-            logger.write(connection, req.session.cas_user, "CMS_INVALID", "RCS or RIN attempted: " + req.params.rcs_id);
-
-            connection.end();
+            logger.write(null, req.session.cas_user, "CMS_INVALID", "RCS or RIN attempted: " + req.params.rcs_id);
 
             res.status(400);
         }
@@ -143,7 +139,7 @@ router.delete('/delete/:rcs_id/:office_id', function (req, res) {
 
     connection.query(query, functions.defaultJSONCallback(res));
 
-    logger.write(connection, req.session.cas_user, "CANDIDATE_DELETE", "Removed " + cms_data.username +
+    logger.write(connection, req.session.cas_user, "CANDIDATE_DELETE", "Removed " + rcs_id +
         " from office #" + office_id);
 
     connection.end();

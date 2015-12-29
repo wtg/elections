@@ -9,6 +9,7 @@ var session = require('express-session');
 var CASAuthentication = require('cas-authentication');
 var Q = require('q');
 var cms = require('./cms.js');
+var custom_logger = require('./logger.js');
 
 // Routes 
 var routes = require('./routes/index');
@@ -68,16 +69,20 @@ app.get('/login', cas.bounce, function (req, res) {
         cms.getWTG(rcs_id),
         cms.getRNE(rcs_id)
     ]).then(function (responses) {
-        var status = false;
+        var wtg_status = JSON.parse(responses[0]).result,
+            rne_status = JSON.parse(responses[1]).result;
 
-        responses.forEach(function(elem) {
-            elem = JSON.parse(elem);
-            if(elem.result) {
-                status = true;
-            }
-        });
+        if(wtg_status || rne_status) {
+            var logger_desc = "Granted admin access by CMS for ";
+            if(wtg_status) logger_desc += "WTG ";
+            if(wtg_status && rne_status) logger_desc += "and ";
+            if(rne_status) logger_desc += "RNE ";
+            logger_desc += "membership";
 
-        req.session.admin_rights = status;
+            custom_logger.write(null, req.session.cas_user, 'CMS_ADMIN', logger_desc);
+        }
+
+        req.session.admin_rights = wtg_status || rne_status;
         req.session.is_authenticated = true;
 
         res.redirect('/');
