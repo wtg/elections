@@ -33,6 +33,29 @@
                 </li>
             </ul>
         </div>
+        <div class="col-md-9" ng-show="currentEditId == 'new'">
+            <h2 class="office-title">
+                New party
+                <button class="btn btn-success pull-right" ng-click="createParty()">Create</button>
+            </h2>
+            <hr/>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="newName" class="col-sm-3 control-label">Party Name</label>
+
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" name="newName" id="newName" ng-model="new.name"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="newPlatform" class="col-sm-3 control-label">Party Platform</label>
+
+                    <div class="col-sm-9">
+                        <textarea class="form-control" name="newPlatform" id="newPlatform" ng-model="new.platform"></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
         <div class="col-md-9" ng-repeat="p in parties track by $index" ng-show="currentEditId == p.id">
             <h2 class="office-title">
                 <i class="text-muted">Editing:</i>
@@ -114,6 +137,15 @@
                     </button>
 		      	</span>
             </div>
+            <hr/>
+            <h3>Dangerous Actions</h3>
+            <br/>
+
+            <p>
+                <button class="btn btn-danger" ng-click="deleteParty(p.id)">Delete Party</button>
+            </p>
+            <p class="text-muted"><span class="text-danger">Caution:</span> this action will <b>permanently</b> delete
+                this party from the Elections site.</p>
         </div>
     </div>
     <footer>
