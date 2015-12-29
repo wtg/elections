@@ -63,8 +63,10 @@ router.post('/create', function (req, res) {
 
     if (!data) res.status(204);
 
-    var query = queries.post + functions.constructSQLArray([1, data.name, data.description,
-            data.openings, data.nominations_required, data.type, data.disabled]);
+    var post_array = functions.constructSQLArray([data.name, data.description, data.openings, data.nominations_required,
+        data.type, data.disabled]);
+
+    var query = queries.post + "(" + queries.active_election + ", " + post_array.substr(1);
 
     connection.query(query, functions.defaultJSONCallback(res));
 
