@@ -2,7 +2,8 @@ var express = require('express'),
     router = express.Router(),
     mysql = require('mysql'),
     functions = require('../functions.js'),
-    cms = require('../cms.js');
+    cms = require('../cms.js'),
+    logger = require('../logger.js');
 
 var queries = {
     allNoData: "SELECT * FROM `candidates`",
@@ -105,13 +106,22 @@ router.post('/create/:rcs_id/:office_id', function (req, res) {
 
             query = queries.post + values.substr(0, values.length - 1) + ", " + queries.active_election + ")" +
                 queries.duplicateRCS + mysql.escape(cms_data.username) + ", office_id = " + office_id;
-            console.log(query);
 
             connection.query(query, functions.defaultJSONCallback(res));
+
+            logger.write(connection, req.session.cas_user, "CANDIDATE_CREATE", "Added " + cms_data.username +
+                " as a candidate for office #" + office_id);
 
             connection.end();
         } catch (e) {
             console.log("Invalid RCS entered (" + rcs_id + "). The client was notified.");
+
+            var connection = functions.dbConnect(res);
+
+            logger.write(connection, req.session.cas_user, "CMS_INVALID", "RCS or RIN attempted: " + req.params.rcs_id);
+
+            connection.end();
+
             res.status(400);
         }
     }, function() {
@@ -132,6 +142,11 @@ router.delete('/delete/:rcs_id/:office_id', function (req, res) {
     var query = queries.remove + " WHERE rcs_id = " + mysql.escape(rcs_id) + " AND office_id = " + mysql.escape(office_id);
 
     connection.query(query, functions.defaultJSONCallback(res));
+
+    logger.write(connection, req.session.cas_user, "CANDIDATE_DELETE", "Removed " + cms_data.username +
+        " from office #" + office_id);
+
+    connection.end();
 });
 
 module.exports = router;
