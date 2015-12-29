@@ -1,5 +1,8 @@
 app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$location', '$filter', '$http', '$q', '$cookies',
     function ($scope, $route, $routeParams, $location, $filter, $http, $q, $cookies) {
+        var EDIT_ID_COOKIE_LABEL = "officesEditId",
+            ALERTS_COOKIE_LABEL  = "officeAlerts";
+
         /**
          * Function that's called immediately where the data needed for the view is loaded
          */
@@ -23,7 +26,7 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                     });
                 });
 
-                $scope.currentEditId = $cookies.getObject("officesEditId") ? $cookies.getObject("officesEditId").val : $scope.offices[0].id;
+                $scope.currentEditId = $cookies.getObject(EDIT_ID_COOKIE_LABEL) ? $cookies.getObject(EDIT_ID_COOKIE_LABEL).val : $scope.offices[0].id;
 
                 responses[1].data.forEach(function (c_elem) {
                     $scope.offices.forEach(function (o_elem) {
@@ -98,12 +101,12 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
          * Function that's called immediately to load any pending alerts for display
          */
         var initiateAlerts = function () {
-            if ($cookies.getObject("officeAlerts") === undefined) {
+            if ($cookies.getObject(ALERTS_COOKIE_LABEL) === undefined) {
                 $scope.showAlerts = false;
                 $scope.alerts = [];
             } else {
                 $scope.showAlerts = true;
-                $scope.alerts = $cookies.getObject("officeAlerts").array;
+                $scope.alerts = $cookies.getObject(ALERTS_COOKIE_LABEL).array;
             }
         };
         initiateAlerts();
@@ -131,7 +134,7 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                 message: message,
                 from: from
             });
-            $cookies.putObject("officeAlerts", {array: $scope.alerts}, {expires: new Date(new Date().getTime() + 300000)});
+            $cookies.putObject(ALERTS_COOKIE_LABEL, {array: $scope.alerts}, {expires: new Date(new Date().getTime() + 300000)});
         };
 
         var shuffle = function (array) {
@@ -159,13 +162,13 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
          */
         $scope.removeAlert = function (index) {
             $scope.alerts.splice(index, 1);
-            $cookies.putObject("officeAlerts", {array: $scope.alerts}, {expires: new Date(new Date().getTime() + 300000)});
+            $cookies.putObject(ALERTS_COOKIE_LABEL, {array: $scope.alerts}, {expires: new Date(new Date().getTime() + 300000)});
         };
 
 
         $scope.$on('$routeChangeStart', function () {
             if($scope.filter === 'edit') {
-                $cookies.putObject("officesEditId", { val: $scope.currentEditId });
+                $cookies.putObject(EDIT_ID_COOKIE_LABEL, { val: $scope.currentEditId });
             }
         });
 

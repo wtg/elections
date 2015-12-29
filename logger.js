@@ -4,7 +4,7 @@ var connection = mysql.createConnection(require('./db.js'));
 //Insert
 exports.write = function (connection, rcsid, type, description) {
   connection.query("INSERT INTO log (rcs_id, type, description) VALUES ('" + rcsid + "', '" + type + "', '" + description + "')");
-}
+};
 
 
 //Example Usage

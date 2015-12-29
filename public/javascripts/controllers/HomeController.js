@@ -111,33 +111,6 @@ app.controller('HomeController', ['$scope', '$sce', '$http', function($scope, $s
 
 	$scope.eventHeader = "Upcoming Events";
 
-	//$scope.events = [
-	//	{
-	//		name: "Elections Info Session",
-	//		date: new Date("Wed Mar 9 2016 19:00:00 GMT-0500 (EST)"),
-	//		location: "Student Government Suite",
-	//		desc: "Come by the Student Government Suite, and learn how to run for Student Government!"
-	//	},
-	//	{
-	//		name: "Elections Info Session",
-	//		date: new Date("Wed Mar 9 2016 19:00:00 GMT-0500 (EST)"),
-	//		location: "Student Government Suite",
-	//		desc: "Come by the Student Government Suite, and learn how to run for Student Government!"
-	//	},
-	//	{
-	//		name: "Elections Info Session",
-	//		date: new Date("Wed Mar 9 2016 19:00:00 GMT-0500 (EST)"),
-	//		location: "Student Government Suite",
-	//		desc: "Come by the Student Government Suite, and learn how to run for Student Government!"
-	//	},
-	//	{
-	//		name: "Elections Info Session",
-	//		date: new Date("Wed Mar 9 2016 19:00:00 GMT-0500 (EST)"),
-	//		location: "Student Government Suite",
-	//		desc: "Come by the Student Government Suite, and learn how to run for Student Government!"
-	//	}
-	//];
-
 	$scope.trust = function(str) {
 		return $sce.trustAsHtml(str);
 	}

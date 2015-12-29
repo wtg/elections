@@ -2,7 +2,8 @@ var express = require('express'),
     router = express.Router(),
     mysql = require('mysql'),
     functions = require('../functions.js'),
-    cms = require('../cms.js');
+    cms = require('../cms.js'),
+    logger = require('../logger.js');
 
 var queries = {
     all: "SELECT * FROM `offices`",
@@ -52,7 +53,7 @@ router.get('/types', function (req, res) {
 });
 
 router.post('/create', function (req, res) {
-    if(!functions.verifyPermissions(req).admin) {
+    if (!functions.verifyPermissions(req).admin) {
         res.status(401);
     }
 
@@ -67,11 +68,14 @@ router.post('/create', function (req, res) {
 
     connection.query(query, functions.defaultJSONCallback(res));
 
+    logger.write(connection, req.session.cas_user, "OFFICE_CREATE", "Entitled " + data.name +
+        ", req. nominations: " + data.nominations_required);
+
     connection.end();
 });
 
-router.put('/update/:office_id', function(req, res) {
-    if(!functions.verifyPermissions(req).admin) {
+router.put('/update/:office_id', function (req, res) {
+    if (!functions.verifyPermissions(req).admin) {
         res.status(401);
     }
 
@@ -92,11 +96,14 @@ router.put('/update/:office_id', function(req, res) {
 
     connection.query(query, functions.defaultJSONCallback(res));
 
+    logger.write(connection, req.session.cas_user, "OFFICE_MODIFY", "Modified " + office_id + ", NEW: " + data.name +
+        ", req. nominations: " + data.nominations_required + ", openings: " + data.openings);
+
     connection.end();
 });
 
 router.put('/toggle/:office_id', function (req, res) {
-    if(!functions.verifyPermissions(req).admin) {
+    if (!functions.verifyPermissions(req).admin) {
         res.status(401);
     }
 
@@ -107,11 +114,13 @@ router.put('/toggle/:office_id', function (req, res) {
 
     connection.query(query, functions.defaultJSONCallback(res));
 
+    logger.write(connection, req.session.cas_user, "OFFICE_TOGGLE", "Toggled disabled/enabled for " + office_id);
+
     connection.end();
 });
 
 router.delete('/delete/:office_id', function (req, res) {
-    if(!functions.verifyPermissions(req).admin) {
+    if (!functions.verifyPermissions(req).admin) {
         res.status(401);
     }
 
@@ -121,6 +130,8 @@ router.delete('/delete/:office_id', function (req, res) {
     var query = queries.remove + queries.office + mysql.escape(office_id);
 
     connection.query(query, functions.defaultJSONCallback(res));
+
+    logger.write(connection, req.session.cas_user, "OFFICE_DELETE", "Deleted " + office_id);
 
     connection.end();
 });

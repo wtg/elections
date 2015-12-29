@@ -42,7 +42,11 @@ app.config(['$routeProvider', function ($routeProvider) {
     }).
     when('/parties', {
         templateUrl: 'partials/partieslist.html',
-        controller: 'PartiesListController'
+        controller: 'PartiesController'
+    }).
+    when('/parties/edit', {
+        templateUrl: 'partials/manageparties.html',
+        controller: 'PartiesController'
     }).
     when('/party', {
         redirectTo: '/parties'

@@ -1,7 +1,21 @@
 <div class="container page shadow">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-sm-12 col-md-4">
             <h1>Political Parties</h1>
+        </div>
+        <div class="col-sm-12 col-md-8" ng-if="editPermissions">
+            <div class="btn-group pull-right header-btns">
+                <a class="btn btn-default active" href="#/parties">
+                    View
+                </a>
+                <a class="btn btn-primary" href="#/parties/edit">
+                    Edit
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
             <hr/>
             <div class="row">
                 <div class="col-md-6" ng-repeat="i in [0,1]">
