@@ -98,7 +98,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`candidates` (" +
     "CONSTRAINT `candidates_fk1`" +
     "  FOREIGN KEY (`office_id`)" +
     "  REFERENCES `rpielections`.`offices` (`office_id`)" +
-    "  ON DELETE NO ACTION" +
+    "  ON DELETE CASCADE" +
     "  ON UPDATE NO ACTION," +
     "CONSTRAINT `candidates_fk2`" +
     "  FOREIGN KEY (`election_id`)" +
@@ -109,7 +109,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`candidates` (" +
     "  FOREIGN KEY (`party_id`)" +
     "  REFERENCES `rpielections`.`parties` (`party_id`)" +
     "  ON DELETE NO ACTION" +
-    "  ON UPDATE NO ACTION)" +
+    "  ON UPDATE SET NULL)" +
     "ENGINE = InnoDB", errorCallback);
 
 
