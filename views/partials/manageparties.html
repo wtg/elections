@@ -98,30 +98,50 @@
                     &ndash; <span>Leader</span>
                 </li>
                 <li class="list-group-item">
-                    <button class="btn btn-default btn-xs pull-right" ng-click="removeCandidate(c.rcsId, o.id)">
-                        <span class="fa fa-times"></span>
-                    </button>
+                    <div class="btn-toolbar pull-right">
+                        <button class="btn btn-primary btn-xs" ng-click="removeCandidate(c.rcsId, o.id)">
+                            Make Leader
+                        </button>
+                        <button class="btn btn-default btn-xs" ng-click="removeCandidate(c.rcsId, o.id)">
+                            <span class="fa fa-times"></span>
+                        </button>
+                    </div>
                     <span>Person Name</span> <span class="text-muted" ng-bind="'(namep)'"></span>
                     &ndash; <span>Position</span>
                 </li>
                 <li class="list-group-item">
-                    <button class="btn btn-default btn-xs pull-right" ng-click="removeCandidate(c.rcsId, o.id)">
-                        <span class="fa fa-times"></span>
-                    </button>
+                    <div class="btn-toolbar pull-right">
+                        <button class="btn btn-primary btn-xs" ng-click="removeCandidate(c.rcsId, o.id)">
+                            Make Leader
+                        </button>
+                        <button class="btn btn-default btn-xs" ng-click="removeCandidate(c.rcsId, o.id)">
+                            <span class="fa fa-times"></span>
+                        </button>
+                    </div>
                     <span>Person Name</span> <span class="text-muted" ng-bind="'(namep)'"></span>
                     &ndash; <span>Position</span>
                 </li>
                 <li class="list-group-item">
-                    <button class="btn btn-default btn-xs pull-right" ng-click="removeCandidate(c.rcsId, o.id)">
-                        <span class="fa fa-times"></span>
-                    </button>
+                    <div class="btn-toolbar pull-right">
+                        <button class="btn btn-primary btn-xs" ng-click="removeCandidate(c.rcsId, o.id)">
+                            Make Leader
+                        </button>
+                        <button class="btn btn-default btn-xs" ng-click="removeCandidate(c.rcsId, o.id)">
+                            <span class="fa fa-times"></span>
+                        </button>
+                    </div>
                     <span>Person Name</span> <span class="text-muted" ng-bind="'(namep)'"></span>
                     &ndash; <span>Position</span>
                 </li>
                 <li class="list-group-item">
-                    <button class="btn btn-default btn-xs pull-right" ng-click="removeCandidate(c.rcsId, o.id)">
-                        <span class="fa fa-times"></span>
-                    </button>
+                    <div class="btn-toolbar pull-right">
+                        <button class="btn btn-primary btn-xs" ng-click="removeCandidate(c.rcsId, o.id)">
+                            Make Leader
+                        </button>
+                        <button class="btn btn-default btn-xs" ng-click="removeCandidate(c.rcsId, o.id)">
+                            <span class="fa fa-times"></span>
+                        </button>
+                    </div>
                     <span>Person Name</span> <span class="text-muted" ng-bind="'(namep)'"></span>
                     &ndash; <span>Position</span>
                 </li>
@@ -148,24 +168,5 @@
                 this party from the Elections site.</p>
         </div>
     </div>
-    <footer>
-        <hr/>
-        <div class="row">
-            <div class="col-sm-8 col-xs-12">
-                <small>
-                    This website was created by the Web Technologies Group of
-                    the Rensselaer Union Student Senate.<br/>
-                    Content on this website is monitored by the Rules and Elections
-                    Committee.<br/>Statements made by candidates do not represent
-                    views of RPI, the Rensselaer Union, or the Student Senate.
-                </small>
-            </div>
-            <div class="col-xs-4 col-sm-2 col-xs-offset-2 col-sm-offset-0">
-                <img src="/images/rne.svg" class="img-responsive pull-right">
-            </div>
-            <div class="col-xs-4 col-sm-2">
-                <img src="/images/wtg.svg" class="img-responsive pull-right">
-            </div>
-        </div>
-    </footer>
+    <ng-include src="'partials/footer.html'"></ng-include>
 </div>
