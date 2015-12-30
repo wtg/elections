@@ -16,6 +16,9 @@ app.controller('EventsController', ['$scope', '$http', function ($scope, $http) 
             });
             console.log($scope.events);
         });
+        // Hard-setting these variables for now
+        $scope.filter = "all";
+        $scope.dataLoaded = true;
     };
     loadData();
 }]);
