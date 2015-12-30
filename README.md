@@ -38,8 +38,9 @@ This website is built in a modified MEAN stack (MySQL, Express.js, Angular.js, a
 
 This project was created by the [Web Technologies Group](http://www.rpiwtg.com/).
 
-### Developers 
+### Developers
 * [Justin Etzine](http://github.com/justetz)
 * [Erica Braunschweig](http://github.com/braune13)
 * [Ylonka Machado](http://github.com/machay)
 * [Rob Russo](http://github.com/rickrizzo)
+* [Jason Lee](http://github.com/jzblee)
