@@ -81,6 +81,10 @@
 			<div class="clearfix"></div>
 			<hr/>
 			<h2 ng-bind="eventHeader"></h2>
+			<div ng-show="!events || events.length == 0">
+				<br/>
+				<h5>There are no upcoming events!</h5>
+			</div>
 			<ul class="event-list">
 				<li ng-repeat="e in events">
 					<p>
@@ -97,7 +101,7 @@
 					<p ng-bind="e.desc"></p>
 				</li>
 			</ul>
-			<div class="btn-toolbar">
+			<div class="btn-toolbar" ng-show="events.length">
 				<button class="btn btn-primary pull-right">
 					<span class="fa fa-calendar"></span> View More
 				</button>

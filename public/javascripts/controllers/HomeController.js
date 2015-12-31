@@ -26,7 +26,6 @@ app.controller('HomeController', ['$scope', '$sce', '$http', function($scope, $s
 					desc: elem.description
 				});
 			});
-			console.log($scope.events);
 		});
 	};
 	loadData();
