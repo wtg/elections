@@ -48,5 +48,19 @@ module.exports = {
             username: req.session.cas_user.toLowerCase(),
             admin: req.session.admin_rights
         };
+    },
+    log: function (connection, rcsid, type, description) {
+      var providedConnection = true;
+
+      if(!connection) {
+        providedConnection = false;
+        connection = functions.dbConnect();
+      }
+
+      connection.query("INSERT INTO log (rcs_id, type, description, time) VALUES ('" + rcsid + "', '" + type + "', '" + description + "', NOW())");
+
+      if(!providedConnection) {
+        connection.end();
+      }
     }
 };
