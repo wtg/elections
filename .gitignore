@@ -39,3 +39,6 @@ node_modules
 
 .DS_Store
 .idea/
+
+# User-uploaded image directory
+public/usr_content/
