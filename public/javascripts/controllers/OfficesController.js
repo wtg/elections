@@ -1,7 +1,7 @@
 app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$location', '$filter', '$http', '$q', '$cookies',
     function ($scope, $route, $routeParams, $location, $filter, $http, $q, $cookies) {
         var EDIT_ID_COOKIE_LABEL = "officesEditId",
-            ALERTS_COOKIE_LABEL  = "officeAlerts";
+            ALERTS_COOKIE_LABEL = "officeAlerts";
 
         /**
          * Function that's called immediately where the data needed for the view is loaded
@@ -49,8 +49,8 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                     });
                 });
 
-                $scope.offices.forEach(function(o) {
-                    if(o.candidates) {
+                $scope.offices.forEach(function (o) {
+                    if (o.candidates) {
                         shuffle(o.candidates);
                     }
                 });
@@ -72,7 +72,7 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                 $scope.filterOptions = $scope.filterOptions.concat($filter('orderBy')(filterOpt, "slug"));
             }, function (status, error) {
                 alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
-            }).finally(function() {
+            }).finally(function () {
                 $scope.dataLoaded = true;
             });
         };
@@ -168,8 +168,8 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
 
 
         $scope.$on('$routeChangeStart', function () {
-            if($scope.filter === 'edit') {
-                $cookies.putObject(EDIT_ID_COOKIE_LABEL, { val: $scope.currentEditId });
+            if ($scope.filter === 'edit') {
+                $cookies.putObject(EDIT_ID_COOKIE_LABEL, {val: $scope.currentEditId});
             }
         });
 
@@ -280,7 +280,7 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
             }
         };
 
-        $scope.addCandidateKeypressEvent = function(keyEvent) {
+        $scope.addCandidateKeypressEvent = function (keyEvent) {
             if (keyEvent.which === 13 && $scope.newCandidate.rcs) {
                 $scope.addCandidate();
             }
@@ -290,7 +290,7 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
          * Adds a new candidate to a given office
          */
         $scope.addCandidate = function () {
-            if(!$scope.newCandidate.rcs) {
+            if (!$scope.newCandidate.rcs) {
                 return;
             }
 
@@ -378,7 +378,7 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                 nominations_required: $scope.offices[position].nominationsRequired,
                 openings: $scope.offices[position].numberOpenings,
                 type: $scope.offices[position].type === 'new' ? $scope.offices[position].newType
-                                                              : $scope.offices[position].type
+                    : $scope.offices[position].type
             };
 
             if (!preparedData.name) {
