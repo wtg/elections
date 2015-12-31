@@ -50,6 +50,9 @@ module.exports = {
         };
     },
     log: function (connection, rcsid, type, description) {
+
+      /*Not sure if connection is needed now*/
+      /*Can rcsid be replaced with a session variable?*/
       var providedConnection = true;
 
       if(!connection) {
@@ -57,7 +60,7 @@ module.exports = {
         connection = functions.dbConnect();
       }
 
-      connection.query("INSERT INTO log (rcs_id, type, description, time) VALUES ('" + rcsid + "', '" + type + "', '" + description + "', NOW())");
+      connection.query("INSERT INTO rpielections.log (rcs_id, type, description, time) VALUES ('" + rcsid + "', '" + type + "', '" + description + "', NOW())");
 
       if(!providedConnection) {
         connection.end();
