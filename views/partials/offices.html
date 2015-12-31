@@ -26,7 +26,6 @@
             <h3 ng-if="filter != 'all' && filter != 'edit' && numOffices(filter) == 0">No offices were found for this filter!</h3>
             <h3 ng-if="filter == 'all' && offices.length === 0">No offices were found!</h3>
             <br/>
-            <hr/>
         </div>
     </div>
     <div class="row" ng-repeat-start="o in offices" ng-hide="(filter != 'all' && filter != o.type) || o.disabled">

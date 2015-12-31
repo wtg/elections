@@ -26,7 +26,8 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                     });
                 });
 
-                $scope.currentEditId = $cookies.getObject(EDIT_ID_COOKIE_LABEL) ? $cookies.getObject(EDIT_ID_COOKIE_LABEL).val : $scope.offices[0].id;
+                $scope.currentEditId = $cookies.getObject(EDIT_ID_COOKIE_LABEL) ?
+                    $cookies.getObject(EDIT_ID_COOKIE_LABEL).val : ($scope.offices[0] ? $scope.offices[0].id : 0);
 
                 responses[1].data.forEach(function (c_elem) {
                     $scope.offices.forEach(function (o_elem) {
