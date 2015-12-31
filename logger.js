@@ -17,7 +17,6 @@ exports.write = function (connection, rcsid, type, description) {
   }
 };
 
-
 //Example Usage
 /*var logger = require('./logger.js');
 logger.write(connection, <rcs-id>, <type>, <description>);*/

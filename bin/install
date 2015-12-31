@@ -131,6 +131,8 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`candidate_data` (" 
     "`major` VARCHAR(45) NULL," +
     "`about` TEXT DEFAULT NULL," +
     "`platform` TEXT DEFAULT NULL," +
+    "`profile_id` VARCHAR(255), " +
+    "`cover_id` VARCHAR(255), " + 
     "`video_url` VARCHAR(2000) DEFAULT NULL," +
     "PRIMARY KEY (`rcs_id`))" +
     "ENGINE = InnoDB", errorCallback);
