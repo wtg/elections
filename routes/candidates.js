@@ -67,6 +67,25 @@ router.get('/office/:office_id', function (req, res) {
     connection.end();
 });
 
+// upload candidate images
+// super lame API name, but different than private API was my thought
+router.post('/upload_cover', function (req, res) {
+    fs.readFile(req.files.image.path, function (err, data) {
+        var imageName = req.files.image.name; //Add my own name
+
+        if(!imageName) {
+            console.log("ERROR: No image name");
+            res.redirect("/");
+            res.end();
+        } else {
+            var newPath = __dirname + "/public/usr_content/" + imageName;
+            fs.writeFile(newPath, data, function (err) {
+                res.redirect("/public/images/" + imageName);
+            });
+        }
+    });
+});
+
 router.post('/create/:rcs_id/:office_id', function (req, res) {
     if(!functions.verifyPermissions(req).admin) {
         res.status(401);
