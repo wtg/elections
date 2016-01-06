@@ -21,13 +21,16 @@ app.controller('PartiesController', ['$scope', '$http', '$cookies', '$location',
                     });
                 });
 
-                $scope.currentEditId = $cookies.getObject("partiesEditId") ? $cookies.getObject("partiesEditId").val : $scope.parties[0].id;
+                $scope.currentEditId = $cookies.getObject("partiesEditId") ? $cookies.getObject("partiesEditId").val :
+                    ($scope.parties[0] ? $scope.parties[0].id : 0);
 
                 $scope.new = {
                     name: "",
                     platform: ""
                 };
-            })
+            }).finally(function () {
+                $scope.dataLoaded = true;
+            });
         };
         loadData();
 
