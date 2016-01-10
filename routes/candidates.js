@@ -69,8 +69,13 @@ router.get('/office/:office_id', function (req, res) {
 
 // upload candidate images
 // super lame API name, but different than private API was my thought
-router.post('/upload_cover', function (req, res) {
-    fs.readFile(req.files.image.path, function (err, data) {
+router.get('/upload', function (req, res) {
+    res.send("HELLO WORLD");
+});
+router.post('/upload', function (req, res) {
+    console.log(req.files);
+    res.send("Post recieved");
+    /*fs.readFile(req.files.image.path, function (err, data) {
         var imageName = req.files.image.name; //Add my own name
 
         if(!imageName) {
@@ -83,7 +88,7 @@ router.post('/upload_cover', function (req, res) {
                 res.redirect("/public/images/" + imageName);
             });
         }
-    });
+    });*/
 });
 
 router.post('/create/:rcs_id/:office_id', function (req, res) {

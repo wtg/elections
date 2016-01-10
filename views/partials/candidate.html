@@ -2,7 +2,12 @@
 <!--<div id="candidate" class="container shadow">-->
 <!--<h1>Resilience, Resilience, Massive Cash</h1>-->
 <!--</div>-->
-<div class="profile"></div>
+<div id="propic" class="profile">
+  <form action="/api/candidates/upload" method="post" enctype="multipart/form-data">
+    <input id="profile" type="file" name="image">
+    <input type="submit" name="submit">
+  </form>
+</div>
 <div id="candidate-content" class="container page shadow">
     <div class="row">
         <div class="col-xs-12">
