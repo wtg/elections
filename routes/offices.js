@@ -9,7 +9,7 @@ var queries = {
     all: "SELECT * FROM `offices`",
     election: " WHERE election_id = ",
     office: " WHERE office_id = ",
-    active_election: "(SELECT `value` FROM `configurations` WHERE `key` = 'active_election_id')",
+    activeElection: "(SELECT `value` FROM `configurations` WHERE `key` = 'active_election_id')",
     types: "SELECT DISTINCT type FROM `offices` WHERE NOT type = 'all'",
 
     post: "INSERT INTO `rpielections`.`offices` (`election_id`, `name`, `description`, `openings`, " +
@@ -30,7 +30,7 @@ router.get('/', function (req, res) {
 router.get('/election/active', function (req, res) {
     var connection = functions.dbConnect(res);
 
-    connection.query(queries.all + queries.election + queries.active_election, functions.defaultJSONCallback(res));
+    connection.query(queries.all + queries.election + queries.activeElection, functions.defaultJSONCallback(res));
 
     connection.end();
 });
@@ -66,7 +66,7 @@ router.post('/create', function (req, res) {
     var post_array = functions.constructSQLArray([data.name, data.description, data.openings, data.nominations_required,
         data.type, data.disabled]);
 
-    var query = queries.post + "(" + queries.active_election + ", " + post_array.substr(1);
+    var query = queries.post + "(" + queries.activeElection + ", " + post_array.substr(1);
 
     connection.query(query, functions.defaultJSONCallback(res));
 

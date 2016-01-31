@@ -1,23 +1,30 @@
-<!--<div class="profile"></div>-->
-<!--<div id="candidate" class="container shadow">-->
-<!--<h1>Resilience, Resilience, Massive Cash</h1>-->
-<!--</div>-->
-<div id="propic" class="profile">
-  <form action="/api/candidates/upload" method="post" enctype="multipart/form-data">
-    <input id="profile" type="file" name="image">
-    <input type="submit" name="submit">
-  </form>
+<div class="container page shadow" ng-if="!dataLoaded">
+	<div class="row">
+		<div class="loader">Loading...</div>
+	</div>
 </div>
-<div id="candidate-content" class="container page shadow">
+<div id="propic" class="profile" ng-if="dataLoaded">
+  <!--<form action="/api/candidates/upload" method="post" enctype="multipart/form-data">-->
+    <!--<input id="profile" type="file" name="image">-->
+    <!--<input type="submit" name="submit">-->
+  <!--</form>-->
+</div>
+<div id="candidate-content" class="container page shadow" ng-if="dataLoaded">
     <div class="row">
         <div class="col-xs-12">
-            <h1 class="text-center">Candidate Name</h1>
+            <h1 class="text-center" ng-bind="formName()"></h1>
         </div>
         <div class="col-xs-12">
-            <h3 class="text-center text-muted" style="margin-top:5px">Running for Grand Marshal</h3>
+            <h3 class="text-center text-muted" style="margin-top:5px">
+				Running for <span ng-bind="candidate.office_name"></span>
+			</h3>
         </div>
-        <div class="col-xs-12">
-            <h4 class="text-center text-muted" style="margin-top:5px">Member of the <span class="text-primary">Party</span> Party</h4>
+        <div class="col-xs-12" ng-if="candidate.party_name">
+            <h4 class="text-center text-muted" style="margin-top:5px">
+				Member of the
+				<span class="text-primary" ng-bind="candidate.party_name"></span>
+				<span ng-if="shouldAppendParty()">Party</span>
+			</h4>
         </div>
 	</div>
     <hr/>
@@ -25,30 +32,30 @@
         <div class="col-md-4 col-md-offset-4 col-xs-11 col-xs-offset-0">
             <ul class="nav nav-pills nav-justified">
                 <li role="presentation" ng-class="{'active': currentSection === 'about'}">
-					<a href="#/candidate/{{candidate.rcsId}}/about">About me</a>
+					<a href="#/candidate/{{candidate.rcs_id}}/about">About me</a>
 				</li>
                 <li role="presentation" ng-class="{'active': currentSection === 'platform'}">
-					<a href="#/candidate/{{candidate.rcsId}}/platform">Platform</a>
+					<a href="#/candidate/{{candidate.rcs_id}}/platform">Platform</a>
 				</li>
                 <li role="presentation" ng-class="{'active': currentSection === 'ama'}">
-					<a href="#/candidate/{{candidate.rcsId}}/ama">AMA</a>
+					<a href="#/candidate/{{candidate.rcs_id}}/ama">AMA</a>
 				</li>
                 <li role="presentation" ng-class="{'active': currentSection === 'contact'}">
-					<a href="#/candidate/{{candidate.rcsId}}/contact">Contact</a>
+					<a href="#/candidate/{{candidate.rcs_id}}/contact">Contact</a>
 				</li>
             </ul>
         </div>
 		<div class="col-md-1 col-md-offset-3 col-xs-1 col-xs-offset-0">
-			<a class="btn btn-primary pull-right" href="#/candidate/{{candidate.rcsId}}/edit">Edit</a>
+			<a class="btn btn-primary pull-right" href="#/candidate/{{candidate.rcs_id}}/edit">Edit</a>
 		</div>
     </div>
     <hr/>
     <div class="row">
         <div class="col-md-5">
-			<div class="embed-responsive embed-responsive-16by9">
-				<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/vQFqRX0Qh6A" frameborder="0" allowfullscreen></iframe>
+			<div class="embed-responsive embed-responsive-16by9" ng-if="candidate.video_url">
+				<iframe class="embed-responsive-item" ng-src="{{candidate.video_url}}" frameborder="0" allowfullscreen></iframe>
 			</div>
-			<hr />
+			<hr ng-if="candidate.video_url" />
 			<h3>
 				Nominations
 				<span class="text-muted pull-right">330/600</span>
@@ -139,6 +146,5 @@
 			</form>
 		</div>
 	</div>
-	<hr/>
 	<ng-include src="'partials/footer.html'"></ng-include>
 </div>

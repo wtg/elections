@@ -7,10 +7,14 @@ var express = require('express'),
 
 var queries = {
     allNoData: "SELECT * FROM `candidates`",
-    allWithData: "SELECT C.*, D.preferred_name, D.first_name, D.middle_name, D.last_name, D.greek_affiliated," +
-    " D.entry_date, D.class_by_credit, D.grad_date, D.rin, D.major, D.about, D.platform, D.video_url " +
-    "FROM `candidates` C LEFT JOIN `candidate_data` D ON C.rcs_id = D.rcs_id",
-    active_election: "(SELECT `value` FROM `configurations` WHERE `key` = 'active_election_id')",
+    allWithData: "SELECT C.*, D.preferred_name, D.first_name, D.middle_name, D.last_name, D.greek_affiliated, " +
+    "D.entry_date, D.class_by_credit, D.grad_date, D.rin, D.major, D.about, D.platform, D.video_url, " +
+    "O.name AS office_name, O.description AS office_description, O.openings AS office_openings, " +
+    "O.nominations_required AS office_nominations_required, O.type AS office_type, " +
+    "O.disabled AS office_disabled, P.name AS party_name, P.platform AS party_platform " +
+    "FROM `candidates` C LEFT JOIN `candidate_data` D ON C.rcs_id = D.rcs_id LEFT JOIN " +
+    "`offices` O ON C.office_id = O.office_id LEFT JOIN `parties` P ON C.party_id = P.party_id",
+    activeElection: "(SELECT `value` FROM `configurations` WHERE `key` = 'active_election_id')",
 
     rcs: " WHERE C.rcs_id = ",
     office: " WHERE C.office_id = ",
@@ -54,8 +58,6 @@ router.get('/rcs/:rcs_id', function (req, res) {
         rcs_id = req.params.rcs_id;
 
     connection.query(useData(req) + queries.rcs + mysql.escape(rcs_id), functions.defaultJSONCallback(res));
-
-    connection.end();
 });
 
 router.get('/office/:office_id', function (req, res) {
@@ -128,7 +130,7 @@ router.post('/create/:rcs_id/:office_id', function (req, res) {
 
             values = functions.constructSQLArray([cms_data.username, office_id]);
 
-            query = queries.post + values.substr(0, values.length - 1) + ", " + queries.active_election + ")" +
+            query = queries.post + values.substr(0, values.length - 1) + ", " + queries.activeElection + ")" +
                 queries.duplicateRCS + mysql.escape(cms_data.username) + ", office_id = " + office_id;
 
             connection.query(query, functions.defaultJSONCallback(res));

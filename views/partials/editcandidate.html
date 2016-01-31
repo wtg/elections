@@ -1,7 +1,7 @@
 <div class="container page shadow">
 	<div class="row">
 		<div class="col-md-12">
-			<a class="btn btn-success pull-right" href="#/candidate/{{candidate.rcsId}}">Save</a>
+			<a class="btn btn-success pull-right" href="#/candidate/{{candidate.rcs_id}}">Save</a>
 			<h2 class="office-title">
 				<i class="text-muted">Editing:</i>
 				<span>Candidate Name</span>
@@ -11,30 +11,46 @@
 			<hr/>
 			<form class="form-horizontal">
 				<div class="form-group">
-					<label for="posTitle" class="col-sm-3 control-label">Candidate Name</label>
+					<label for="candidateName" class="col-sm-3 control-label">Candidate Name</label>
 
 					<div class="col-sm-9">
-						<p class="form-control-static">Name</p>
+						<p id="candidateName" class="form-control-static">Name</p>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="posDesc" class="col-sm-3 control-label">RCS ID</label>
+					<label for="candidateRCS" class="col-sm-3 control-label">RCS ID</label>
 
 					<div class="col-sm-9">
-						<p class="form-control-static">rcsid</p>
+						<p id="candidateRCS" class="form-control-static" ng-bind="candidate.rcs_id"></p>
 					</div>
 				</div>
 				<div class="form-group">
-					<label for="posNomReq" class="col-sm-3 control-label">Nominations</label>
+					<label for="candidateNominations" class="col-sm-3 control-label">Nominations</label>
 
 					<div class="col-sm-9">
-						<p class="form-control-static">
+						<p id="candidateNominations" class="form-control-static">
 							330/600
 							<button class="btn btn-xs btn-default">
 								<span class="fa fa-edit"></span>
 								Manual Override
 							</button>
 						</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="candidateAbout" class="col-sm-3 control-label">About Me</label>
+
+					<div class="col-sm-9">
+						<textarea class="form-control" name="candidateAbout" id="candidateAbout"
+								  ng-model="candidate.about" style="min-height: 200px; resize: vertical;"></textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="candidatePlatform" class="col-sm-3 control-label">Platform</label>
+
+					<div class="col-sm-9">
+						<textarea class="form-control" name="candidatePlatform" id="candidatePlatform"
+								  ng-model="candidate.platform" style="min-height: 200px; resize: vertical;"></textarea>
 					</div>
 				</div>
 			</form>
@@ -88,7 +104,6 @@
 				This action will
 				<span ng-if="!o.disabled">disable the candidate's account and mark the candidate as disqualified.</span>
 				<span ng-if="o.disabled">re-enable the candidate's account and remove the disqualified note.</span>
-
 			</p>
 			<br/>
 
