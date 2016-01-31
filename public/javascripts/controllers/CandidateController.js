@@ -37,7 +37,6 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
         };
 
         $scope.convertMarkdown = function (string) {
-            var md = $showdown.makeHtml(string);
-            return md;
+            return $showdown.makeHtml(string);
         };
     }]);
