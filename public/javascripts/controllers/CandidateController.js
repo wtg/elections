@@ -13,6 +13,11 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
                 if ($scope.candidate.video_url) {
                     $scope.candidate.video_url_trusted = $sce.trustAsResourceUrl($scope.candidate.video_url);
                 }
+
+                var majors = $scope.candidate.major.split(';');
+                if(majors.length > 1) {
+                    $scope.candidate.majors = majors;
+                }
             }, function () {
                 alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
             }).finally(function () {
@@ -41,12 +46,9 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
         };
 
         $scope.saveChanges = function () {
-            console.log('here');
             if (!$scope.editPermissions) {
-                console.log('here2');
                 return;
             }
-            console.log('here3');
 
             $http.put('/api/candidates/update/' + $routeParams.rcs, $scope.candidate).then(function (response) {
                 $location.url('/candidate/' + $routeParams.rcs);
