@@ -10,10 +10,10 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
                 }
 
                 $scope.candidate = response.data[0];
-                if($scope.candidate.video_url) {
-                    $scope.candidate.video_url = $sce.trustAsResourceUrl($scope.candidate.video_url);
+                if ($scope.candidate.video_url) {
+                    $scope.candidate.video_url_trusted = $sce.trustAsResourceUrl($scope.candidate.video_url);
                 }
-            }, function (status, error) {
+            }, function () {
                 alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
             }).finally(function () {
                 $scope.dataLoaded = true;
@@ -21,13 +21,13 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
         };
         loadData();
 
-        $scope.shouldAppendParty = function() {
-            return $scope.candidate.party_name.split(' ')[$scope.candidate.party_name.split(' ').length-1].toLowerCase() !== "party";
+        $scope.shouldAppendParty = function () {
+            return $scope.candidate.party_name.split(' ')[$scope.candidate.party_name.split(' ').length - 1].toLowerCase() !== "party";
         };
 
-        $scope.formName = function() {
+        $scope.formName = function () {
             return $scope.candidate.preferred_name ? $scope.candidate.preferred_name : $scope.candidate.first_name +
-                " " + $scope.candidate.last_name;
+            " " + $scope.candidate.last_name;
         };
 
         $scope.currentSection = $routeParams.section === undefined ? "about" : $routeParams.section;
@@ -38,5 +38,20 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
 
         $scope.convertMarkdown = function (string) {
             return $showdown.makeHtml(string);
+        };
+
+        $scope.saveChanges = function () {
+            console.log('here');
+            if (!$scope.editPermissions) {
+                console.log('here2');
+                return;
+            }
+            console.log('here3');
+
+            $http.put('/api/candidates/update/' + $routeParams.rcs, $scope.candidate).then(function (response) {
+                $location.url('/candidate/' + $routeParams.rcs);
+            }, function () {
+                alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
+            })
         };
     }]);

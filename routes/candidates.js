@@ -28,6 +28,7 @@ var queries = {
     postCMSData: "INSERT INTO `rpielections`.`candidate_data` (`rcs_id`, `preferred_name`, `first_name`, " +
     "`middle_name`, `last_name`, `greek_affiliated`, `entry_date`, `class_by_credit`, `grad_date`, `rin`) VALUES ",
     remove: "DELETE FROM `rpielections`.`candidates` ",
+    update: "UPDATE `rpielections`.`candidate_data` SET <> WHERE rcs_id = ",
 
     duplicateRCS: " ON DUPLICATE KEY UPDATE rcs_id = "
 };
@@ -149,6 +150,40 @@ router.post('/create/:rcs_id/:office_id', function (req, res) {
     }, function() {
         res.status(400);
     });
+});
+
+router.put('/update/:rcs_id', function(req, res) {
+    console.log("HERE\n\n\n");
+    if(!functions.verifyPermissions(req).admin && req.session.cas_user !== req.params.rcs_id) {
+        res.status(401);
+    }
+
+    var connection = functions.dbConnect(res);
+
+    var rcs_id = req.params.rcs_id,
+        data = req.body;
+
+    if (!data) res.status(204);
+
+    var fields = [
+        'preferred_name', 'first_name', 'middle_name', 'last_name', 'major', 'about', 'platform', 'video_url'
+    ];
+
+    var assignments = "";
+
+    fields.forEach(function(elem, index) {
+        if(data.hasOwnProperty(elem)) {
+            assignments += "`" + elem + "` = " + mysql.escape(data[elem]) + (index < fields.length - 1 ? ", " : "");
+        }
+    });
+
+    var query = queries.update.replace(/<>/g, assignments) + mysql.escape(rcs_id);
+
+    connection.query(query, functions.defaultJSONCallback(res));
+
+    logger.write(connection, req.session.cas_user, "CANDIDATE_MODIFY", "Modified " + rcs_id);
+
+    connection.end();
 });
 
 router.delete('/delete/:rcs_id/:office_id', function (req, res) {
