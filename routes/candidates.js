@@ -70,30 +70,6 @@ router.get('/office/:office_id', function (req, res) {
     connection.end();
 });
 
-// upload candidate images
-// super lame API name, but different than private API was my thought
-router.get('/upload', function (req, res) {
-    res.send("HELLO WORLD");
-});
-router.post('/upload', function (req, res) {
-    console.log(req.files);
-    res.send("Post recieved");
-    /*fs.readFile(req.files.image.path, function (err, data) {
-        var imageName = req.files.image.name; //Add my own name
-
-        if(!imageName) {
-            console.log("ERROR: No image name");
-            res.redirect("/");
-            res.end();
-        } else {
-            var newPath = __dirname + "/public/usr_content/" + imageName;
-            fs.writeFile(newPath, data, function (err) {
-                res.redirect("/public/images/" + imageName);
-            });
-        }
-    });*/
-});
-
 router.post('/create/:rcs_id/:office_id', function (req, res) {
     if(!functions.verifyPermissions(req).admin) {
         res.status(401);
@@ -152,6 +128,7 @@ router.post('/create/:rcs_id/:office_id', function (req, res) {
     });
 });
 
+// Isn't PUT create new, and POST is update?
 router.put('/update/:rcs_id', function(req, res) {
     console.log("HERE\n\n\n");
     if(!functions.verifyPermissions(req).admin && req.session.cas_user !== req.params.rcs_id) {
@@ -204,6 +181,16 @@ router.delete('/delete/:rcs_id/:office_id', function (req, res) {
         " from office #" + office_id);
 
     connection.end();
+});
+
+/* Candidate Profile APIs */
+/*** CAN/SHOULD BE MERGED INTO OTHER CALLS ***/
+router.get('/update/russor3/about', function(req, res) {
+    res.write("HELLO");
+});
+router.post('/update/russor3/about', function(req, res) {
+    console.log("CALLED!");
+    res.write("HELLO");
 });
 
 module.exports = router;
