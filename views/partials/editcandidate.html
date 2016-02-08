@@ -13,55 +13,52 @@
                 <!--<span class="text-muted" ng-show="o.disabled">(disabled)</span>-->
             </h2>
             <hr/>
-            <form action="/#/candidate/russor3/about" method="POST" class="form-horizontal">
-                <input type="submit">
-                <div class="form-group">
-                    <label for="candidateName" class="col-sm-3 control-label">Name</label>
+            <div class="form-group">
+                <label for="candidateName" class="col-sm-3 control-label">Name</label>
 
-                    <div class="col-sm-9">
-                        <p id="candidateName" class="form-control-static" ng-bind="formName()"></p>
+                <div class="col-sm-9">
+                    <p id="candidateName" class="form-control-static" ng-bind="formName()"></p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="candidatePreferredName" class="col-sm-3 control-label">Preferred Name</label>
+
+                <div class="col-sm-9">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="candidatePreferredName"
+                               id="candidatePreferredName"
+                               ng-model="candidate.preferred_name"/>
+                        <p class="help-block">Note: this will replace your first name.</p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="candidatePreferredName" class="col-sm-3 control-label">Preferred Name</label>
+            </div>
+            <div class="form-group">
+                <label for="candidateRCS" class="col-sm-3 control-label">RCS ID</label>
 
-                    <div class="col-sm-9">
-                        <div class="form-group">
-                            <input type="text" class="form-control" name="candidatePreferredName"
-                                   id="candidatePreferredName"
-                                   ng-model="candidate.preferred_name"/>
-                            <p class="help-block">Note: this will replace your first name.</p>
-                        </div>
+                <div class="col-sm-9">
+                    <p id="candidateRCS" class="form-control-static" ng-bind="candidate.rcs_id"></p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="candidateNominations" class="col-sm-3 control-label">Nominations</label>
+
+                <div class="col-sm-9">
+                    <p id="candidateNominations" class="form-control-static">
+                        330/600
+                    </p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="candidateMajor" class="col-sm-3 control-label">Major(s)</label>
+
+                <div class="col-sm-9">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="candidateMajor" id="candidateMajor"
+                               ng-model="candidate.major"/>
+                        <p class="help-block">Note: separate multiple majors with a semicolon.</p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="candidateRCS" class="col-sm-3 control-label">RCS ID</label>
-
-                    <div class="col-sm-9">
-                        <p id="candidateRCS" class="form-control-static" ng-bind="candidate.rcs_id"></p>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="candidateNominations" class="col-sm-3 control-label">Nominations</label>
-
-                    <div class="col-sm-9">
-                        <p id="candidateNominations" class="form-control-static">
-                            330/600
-                        </p>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="candidateMajor" class="col-sm-3 control-label">Major(s)</label>
-
-                    <div class="col-sm-9">
-                        <div class="form-group">
-                            <input type="text" class="form-control" name="candidateMajor" id="candidateMajor"
-                                   ng-model="candidate.major"/>
-                            <p class="help-block">Note: separate multiple majors with a semicolon.</p>
-                        </div>
-                    </div>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
     <hr/>

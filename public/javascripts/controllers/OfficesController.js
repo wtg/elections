@@ -30,6 +30,7 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                     $cookies.getObject(EDIT_ID_COOKIE_LABEL).val : ($scope.offices[0] ? $scope.offices[0].id : 0);
 
                 responses[1].data.forEach(function (c_elem) {
+                    console.log(c_elem);
                     $scope.offices.forEach(function (o_elem) {
                         if (c_elem.office_id === o_elem.id) {
                             if (!o_elem.candidates) {
@@ -38,7 +39,8 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
 
                             o_elem.candidates.push({
                                 name: c_elem.first_name + " " + c_elem.last_name,
-                                party: c_elem.party_id,
+                                party_id: c_elem.party_id,
+                                party_name: c_elem.party_name,
                                 rcsId: c_elem.rcs_id,
                                 major: c_elem.major,
                                 nominations: c_elem.nominations,

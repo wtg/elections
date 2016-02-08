@@ -30,9 +30,7 @@
     </div>
     <div class="row" ng-repeat-start="o in offices" ng-hide="(filter != 'all' && filter != o.type) || o.disabled">
         <div class="col-xs-10">
-            <h2>
-                {{o.title}}
-            </h2>
+            <h2 ng-bind="o.title"></h2>
         </div>
         <div class="col-xs-2">
             <button class="btn btn-simple btn-lg pull-right" ng-click="o.showDesc = !o.showDesc">
@@ -60,10 +58,10 @@
                             <div class="main">
                                 <h3 class="name">{{c.name}}</h3>
 
-                                <p ng-if="c.party === undefined || c.party == ''" class="profession">Unaffiliated</p>
+                                <p ng-if="!c.party_name" class="profession">&nbsp;</p>
 
-                                <p ng-if="c.party !== undefined && c.party != ''" class="profession"
-                                   ng-bind="c.party"></p>
+                                <p ng-if="c.party_name" class="profession"
+                                   ng-bind="c.party_name"></p>
                                 <h5 ng-hide="!c.major">
                                     <i class="fa fa-graduation-cap fa-fw text-muted"></i>
                                     <span ng-bind="c.major"></span>
@@ -76,14 +74,16 @@
                                     nominations required</h5>
 
                                 <div class="progress text-center" ng-if="o.nominationsRequired !== undefined">
-                                    <span ng-if="c.nominations/o.nominationsRequired < .33">{{c.nominations}}/{{o.nominationsRequired}}</span>
-                                    <span ng-if="c.nominations === undefined && o.nominationsRequired !== undefined">0/{{o.nominationsRequired}}</span>
+                                    <span ng-if="c.nominations/o.nominationsRequired < .33"
+                                          ng-bind="c.nominations + '/' + o.nominationsRequired"></span>
+                                    <span ng-if="c.nominations === undefined && o.nominationsRequired !== undefined"
+                                          ng-bind="'0/' + o.nominationsRequired"></span>
 
                                     <div class="progress-bar" role="progressbar" aria-valuenow="{{c.nominations}}"
-                                         aria-valuemin="0"
-                                         aria-valuemax="{{o.nominationsRequired}}"
+                                         aria-valuemin="0" aria-valuemax="{{o.nominationsRequired}}"
                                          ng-style="{'width': nominationPercentage(c.nominations, o.nominationsRequired)}">
-                                        <span ng-if="c.nominations/o.nominationsRequired >= .33">{{c.nominations}}/{{o.nominationsRequired}}</span>
+                                        <span ng-if="c.nominations/o.nominationsRequired >= .33"
+                                              ng-bind="c.nominations + '/' + o.nominationsRequired"></span>
                                     </div>
                                 </div>
                             </div>
