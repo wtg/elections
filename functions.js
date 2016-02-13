@@ -1,5 +1,6 @@
 var db = require('./db.js'),
-    mysql = require('mysql');
+    mysql = require('mysql'),
+    cms = require('./cms.js');
 
 module.exports = {
     dbConnect: function (res) {
@@ -65,5 +66,9 @@ module.exports = {
       if(!providedConnection) {
         connection.end();
       }
+    },
+    determineCMSPromise: function(rcs_id) {
+        console.log(rcs_id);
+        return isNaN(parseInt(rcs_id)) ? cms.getRCS(rcs_id) : cms.getRIN(rcs_id);
     }
 };

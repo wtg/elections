@@ -174,17 +174,21 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`nominations` (" +
  * Execute the creation of the party_officers table. This table maintains all party officers for all parties
  */
 connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`party_officers` (" +
-    "`party_officer_id` INT NOT NULL AUTO_INCREMENT," +
     "`party_id` INT NOT NULL," +
     "`rcs_id` VARCHAR(45) NOT NULL," +
     "`position` VARCHAR(45) NOT NULL," +
     "`is_highest` INT NOT NULL DEFAULT 0," +
-    "PRIMARY KEY (`party_officer_id`)," +
-    "INDEX `officer_fk1_idx` (`party_id` ASC)," +
+    "`first_name` VARCHAR(45) NOT NULL," +
+    "`middle_name` VARCHAR(45) NOT NULL," +
+    "`preferred_name` VARCHAR(45) NOT NULL," +
+    "`last_name` VARCHAR(45) NOT NULL," +
+    "PRIMARY KEY (`party_id`,`rcs_id`)," +
+    "KEY `officer_fk1_idx` (`party_id`)," +
+    "UNIQUE KEY `party_officer_id` (`rcs_id`, `party_id`)," +
     "CONSTRAINT `officer_fk1`" +
     "  FOREIGN KEY (`party_id`)" +
     "  REFERENCES `rpielections`.`parties` (`party_id`)" +
-    "  ON DELETE NO ACTION" +
+    "  ON DELETE CASCADE" +
     "  ON UPDATE NO ACTION)" +
     "ENGINE = InnoDB;", errorCallback);
 

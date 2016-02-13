@@ -30,8 +30,7 @@
                 <div class="panel-body">
                     <p>
                         <strong>Party Leader:</strong>
-                        <span ng-bind="p.leader" ng-if="p.leader"></span>
-                        <span ng-if="!p.leader">N/A</span>
+                        <span ng-bind="getLeader(p)"></span>
                     </p>
                     <p ng-bind="p.platform"></p>
                 </div>
