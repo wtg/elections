@@ -27,7 +27,6 @@ app.controller('PartiesController', ['$scope', '$http', '$cookies', '$location',
 
                 $scope.currentEditId = $cookies.getObject(EDIT_ID_COOKIE_LABEL) ?
                     $cookies.getObject(EDIT_ID_COOKIE_LABEL).val : ($scope.parties[0] ? $scope.parties[0].party_id : 0);
-                console.log($scope.currentEditId);
             }).finally(function () {
                 $scope.dataLoaded = true;
             });
@@ -122,7 +121,6 @@ app.controller('PartiesController', ['$scope', '$http', '$cookies', '$location',
                 $route.reload();
             }, function (response) {
                 addNewAlert("error", response.statusText + " (code: " + response.status + ")", "promote_officer");
-                console.log(response);
             });
         };
 
@@ -138,7 +136,6 @@ app.controller('PartiesController', ['$scope', '$http', '$cookies', '$location',
                 $route.reload();
             }, function (response) {
                 addNewAlert("error", response.statusText + " (code: " + response.status + ")", "remove_officer");
-                console.log(response);
             });
         };
 
@@ -155,7 +152,6 @@ app.controller('PartiesController', ['$scope', '$http', '$cookies', '$location',
             if (!$scope.newOfficer.rcs) {
                 return;
             }
-            console.log($scope.newOfficer.rcs);
 
             var name = $scope.parties[findParty($scope.currentEditId)].name;
 
@@ -165,7 +161,6 @@ app.controller('PartiesController', ['$scope', '$http', '$cookies', '$location',
                 $route.reload();
             }, function (response) {
                 addNewAlert("error", response.statusText + " (code: " + response.status + ")", "add_officer");
-                console.log(response);
             });
         };
 
@@ -246,7 +241,6 @@ app.controller('PartiesController', ['$scope', '$http', '$cookies', '$location',
          */
         $scope.deleteParty = function () {
             var position = findParty($scope.currentEditId);
-            console.log(position);
             var name = $scope.parties[position].name;
 
             if (!confirm("Are you sure you want to permanently delete this office?") ||

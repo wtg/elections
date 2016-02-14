@@ -30,7 +30,6 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                     $cookies.getObject(EDIT_ID_COOKIE_LABEL).val : ($scope.offices[0] ? $scope.offices[0].id : 0);
 
                 responses[1].data.forEach(function (c_elem) {
-                    console.log(c_elem);
                     $scope.offices.forEach(function (o_elem) {
                         if (c_elem.office_id === o_elem.id) {
                             if (!o_elem.candidates) {
