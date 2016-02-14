@@ -55,6 +55,10 @@ app.config(['$routeProvider', function ($routeProvider) {
     when('/party', {
         redirectTo: '/parties'
     }).
+    when('/party/:detail_id', {
+        templateUrl: 'partials/partydetails.html',
+        controller: 'PartiesController'
+    }).
     when('/events', {
         templateUrl: 'partials/events.html',
         controller: 'EventsController'

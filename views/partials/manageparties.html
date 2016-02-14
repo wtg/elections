@@ -1,4 +1,9 @@
-<div class="container page shadow">
+<div class="container page shadow" ng-if="!dataLoaded">
+    <div class="row">
+        <div class="loader">Loading...</div>
+    </div>
+</div>
+<div class="container page shadow" ng-if="dataLoaded">
     <div class="row">
         <div class="col-sm-12 col-md-4">
             <h1>Political Parties</h1>

@@ -1,5 +1,5 @@
-app.controller('PartiesController', ['$scope', '$http', '$cookies', '$location', '$route',
-    function ($scope, $http, $cookies, $location, $route) {
+app.controller('PartiesController', ['$scope', '$http', '$cookies', '$location', '$route', '$routeParams',
+    function ($scope, $http, $cookies, $location, $route, $routeParams) {
         var EDIT_ID_COOKIE_LABEL = "partiesEditId",
             ALERTS_COOKIE_LABEL = "partiesAlerts";
 
@@ -60,6 +60,10 @@ app.controller('PartiesController', ['$scope', '$http', '$cookies', '$location',
             $cookies.putObject(ALERTS_COOKIE_LABEL, {array: $scope.alerts}, {expires: new Date(new Date().getTime() + 300000)});
         };
 
+        $scope.getDetailActiveParty = function () {
+            return $scope.parties[findParty($routeParams.detail_id)];
+        };
+
         /**
          * Called by the 'close' button on any alert; removes it from the alert array
          * @param index
@@ -74,9 +78,11 @@ app.controller('PartiesController', ['$scope', '$http', '$cookies', '$location',
         };
 
         $scope.getLeader = function (party) {
-            for(var i=0; i<party.officers.length; i++) {
-                if(party.officers[i].is_highest === 1) {
-                    return party.officers[i].rcs_id;
+            if(party.officers) {
+                for (var i = 0; i < party.officers.length; i++) {
+                    if (party.officers[i].is_highest === 1) {
+                        return party.officers[i].rcs_id;
+                    }
                 }
             }
 
@@ -104,14 +110,14 @@ app.controller('PartiesController', ['$scope', '$http', '$cookies', '$location',
             return position;
         };
 
-        $scope.promoteOfficer = function(rcsId, partyId) {
-            if(rcsId === undefined || partyId === undefined) {
+        $scope.promoteOfficer = function (rcsId, partyId) {
+            if (rcsId === undefined || partyId === undefined) {
                 return;
             }
 
             var name = $scope.parties[findParty(partyId)].name;
 
-            $http.put('/api/parties/setleader/' + partyId + '/' + rcsId).then(function() {
+            $http.put('/api/parties/setleader/' + partyId + '/' + rcsId).then(function () {
                 addNewAlert("success", rcsId + " was successfully promoted to party leader for " + name + "!", "promote_officer");
                 $route.reload();
             }, function (response) {
@@ -120,9 +126,8 @@ app.controller('PartiesController', ['$scope', '$http', '$cookies', '$location',
             });
         };
 
-        $scope.removeOfficer = function(rcsId, partyId) {
-            if(rcsId === undefined || partyId === undefined ||
-                !confirm("Are you sure you want to remove " + rcsId + " as an officer of this party?")) {
+        $scope.removeOfficer = function (rcsId, partyId) {
+            if (rcsId === undefined || partyId === undefined || !confirm("Are you sure you want to remove " + rcsId + " as an officer of this party?")) {
                 return;
             }
 
