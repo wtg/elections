@@ -113,4 +113,8 @@ app.controller('HomeController', ['$scope', '$sce', '$http', function($scope, $s
 	$scope.trust = function(str) {
 		return $sce.trustAsHtml(str);
 	}
+
+	angular.element('.carousel').carousel({
+		interval: 4000
+	});
 }]);
