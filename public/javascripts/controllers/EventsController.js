@@ -5,9 +5,10 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
 
         var initialize = function () {
             $scope.events = [];
+            $scope.pastEvents = [];
 
             $scope.new = {
-                title: ""
+                title: "", location: "", date: null, start: null, end: null, description: ""
             };
 
             if ($location.path().split('/')[$location.path().split('/').length - 1] === 'edit' && !$scope.editPermissions) {
@@ -21,19 +22,26 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
             $scope.events = [];
 
             $http.get('/api/events/').then(function (response) {
-                $scope.events = response.data;
-                $scope.events.forEach(function(elem) {
+                response.data.forEach(function (elem) {
                     elem.date = new Date(elem.date);
                     elem.start_string = elem.start;
                     elem.start = new Date('Thu, 01 Jan 1970 ' + elem.start + ' GMT-0500');
-                    if(elem.end) {
+
+                    if (elem.end) {
                         elem.end_string = elem.end;
                         elem.end = new Date('Thu, 01 Jan 1970 ' + elem.end + ' GMT-0500');
                     }
+
+                    if(!$scope.isPastEvent(elem.date)) {
+                        $scope.events.push(elem);
+                    } /*else {
+                        $scope.pastEvents.push(elem);
+                    }*/
                 });
 
                 $scope.currentEditId = $cookies.getObject(EDIT_ID_COOKIE_LABEL) ?
                     $cookies.getObject(EDIT_ID_COOKIE_LABEL).val : ($scope.events[0] ? $scope.events[0].event_id : 0);
+                console.log( $scope.currentEditId);
             }).finally(function () {
                 $scope.dataLoaded = true;
             });
@@ -91,6 +99,7 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
 
         $scope.setEditId = function (newId) {
             $scope.currentEditId = newId;
+            $cookies.putObject(EDIT_ID_COOKIE_LABEL, {val: $scope.currentEditId});
         };
 
         $scope.$on('$routeChangeStart', function () {
@@ -114,5 +123,65 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
             });
 
             return position;
+        };
+
+        /**
+         * Saves any pending edits on the currently selected party
+         */
+        $scope.saveEdits = function () {
+            var position = findEvent($scope.currentEditId);
+            var title = $scope.events[position].title;
+
+            if (isNaN($scope.currentEditId) || position == -1) {
+                return;
+            }
+
+            var preparedData = {
+                title: $scope.events[position].title,
+                location: $scope.events[position].location,
+                date: $scope.events[position].date.toISOString().substr(0,10),
+                start: $scope.events[position].start.getHours() + ":" +
+                $scope.events[position].start.getMinutes() + ":" + $scope.events[position].start.getSeconds(),
+                description: $scope.events[position].description
+            };
+
+            if($scope.events[position].end) {
+                preparedData.end = $scope.events[position].end.getHours() + ":" +
+                $scope.events[position].end.getMinutes() + ":" + $scope.events[position].end.getSeconds();
+            }
+
+            for(var i in preparedData) {
+                if(preparedData.hasOwnProperty(i) && !preparedData[i]) {
+                    addNewAlert("error", "You didn't enter a " + i + " for the event!", "update");
+                    return;
+                }
+            }
+
+            $http.put('/api/events/update/' + $scope.currentEditId, preparedData).then(function () {
+                addNewAlert("success", "The event entitled " + title + " was successfully updated!", "update");
+                $route.reload();
+            }, function (response) {
+                addNewAlert("error", response.statusText + " (code: " + response.status + ")", "update");
+            })
+        };
+        
+        /**
+         * Deletes an party based on the given edit id
+         */
+        $scope.deleteParty = function () {
+            var position = findEvent($scope.currentEditId);
+            var title = $scope.events[position].title;
+
+            if (!confirm("Are you sure you want to permanently delete this event?") ||
+                isNaN($scope.currentEditId) || position == -1) {
+                return;
+            }
+
+            $http.delete('/api/events/delete/' + $scope.currentEditId).then(function () {
+                addNewAlert("success", "The event entitled " + title + " was permanently deleted!", "delete");
+                $route.reload();
+            }, function (response) {
+                addNewAlert("error", response.statusText + " (code: " + response.status + ")", "delete");
+            })
         };
     }]);

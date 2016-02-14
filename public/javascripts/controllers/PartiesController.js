@@ -249,7 +249,7 @@ app.controller('PartiesController', ['$scope', '$http', '$cookies', '$location',
             var position = findParty($scope.currentEditId);
             var name = $scope.parties[position].name;
 
-            if (!confirm("Are you sure you want to permanently delete this office?") ||
+            if (!confirm("Are you sure you want to permanently delete this party?") ||
                 isNaN($scope.currentEditId) || position == -1) {
                 return;
             }

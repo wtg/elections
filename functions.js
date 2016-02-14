@@ -20,7 +20,8 @@ module.exports = {
         return function (err, result) {
             if (err) {
                 console.log(err);
-                res.status(500);
+                res.sendStatus(500);
+                return;
             }
 
             res.json(result);
