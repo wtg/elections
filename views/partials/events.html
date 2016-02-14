@@ -9,6 +9,16 @@
 			<h1>Events</h1>
 			<br/>
 		</div>
+		<div class="col-sm-12 col-md-8" ng-if="editPermissions">
+			<div class="btn-group pull-right header-btns">
+				<a class="btn btn-default active" href="#/events">
+					View
+				</a>
+				<a class="btn btn-primary" href="#/events/edit">
+					Edit
+				</a>
+			</div>
+		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-4" ng-repeat="i in [0,1,2]">
@@ -27,9 +37,9 @@
 					<p>
 						<strong>When:</strong>
 						<span ng-bind="e.date | date:'longDate'"></span>,
-						<span ng-bind="formatTime(e.start)"></span>
-						<span ng-if="e.end">&ndash;</span>
-						<span ng-if="e.end" ng-bind="formatTime(e.end)"></span>
+						<span ng-bind="formatTime(e.start_string)"></span>
+						<span ng-if="e.end_string">&ndash;</span>
+						<span ng-if="e.end_string" ng-bind="formatTime(e.end_string)"></span>
 					</p>
 					<p>
 						<span ng-bind="e.description.substr(0,255)"></span><span ng-if="e.description.length>=255">&#8230;</span>

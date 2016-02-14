@@ -63,6 +63,10 @@ app.config(['$routeProvider', function ($routeProvider) {
         templateUrl: 'partials/events.html',
         controller: 'EventsController'
     }).
+    when('/events/edit', {
+        templateUrl: 'partials/manageevents.html',
+        controller: 'EventsController'
+    }).
     otherwise({
         redirectTo: '/home'
     });
