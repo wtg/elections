@@ -99,7 +99,9 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
 
         $scope.setEditId = function (newId) {
             $scope.currentEditId = newId;
-            $cookies.putObject(EDIT_ID_COOKIE_LABEL, {val: $scope.currentEditId});
+            if(newId !== "new") {
+                $cookies.putObject(EDIT_ID_COOKIE_LABEL, {val: $scope.currentEditId});
+            }
         };
 
         $scope.$on('$routeChangeStart', function () {
@@ -123,6 +125,40 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
             });
 
             return position;
+        };
+
+        /**
+         * Creates a new party
+         */
+        $scope.createEvent = function () {
+            var title = $scope.new.title;
+            var preparedData = {
+                title: $scope.new.title,
+                location: $scope.new.location,
+                date: $scope.new.date.toISOString().substr(0,10),
+                start: $scope.new.start.getHours() + ":" +
+                $scope.new.start.getMinutes() + ":" + $scope.new.start.getSeconds(),
+                description: $scope.new.description
+            };
+
+            if($scope.new.end) {
+                preparedData.end = $scope.new.end.getHours() + ":" +
+                    $scope.new.end.getMinutes() + ":" + $scope.new.end.getSeconds();
+            }
+
+            for(var i in preparedData) {
+                if(preparedData.hasOwnProperty(i) && !preparedData[i]) {
+                    addNewAlert("error", "You didn't enter a(n) " + i + " for the event!", "update");
+                    return;
+                }
+            }
+
+            $http.post('/api/events/create', preparedData).then(function () {
+                addNewAlert("success", "The new event, entitled " + title + ", was created successfully!", "create");
+                $route.reload();
+            }, function (response) {
+                addNewAlert("error", response.statusText + " (code: " + response.status + ")", "create");
+            });
         };
 
         /**
@@ -152,7 +188,7 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
 
             for(var i in preparedData) {
                 if(preparedData.hasOwnProperty(i) && !preparedData[i]) {
-                    addNewAlert("error", "You didn't enter a " + i + " for the event!", "update");
+                    addNewAlert("error", "You didn't enter a(n) " + i + " for the event!", "update");
                     return;
                 }
             }
@@ -164,11 +200,11 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
                 addNewAlert("error", response.statusText + " (code: " + response.status + ")", "update");
             })
         };
-        
+
         /**
          * Deletes an party based on the given edit id
          */
-        $scope.deleteParty = function () {
+        $scope.deleteEvent = function () {
             var position = findEvent($scope.currentEditId);
             var title = $scope.events[position].title;
 

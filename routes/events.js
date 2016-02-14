@@ -7,6 +7,7 @@ var express = require('express'),
 
 var queries = {
     all: "SELECT * FROM `rpielections`.`events` ORDER BY date, start, end",
+    post: "INSERT INTO `rpielections`.`events` (`title`, `location`, `date`, `start`, `end`, `description`) VALUES ",
     update: "UPDATE `rpielections`.`events` SET <> WHERE event_id = ",
     remove: "DELETE FROM `rpielections`.`events` WHERE event_id = "
 };
@@ -29,6 +30,29 @@ router.get('/limit/:quantity', function (req, res) {
     }
 
     connection.query(queries.all + " LIMIT " + quantity, functions.defaultJSONCallback(res));
+
+    connection.end();
+});
+
+router.post('/create', function (req, res) {
+    if (!functions.verifyPermissions(req).admin) {
+        res.status(401);
+    }
+
+    var connection = functions.dbConnect(res);
+
+    var data = req.body;
+
+    if (!data) { res.status(204); return; }
+
+    var query = queries.post + functions.constructSQLArray([
+            data.title, data.location, data.date, data.start, data.end, data.description
+        ]);
+
+    connection.query(query, functions.defaultJSONCallback(res));
+
+    logger.write(connection, req.session.cas_user, "EVENT_CREATE", "Entitled " + data.title +
+        ", description: " + (data.description.length >= 100 ? data.description.substr(0,100) + '...' : data.description));
 
     connection.end();
 });

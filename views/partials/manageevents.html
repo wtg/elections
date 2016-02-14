@@ -57,38 +57,36 @@
 
                     <div class="col-sm-9">
                         <input class="form-control" type="text" name="newLocation" id="newLocation"
-                               ng-model="e.location" ng-change="e.changesPending = true"/>
+                               ng-model="new.location" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="newDate" class="col-sm-3 control-label">Event Date</label>
 
                     <div class="col-sm-9">
-                        <input class="form-control" type="date" name="newDate" id="newDate" ng-model="e.date"
-                               ng-change="e.changesPending = true"/>
+                        <input class="form-control" type="date" name="newDate" id="newDate" ng-model="new.date" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="newStart" class="col-sm-3 control-label">Start Time</label>
 
                     <div class="col-sm-9">
-                        <input class="form-control" type="time" name="newStart" id="newStart" ng-model="e.start"
-                               ng-change="e.changesPending = true"/>
+                        <input class="form-control" type="time" name="newStart" id="newStart" ng-model="new.start" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="newEnd" class="col-sm-3 control-label">End Time</label>
 
                     <div class="col-sm-9">
-                        <input class="form-control" type="time" name="newEnd" id="newEnd" ng-model="e.end"
-                               ng-change="e.changesPending = true"/>
+                        <input class="form-control" type="time" name="newEnd" id="newEnd" ng-model="new.end" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="newDescription" class="col-sm-3 control-label">Event Description</label>
 
                     <div class="col-sm-9">
-                        <textarea class="form-control" name="newDescription" id="newDescription" ng-model="new.description"></textarea>
+                        <textarea class="form-control" name="newDescription" id="newDescription"
+                                  ng-model="new.description"></textarea>
                     </div>
                 </div>
             </form>
@@ -172,7 +170,7 @@
             <br/>
 
             <p>
-                <button class="btn btn-danger" ng-click="deleteParty(e.id)">Delete Event</button>
+                <button class="btn btn-danger" ng-click="deleteEvent(e.id)">Delete Event</button>
             </p>
             <p class="text-muted"><span class="text-danger">Caution:</span> this action will <b>permanently</b> delete
                 this event from the Elections site.</p>

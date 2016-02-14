@@ -189,7 +189,7 @@ app.controller('PartiesController', ['$scope', '$http', '$cookies', '$location',
             }
 
             $http.post('/api/parties/create', preparedData).then(function () {
-                addNewAlert("success", "The new platform, entitled " + name + ", was created successfully!", "create");
+                addNewAlert("success", "The new party, entitled " + name + ", was created successfully!", "create");
                 $route.reload();
             }, function (response) {
                 addNewAlert("error", response.statusText + " (code: " + response.status + ")", "create");
