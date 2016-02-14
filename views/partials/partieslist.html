@@ -33,12 +33,14 @@
                 <div class="panel-heading">
                     <h2 class="panel-title"><a ng-href="#/party/{{p.party_id}}" ng-bind="p.name"></a></h2>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body" style="height: 150px">
                     <p>
                         <strong>Party Leader:</strong>
                         <span ng-bind="getLeader(p)"></span>
                     </p>
-                    <p ng-bind="p.platform"></p>
+                    <p>
+                        <span ng-bind="p.platform.substr(0,355)"></span><span ng-if="p.platform.length>=355">&#8230;</span>
+                    </p>
                 </div>
             </div>
         </div>
