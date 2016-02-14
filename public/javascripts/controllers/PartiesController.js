@@ -76,11 +76,17 @@ app.controller('PartiesController', ['$scope', '$http', '$cookies', '$location',
             $scope.currentEditId = newId;
         };
 
+        $scope.$on('$routeChangeStart', function () {
+            if ($location.path().split('/')[$location.path().split('/').length - 1] === 'edit') {
+                $cookies.putObject(EDIT_ID_COOKIE_LABEL, {val: $scope.currentEditId});
+            }
+        });
+
         $scope.getLeader = function (party) {
             if(party.officers) {
                 for (var i = 0; i < party.officers.length; i++) {
                     if (party.officers[i].is_highest === 1) {
-                        return party.officers[i].rcs_id;
+                        return $scope.constructName(party.officers[i]);
                     }
                 }
             }

@@ -29,6 +29,7 @@ var queries = {
     "`middle_name`, `last_name`, `greek_affiliated`, `entry_date`, `class_by_credit`, `grad_date`, `rin`) VALUES ",
     remove: "DELETE FROM `rpielections`.`candidates` ",
     update: "UPDATE `rpielections`.`candidate_data` SET <> WHERE rcs_id = ",
+    updateParty: "UPDATE `rpielections`.`candidates` SET `party_id` = <> WHERE rcs_id = ",
 
     duplicateRCS: " ON DUPLICATE KEY UPDATE rcs_id = "
 };
@@ -36,6 +37,48 @@ var queries = {
 var useData = function (req) {
     var includeData = (req.body.includeData !== undefined ? req.body.includeData : true);
     return (!includeData ? queries.allNoData : queries.allWithData);
+};
+
+var processMiscInfo = function (result) {
+    for(var r=0; r < result.length; r++) {
+        if (result[r].misc_info) {
+            var misc_info = result[r].misc_info.split('\n');
+            result[r].misc_info = "";
+            result[r].misc_info_obj = [];
+
+            for (var i = 0; i < misc_info.length; i++) {
+                var item = misc_info[i].split(':');
+
+                if (item.length < 2) {
+                    continue;
+                }
+
+                if (item[0].trim() === "Experience") {
+                    result[r].experience = (item[1] ? item[1].trim() : "");
+                } else if (item[0].trim() === "Activities") {
+                    result[r].activities = (item[1] ? item[1].trim() : "");
+                } else if (item[0].trim() === "Facebook") {
+                    result[r].facebook = (item[1].trim().length > 0 ? "http://" + item[1].trim() : "");
+                } else if (item[0].trim() === "Twitter") {
+                    result[r].twitter = (item[1].trim().length > 0 ? "http://" + item[1].trim() : "");
+                } else {
+                    result[r].misc_info += misc_info[i];
+                    result[r].misc_info_obj.push({
+                        label: item[0].trim(),
+                        entry: item[1].trim()
+                    });
+                }
+            }
+        } else {
+            result[r].experience = "";
+            result[r].activities = "";
+            result[r].facebook = "";
+            result[r].twitter = "";
+            result[r].misc_info = "";
+        }
+    }
+
+    return result;
 };
 
 router.get('/', function (req, res) {
@@ -47,39 +90,7 @@ router.get('/', function (req, res) {
             res.status(500);
         }
 
-        for(var r=0; r < result.length; r++) {
-            if (result[r].misc_info) {
-                var misc_info = result[r].misc_info.split('\n');
-                result[r].misc_info = "";
-                result[r].misc_info_obj = [];
-
-                for (var i = 0; i < misc_info.length; i++) {
-                    var item = misc_info[i].split(':');
-
-                    if (item.length < 2) {
-                        continue;
-                    }
-
-                    if (item[0].trim() === "Experience") {
-                        result[r].experience = item[1].trim();
-                    } else if (item[0].trim() === "Activities") {
-                        result[r].activities = item[1].trim();
-                    } else {
-                        result[r].misc_info += misc_info[i];
-                        result[r].misc_info_obj.push({
-                            label: item[0].trim(),
-                            entry: item[1].trim()
-                        });
-                    }
-                }
-            } else {
-                result[r].experience = "";
-                result[r].activities = "";
-                result[r].misc_info = "";
-            }
-        }
-
-        res.json(result);
+        res.json(processMiscInfo(result));
     });
 
     connection.end();
@@ -103,37 +114,7 @@ router.get('/rcs/:rcs_id', function (req, res) {
             res.status(500);
         }
 
-        if (result[0].misc_info) {
-            var misc_info = result[0].misc_info.split('\n');
-            result[0].misc_info = "";
-            result[0].misc_info_obj = [];
-
-            for (var i = 0; i < misc_info.length; i++) {
-                var item = misc_info[i].split(':');
-
-                if (item.length < 2) {
-                    continue;
-                }
-
-                if (item[0].trim() === "Experience") {
-                    result[0].experience = item[1].trim();
-                } else if (item[0].trim() === "Activities") {
-                    result[0].activities = item[1].trim();
-                } else {
-                    result[0].misc_info += misc_info[i];
-                    result[0].misc_info_obj.push({
-                        label: item[0].trim(),
-                        entry: item[1].trim()
-                    });
-                }
-            }
-        } else {
-            result[0].experience = "";
-            result[0].activities = "";
-            result[0].misc_info = "";
-        }
-
-        res.json(result);
+        res.json(processMiscInfo(result));
     });
 });
 
@@ -147,39 +128,7 @@ router.get('/office/:office_id', function (req, res) {
             res.status(500);
         }
 
-        for(var r=0; r < result.length; r++) {
-            if (result[r].misc_info) {
-                var misc_info = result[r].misc_info.split('\n');
-                result[r].misc_info = "";
-                result[r].misc_info_obj = [];
-
-                for (var i = 0; i < misc_info.length; i++) {
-                    var item = misc_info[i].split(':');
-
-                    if (item.length < 2) {
-                        continue;
-                    }
-
-                    if (item[0].trim() === "Experience") {
-                        result[r].experience = item[1].trim();
-                    } else if (item[0].trim() === "Activities") {
-                        result[r].activities = item[1].trim();
-                    } else {
-                        result[r].misc_info += misc_info[i];
-                        result[r].misc_info_obj.push({
-                            label: item[0].trim(),
-                            entry: item[1].trim()
-                        });
-                    }
-                }
-            } else {
-                result[r].experience = "";
-                result[r].activities = "";
-                result[r].misc_info = "";
-            }
-        }
-
-        res.json(result);
+        res.json(processMiscInfo(result));
     });
 
     connection.end();
@@ -243,7 +192,6 @@ router.post('/create/:rcs_id/:office_id', function (req, res) {
     });
 });
 
-// Isn't PUT create new, and POST is update?
 router.put('/update/:rcs_id', function (req, res) {
     if (!functions.verifyPermissions(req).admin && req.session.cas_user !== req.params.rcs_id) {
         res.status(401);
@@ -256,26 +204,38 @@ router.put('/update/:rcs_id', function (req, res) {
 
     if (!data) res.status(204);
 
-    var fields = [
-        'preferred_name', 'first_name', 'middle_name', 'last_name', 'major', 'about', 'platform', 'video_url',
-        'misc_info'
-    ];
-
-    var assignments = "";
-
-    fields.forEach(function (elem, index) {
-        if (data.hasOwnProperty(elem)) {
-            assignments += "`" + elem + "` = " + mysql.escape(data[elem]) + (index < fields.length - 1 ? ", " : "");
+    var query = queries.updateParty.replace(/<>/g, !isNaN(parseInt(data.party_id)) ? data.party_id : "NULL") +
+        mysql.escape(data.rcs_id);
+    console.log(query);
+    connection.query(query, function (err) {
+        if (err) {
+            console.log(err);
+            res.sendStatus(500);
+            connection.end();
+            return;
         }
+
+        var fields = [
+            'preferred_name', 'first_name', 'middle_name', 'last_name', 'major', 'about', 'platform', 'video_url',
+            'misc_info'
+        ];
+
+        var assignments = "";
+
+        fields.forEach(function (elem, index) {
+            if (data.hasOwnProperty(elem)) {
+                assignments += "`" + elem + "` = " + mysql.escape(data[elem]) + (index < fields.length - 1 ? ", " : "");
+            }
+        });
+
+        query = queries.update.replace(/<>/g, assignments) + mysql.escape(rcs_id);
+
+        connection.query(query, functions.defaultJSONCallback(res));
+
+        logger.write(connection, req.session.cas_user, "CANDIDATE_MODIFY", "Modified " + rcs_id);
+
+        connection.end();
     });
-
-    var query = queries.update.replace(/<>/g, assignments) + mysql.escape(rcs_id);
-
-    connection.query(query, functions.defaultJSONCallback(res));
-
-    logger.write(connection, req.session.cas_user, "CANDIDATE_MODIFY", "Modified " + rcs_id);
-
-    connection.end();
 });
 
 router.delete('/delete/:rcs_id/:office_id', function (req, res) {
@@ -296,16 +256,6 @@ router.delete('/delete/:rcs_id/:office_id', function (req, res) {
         " from office #" + office_id);
 
     connection.end();
-});
-
-/* Candidate Profile APIs */
-/*** CAN/SHOULD BE MERGED INTO OTHER CALLS ***/
-router.get('/update/russor3/about', function (req, res) {
-    res.write("HELLO");
-});
-router.post('/update/russor3/about', function (req, res) {
-    console.log("CALLED!");
-    res.write("HELLO");
 });
 
 module.exports = router;

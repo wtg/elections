@@ -17,7 +17,8 @@ var queries = {
     "`preferred_name`, `middle_name`, `last_name`) VALUES ",
     demoteLeader: "UPDATE `rpielections`.`party_officers` SET `is_highest` = 0, `position` = 'Officer' WHERE `party_id` = ",
     promoteOfficer: "UPDATE `rpielections`.`party_officers` SET `is_highest` = 1, `position` = 'Leader' WHERE `party_id` = ",
-    removeOfficer: "DELETE FROM `rpielections`.`party_officers`"
+    removeOfficer: "DELETE FROM `rpielections`.`party_officers`",
+    affiliateCandidate: "UPDATE `rpielections`.`candidates` SET `party_id` = <> WHERE rcs_id = "
 };
 
 router.get('/', function (req, res) {
@@ -128,12 +129,20 @@ router.post('/addofficer/:party_id/:rcs_id', function (req, res) {
             var query = queries.newOfficer + values + " ON DUPLICATE KEY UPDATE " +
                 "`rcs_id` = " + mysql.escape(cms_data.username) + " AND `party_id` = " + party_id;
 
-            connection.query(query, functions.defaultJSONCallback(res));
+            connection.query(query, function (err, result) {
+                if (err) {
+                    console.log(err);
+                    res.status(500);
+                }
 
-            logger.write(connection, req.session.cas_user, "OFFICER_ADD", "Added " + cms_data.username +
-                " as a party officer for party #" + party_id);
+                query = queries.affiliateCandidate.replace(/<>/g, party_id) + mysql.escape(cms_data.username);
+                connection.query(query, functions.defaultJSONCallback(res));
 
-            connection.end();
+                logger.write(connection, req.session.cas_user, "OFFICER_ADD", "Added " + cms_data.username +
+                    " as a party officer for party #" + party_id);
+
+                connection.end();
+            });
         } catch (e) {
             console.log("Invalid RCS entered (" + rcs_id + "). The client was notified.");
 

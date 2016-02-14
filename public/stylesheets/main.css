@@ -23,6 +23,17 @@ h1, .header-btns {
 	margin-top: 10px;
 }
 
+.btn-facebook {
+    background-color: #3b5998;
+    border-color: #3b5998;
+    color: #ffffff;
+}
+.btn-twitter {
+    background-color: #55acee;
+    border-color: #55acee;
+    color: #ffffff;
+}
+
 .no-margin-top {
 	margin-top: 0 !important;
 }

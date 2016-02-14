@@ -1,20 +1,26 @@
-app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$sce', '$http', '$location',
-    function ($scope, $routeParams, $showdown, $sce, $http, $location) {
+app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$sce', '$http', '$q', '$location',
+    function ($scope, $routeParams, $showdown, $sce, $http, $q, $location) {
         var loadData = function () {
-            if ($location.path().split('/')[$location.path().split('/').length - 1] === 'edit' && !$scope.editPermissions) {
-                $location.url('/offices');
-            }
-
             $scope.candidate = {};
+            $scope.parties = [];
             $scope.dataLoaded = false;
-            $http.get('/api/candidates/rcs/' + $routeParams.rcs).then(function (response) {
-                console.log(response.data);
-                if (!response.data[0]) {
-                    $location.path("/offices");
+            $q.all([
+                $http.get('/api/candidates/rcs/' + $routeParams.rcs),
+                $http.get('/api/parties/')
+            ]).then(function (responses) {
+                if (!responses[0].data[0]) {
+                    $location.url("/offices");
                     return;
                 }
 
-                $scope.candidate = response.data[0];
+                $scope.candidate = responses[0].data[0];
+
+                if ($location.path().split('/')[$location.path().split('/').length - 1] === 'edit' &&
+                    (!$scope.editPermissions && $scope.username !== $scope.candidate.rcs_id)) {
+                    $location.url('/offices');
+                    return;
+                }
+
                 if ($scope.candidate.video_url) {
                     $scope.candidate.video_url_trusted = $sce.trustAsResourceUrl($scope.candidate.video_url);
                 }
@@ -25,11 +31,37 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
                         $scope.candidate.majors = majors;
                     }
                 }
+
+                $scope.parties = responses[1].data;
+                $scope.parties.push({party_id:null, name: "Unaffiliated"});
             }, function () {
                 alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
             }).finally(function () {
                 $scope.dataLoaded = true;
             });
+            //$http.get('/api/candidates/rcs/' + $routeParams.rcs).then(function (response) {
+            //    console.log(response.data);
+            //    if (!response.data[0]) {
+            //        $location.path("/offices");
+            //        return;
+            //    }
+            //
+            //    $scope.candidate = response.data[0];
+            //    if ($scope.candidate.video_url) {
+            //        $scope.candidate.video_url_trusted = $sce.trustAsResourceUrl($scope.candidate.video_url);
+            //    }
+            //
+            //    if($scope.candidate.major) {
+            //        var majors = $scope.candidate.major.split(';');
+            //        if (majors.length > 1) {
+            //            $scope.candidate.majors = majors;
+            //        }
+            //    }
+            //}, function () {
+            //    alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
+            //}).finally(function () {
+            //    $scope.dataLoaded = true;
+            //});
         };
         loadData();
 
@@ -59,9 +91,9 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
             }
 
             $scope.candidate.misc_info += "\nExperience: " + $scope.candidate.experience +
-                "\nActivities: " + $scope.candidate.activities;
-
-            console.log($scope.candidate.misc_info);
+                "\nActivities: " + $scope.candidate.activities +
+                "\nFacebook: " + $scope.candidate.facebook.replace("http://", "") +
+                "\nTwitter: " + $scope.candidate.twitter.replace("http://", "");
 
             $http.put('/api/candidates/update/' + $routeParams.rcs, $scope.candidate).then(function (response) {
                 $location.url('/candidate/' + $routeParams.rcs);

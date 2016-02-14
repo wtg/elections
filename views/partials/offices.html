@@ -105,11 +105,16 @@
                         <div class="content">
                             <div class="main">
                                 <h4 class="text-center">Experience</h4>
-
-                                <p ng-bind="c.experience">Mike was working with our team since 2012.</p>
+                                <p ng-bind="c.experience" ng-if="c.experience"></p>
+                                <p ng-if="!c.experience" class="text-muted">
+                                    {{c.name}} hasn't entered any details about his experience yet!
+                                </p>
+                                <hr/>
                                 <h4 class="text-center">Activities</h4>
-
-                                <p ng-bind="c.activities">Web design, Adobe Photoshop, HTML5, CSS3, Corel and many others...</p>
+                                <p ng-bind="c.activities" ng-if="c.activities"></p>
+                                <p ng-if="!c.activities" class="text-muted">
+                                    {{c.name}} hasn't entered any details about his other activities yet!
+                                </p>
                             </div>
                         </div>
                         <div class="footer">
@@ -117,16 +122,12 @@
                                     data-original-title="Flip Card">
                                 <i class="fa fa-reply"></i> Back
                             </button>
-                            <button class="btn btn-simple"><i class="fa fa-facebook fa-fw"></i></button>
-                            <button class="btn btn-simple"><i class="fa fa-twitter fa-fw"></i></button>
-                            <!--<div class="social-links">-->
-                                <!--<a href="http://cretive-tim.com" class="facebook">-->
-                                    <!--<i class="fa fa-facebook fa-fw"></i>-->
-                                <!--</a>-->
-                                <!--<a href="http://cretive-tim.com" class="twitter">-->
-                                    <!--<i class="fa fa-twitter fa-fw"></i>-->
-                                <!--</a>-->
-                            <!--</div>-->
+                            <a class="btn btn-simple" ng-href="{{c.facebook}}" ng-if="c.facebook">
+                                <i class="fa fa-facebook fa-fw"></i>
+                            </a>
+                            <a class="btn btn-simple" ng-href="{{c.twitter}}" ng-if="c.twitter">
+                                <i class="fa fa-twitter fa-fw"></i>
+                            </a>
 
                             <div class="clearfix"></div>
                         </div>
