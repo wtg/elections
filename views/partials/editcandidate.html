@@ -147,36 +147,42 @@ Favorite class: Data Structures"></textarea>
             </div>
         </div>
     </div>
-    <hr/>
-    <div class="row">
+    <hr ng-if="editPermissions"/>
+    <div class="row" ng-if="editPermissions">
         <div class="col-xs-12">
             <h3>Dangerous Actions</h3>
             <br/>
-            <p>
-                <button ng-if="!o.disabled" class="btn btn-danger" ng-click="disablePetition(o.id)">Mark as Disqualified
-                </button>
-                <button ng-if="o.disabled" class="btn btn-success" ng-click="enablePetition(o.id)">Remove
-                    Disqualification
-                </button>
-            </p>
-            <p class="text-muted">
-                This action will
-                <span ng-if="!o.disabled">disable the candidate's account and mark the candidate as disqualified.</span>
-                <span ng-if="o.disabled">re-enable the candidate's account and remove the disqualified note.</span>
-            </p>
-            <br/>
+            <!--<p>-->
+                <!--<button ng-if="!o.disabled" class="btn btn-danger" ng-click="disablePetition(o.id)">Mark as Disqualified-->
+                <!--</button>-->
+                <!--<button ng-if="o.disabled" class="btn btn-success" ng-click="enablePetition(o.id)">Remove-->
+                    <!--Disqualification-->
+                <!--</button>-->
+            <!--</p>-->
+            <!--<p class="text-muted">-->
+                <!--This action will-->
+                <!--<span ng-if="!o.disabled">disable the candidate's account and mark the candidate as disqualified.</span>-->
+                <!--<span ng-if="o.disabled">re-enable the candidate's account and remove the disqualified note.</span>-->
+            <!--</p>-->
 
-            <p>
-                <button class="btn btn-danger" ng-click="deleteOffice(o.id)">Delete Candidate</button>
+            <p ng-if="candidate.offices.length === 1">
+                <button class="btn btn-danger" ng-click="deleteCandidate(candidate.office_id)">Delete Candidate</button>
             </p>
+            <div class="btn-toolbar" ng-if="candidate.offices.length > 1">
+                <button class="btn btn-danger" ng-repeat="o in candidate.offices" ng-click="deleteCandidate(o.office_id)">
+                    Remove from <span ng-bind="o.office_name"></span>
+                </button>
+            </div>
+            <br/>
             <p class="text-muted">
-                <span class="text-danger">Caution:</span> this action will <b>permanently</b> delete
-                this candidate's account from the Elections site.
+                <span class="text-danger">Caution:</span> this action will <b>permanently</b>
+                <span ng-if="candidate.offices.length === 1">delete this candidate's account</span>
+                <span ng-if="candidate.offices.length > 1">remove their candidacy for the selected office</span>
+                from the Elections site.
                 <br/>
-                <i>Note: candidates can be re-added, but their existing candidate profile will be deleted.</i>
+                <em>Note: candidates can be re-added, but their existing candidate profile will be deleted.</em>
             </p>
         </div>
     </div>
-    <hr/>
     <ng-include src="'partials/footer.html'"></ng-include>
 </div>

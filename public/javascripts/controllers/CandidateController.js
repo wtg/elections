@@ -14,11 +14,17 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
                 }
 
                 $scope.candidate = responses[0].data[0];
+                $scope.candidate.offices = [
+                    {office_id: $scope.candidate.office_id, office_name: $scope.candidate.office_name}
+                ];
 
-
-                for(var i = 1; i < responses[0].data.length; i++) {
+                for (var i = 1; i < responses[0].data.length; i++) {
                     $scope.candidate.office_name += (i === responses[0].data.length - 1 ? ((i > 1 ? "," : "") + " and ") : ", ") +
                         " " + responses[0].data[i].office_name;
+                    $scope.candidate.offices.push({
+                        office_id: responses[0].data[i].office_id,
+                        office_name: responses[0].data[i].office_name
+                    });
                 }
 
                 if ($location.path().split('/')[$location.path().split('/').length - 1] === 'edit' &&
@@ -31,7 +37,7 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
                     $scope.candidate.video_url_trusted = $sce.trustAsResourceUrl($scope.candidate.video_url);
                 }
 
-                if($scope.candidate.major) {
+                if ($scope.candidate.major) {
                     var majors = $scope.candidate.major.split(';');
                     if (majors.length > 1) {
                         $scope.candidate.majors = majors;
@@ -54,7 +60,7 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
 
         $scope.formName = function () {
             return ($scope.candidate.preferred_name ? $scope.candidate.preferred_name : $scope.candidate.first_name) +
-            " " + $scope.candidate.last_name;
+                " " + $scope.candidate.last_name;
         };
 
         $scope.currentSection = $routeParams.section === undefined ? "about" : $routeParams.section;
@@ -68,8 +74,7 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
         };
 
         $scope.saveChanges = function () {
-            console.log("HERE");
-            if (!$scope.editPermissions) {
+            if (!$scope.editPermissions && $scope.candidate.rcs_id !== $scope.username) {
                 return;
             }
 
@@ -78,10 +83,26 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
                 "\nFacebook: " + $scope.candidate.facebook.replace("http://", "") +
                 "\nTwitter: " + $scope.candidate.twitter.replace("http://", "");
 
-            $http.put('/api/candidates/update/' + $routeParams.rcs, $scope.candidate).then(function (response) {
+            $http.put('/api/candidates/update/' + $routeParams.rcs, $scope.candidate).then(function () {
                 $location.url('/candidate/' + $routeParams.rcs);
             }, function () {
                 alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
             })
         };
+
+        $scope.deleteCandidate = function (officeId) {
+            var confirm_message = "Are you sure you want to permanently " +
+                ($scope.candidate.offices.length === 1 ? "delete this candidate?" :
+                    "remove this candidate's candidacy for the selected office?");
+
+            if ((!$scope.editPermissions && $scope.candidate.rcs_id !== $scope.username) || !confirm(confirm_message)) {
+                return;
+            }
+
+            $http.delete('/api/candidates/delete/' + $routeParams.rcs + '/' + officeId).then(function () {
+                $location.url('/offices');
+            }, function () {
+                alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
+            });
+        }
     }]);
