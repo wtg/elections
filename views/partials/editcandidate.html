@@ -59,6 +59,26 @@
                     </div>
                 </div>
             </div>
+            <div class="form-group">
+                <label for="candidateExperience" class="col-sm-3 control-label">Experience</label>
+
+                <div class="col-sm-9">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="candidateExperience" id="candidateExperience"
+                               ng-model="candidate.experience"/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="candidateActivities" class="col-sm-3 control-label">Activities</label>
+
+                <div class="col-sm-9">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="candidateActivities" id="candidateActivities"
+                               ng-model="candidate.activities"/>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <hr/>
@@ -78,6 +98,22 @@
             <div class="form-group">
 				<textarea class="form-control" name="candidatePlatform" id="candidatePlatform"
                           ng-model="candidate.platform" style="min-height: 200px; resize: vertical;"></textarea>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-xs-12">
+            <h3>Miscellaneous Facts</h3>
+            <div class="form-group">
+				<textarea class="form-control" name="candidateMiscInfo" id="candidateMiscInfo"
+                          ng-model="candidate.misc_info" style="min-height: 200px; resize: vertical;"
+                          placeholder="Favorite food: pizza
+Favorite class: Data Structures"></textarea>
+                <p class="help-block">
+                    Note: only one fact should appear on each line, and should follow the format of
+                    <kbd>[Descriptor]: [info]</kbd>.
+                </p>
             </div>
         </div>
     </div>

@@ -8,7 +8,7 @@ var express = require('express'),
 var queries = {
     allNoData: "SELECT * FROM `candidates`",
     allWithData: "SELECT C.*, D.preferred_name, D.first_name, D.middle_name, D.last_name, D.greek_affiliated, " +
-    "D.entry_date, D.class_by_credit, D.grad_date, D.rin, D.major, D.about, D.platform, D.video_url, " +
+    "D.entry_date, D.class_by_credit, D.grad_date, D.rin, D.major, D.about, D.platform, D.video_url, D.misc_info, " +
     "O.name AS office_name, O.description AS office_description, O.openings AS office_openings, " +
     "O.nominations_required AS office_nominations_required, O.type AS office_type, " +
     "O.disabled AS office_disabled, P.name AS party_name, P.platform AS party_platform " +
@@ -18,7 +18,7 @@ var queries = {
 
     rcs: " WHERE C.rcs_id = ",
     office: " WHERE C.office_id = ",
-    random: "SELECT C.*, D.preferred_name, D.first_name, D.middle_name, D.last_name, D.greek_affiliated, " +
+    random: "SELECT C.*, D.preferred_name, D.first_name, D.middle_name, D.last_name, D.greek_affiliated, D.misc_info, " +
     "D.entry_date, D.class_by_credit, D.grad_date, D.rin, D.major, D.about, D.platform, D.video_url FROM " +
     "(SELECT O.*, R.rcs_id FROM (SELECT * FROM `candidates` WHERE RAND()<(SELECT ((1/COUNT(*))*10) FROM " +
     "`candidates`) ORDER BY RAND() LIMIT 1) AS R INNER JOIN `offices` AS O WHERE O.office_id = R.office_id) " +
@@ -41,7 +41,46 @@ var useData = function (req) {
 router.get('/', function (req, res) {
     var connection = functions.dbConnect(res);
 
-    connection.query(useData(req), functions.defaultJSONCallback(res));
+    connection.query(useData(req), function (err, result) {
+        if (err) {
+            console.log(err);
+            res.status(500);
+        }
+
+        for(var r=0; r < result.length; r++) {
+            if (result[r].misc_info) {
+                var misc_info = result[r].misc_info.split('\n');
+                result[r].misc_info = "";
+                result[r].misc_info_obj = [];
+
+                for (var i = 0; i < misc_info.length; i++) {
+                    var item = misc_info[i].split(':');
+
+                    if (item.length < 2) {
+                        continue;
+                    }
+
+                    if (item[0].trim() === "Experience") {
+                        result[r].experience = item[1].trim();
+                    } else if (item[0].trim() === "Activities") {
+                        result[r].activities = item[1].trim();
+                    } else {
+                        result[r].misc_info += misc_info[i];
+                        result[r].misc_info_obj.push({
+                            label: item[0].trim(),
+                            entry: item[1].trim()
+                        });
+                    }
+                }
+            } else {
+                result[r].experience = "";
+                result[r].activities = "";
+                result[r].misc_info = "";
+            }
+        }
+
+        res.json(result);
+    });
 
     connection.end();
 });
@@ -58,20 +97,96 @@ router.get('/rcs/:rcs_id', function (req, res) {
     var connection = functions.dbConnect(res),
         rcs_id = req.params.rcs_id;
 
-    connection.query(useData(req) + queries.rcs + mysql.escape(rcs_id), functions.defaultJSONCallback(res));
+    connection.query(useData(req) + queries.rcs + mysql.escape(rcs_id), function (err, result) {
+        if (err) {
+            console.log(err);
+            res.status(500);
+        }
+
+        if (result[0].misc_info) {
+            var misc_info = result[0].misc_info.split('\n');
+            result[0].misc_info = "";
+            result[0].misc_info_obj = [];
+
+            for (var i = 0; i < misc_info.length; i++) {
+                var item = misc_info[i].split(':');
+
+                if (item.length < 2) {
+                    continue;
+                }
+
+                if (item[0].trim() === "Experience") {
+                    result[0].experience = item[1].trim();
+                } else if (item[0].trim() === "Activities") {
+                    result[0].activities = item[1].trim();
+                } else {
+                    result[0].misc_info += misc_info[i];
+                    result[0].misc_info_obj.push({
+                        label: item[0].trim(),
+                        entry: item[1].trim()
+                    });
+                }
+            }
+        } else {
+            result[0].experience = "";
+            result[0].activities = "";
+            result[0].misc_info = "";
+        }
+
+        res.json(result);
+    });
 });
 
 router.get('/office/:office_id', function (req, res) {
     var connection = functions.dbConnect(res),
         office_id = req.params.office_id;
 
-    connection.query(useData(req) + queries.office + mysql.escape(office_id), functions.defaultJSONCallback(res));
+    connection.query(useData(req) + queries.office + mysql.escape(office_id), function (err, result) {
+        if (err) {
+            console.log(err);
+            res.status(500);
+        }
+
+        for(var r=0; r < result.length; r++) {
+            if (result[r].misc_info) {
+                var misc_info = result[r].misc_info.split('\n');
+                result[r].misc_info = "";
+                result[r].misc_info_obj = [];
+
+                for (var i = 0; i < misc_info.length; i++) {
+                    var item = misc_info[i].split(':');
+
+                    if (item.length < 2) {
+                        continue;
+                    }
+
+                    if (item[0].trim() === "Experience") {
+                        result[r].experience = item[1].trim();
+                    } else if (item[0].trim() === "Activities") {
+                        result[r].activities = item[1].trim();
+                    } else {
+                        result[r].misc_info += misc_info[i];
+                        result[r].misc_info_obj.push({
+                            label: item[0].trim(),
+                            entry: item[1].trim()
+                        });
+                    }
+                }
+            } else {
+                result[r].experience = "";
+                result[r].activities = "";
+                result[r].misc_info = "";
+            }
+        }
+
+        res.json(result);
+    });
 
     connection.end();
 });
 
 router.post('/create/:rcs_id/:office_id', function (req, res) {
-    if(!functions.verifyPermissions(req).admin) {
+    if (!functions.verifyPermissions(req).admin) {
         res.status(401);
     }
 
@@ -123,15 +238,14 @@ router.post('/create/:rcs_id/:office_id', function (req, res) {
 
             res.status(400);
         }
-    }, function() {
+    }, function () {
         res.status(400);
     });
 });
 
 // Isn't PUT create new, and POST is update?
-router.put('/update/:rcs_id', function(req, res) {
-    console.log("HERE\n\n\n");
-    if(!functions.verifyPermissions(req).admin && req.session.cas_user !== req.params.rcs_id) {
+router.put('/update/:rcs_id', function (req, res) {
+    if (!functions.verifyPermissions(req).admin && req.session.cas_user !== req.params.rcs_id) {
         res.status(401);
     }
 
@@ -143,13 +257,14 @@ router.put('/update/:rcs_id', function(req, res) {
     if (!data) res.status(204);
 
     var fields = [
-        'preferred_name', 'first_name', 'middle_name', 'last_name', 'major', 'about', 'platform', 'video_url'
+        'preferred_name', 'first_name', 'middle_name', 'last_name', 'major', 'about', 'platform', 'video_url',
+        'misc_info'
     ];
 
     var assignments = "";
 
-    fields.forEach(function(elem, index) {
-        if(data.hasOwnProperty(elem)) {
+    fields.forEach(function (elem, index) {
+        if (data.hasOwnProperty(elem)) {
             assignments += "`" + elem + "` = " + mysql.escape(data[elem]) + (index < fields.length - 1 ? ", " : "");
         }
     });
@@ -164,7 +279,7 @@ router.put('/update/:rcs_id', function(req, res) {
 });
 
 router.delete('/delete/:rcs_id/:office_id', function (req, res) {
-    if(!functions.verifyPermissions(req).admin) {
+    if (!functions.verifyPermissions(req).admin) {
         res.status(401);
     }
 
@@ -185,10 +300,10 @@ router.delete('/delete/:rcs_id/:office_id', function (req, res) {
 
 /* Candidate Profile APIs */
 /*** CAN/SHOULD BE MERGED INTO OTHER CALLS ***/
-router.get('/update/russor3/about', function(req, res) {
+router.get('/update/russor3/about', function (req, res) {
     res.write("HELLO");
 });
-router.post('/update/russor3/about', function(req, res) {
+router.post('/update/russor3/about', function (req, res) {
     console.log("CALLED!");
     res.write("HELLO");
 });

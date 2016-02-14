@@ -1,9 +1,14 @@
 app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$sce', '$http', '$location',
     function ($scope, $routeParams, $showdown, $sce, $http, $location) {
         var loadData = function () {
+            if ($location.path().split('/')[$location.path().split('/').length - 1] === 'edit' && !$scope.editPermissions) {
+                $location.url('/offices');
+            }
+
             $scope.candidate = {};
             $scope.dataLoaded = false;
             $http.get('/api/candidates/rcs/' + $routeParams.rcs).then(function (response) {
+                console.log(response.data);
                 if (!response.data[0]) {
                     $location.path("/offices");
                     return;
@@ -14,9 +19,11 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
                     $scope.candidate.video_url_trusted = $sce.trustAsResourceUrl($scope.candidate.video_url);
                 }
 
-                var majors = $scope.candidate.major.split(';');
-                if(majors.length > 1) {
-                    $scope.candidate.majors = majors;
+                if($scope.candidate.major) {
+                    var majors = $scope.candidate.major.split(';');
+                    if (majors.length > 1) {
+                        $scope.candidate.majors = majors;
+                    }
                 }
             }, function () {
                 alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
@@ -31,7 +38,7 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
         };
 
         $scope.formName = function () {
-            return $scope.candidate.preferred_name ? $scope.candidate.preferred_name : $scope.candidate.first_name +
+            return ($scope.candidate.preferred_name ? $scope.candidate.preferred_name : $scope.candidate.first_name) +
             " " + $scope.candidate.last_name;
         };
 
@@ -46,9 +53,15 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
         };
 
         $scope.saveChanges = function () {
+            console.log("HERE");
             if (!$scope.editPermissions) {
                 return;
             }
+
+            $scope.candidate.misc_info += "\nExperience: " + $scope.candidate.experience +
+                "\nActivities: " + $scope.candidate.activities;
+
+            console.log($scope.candidate.misc_info);
 
             $http.put('/api/candidates/update/' + $routeParams.rcs, $scope.candidate).then(function (response) {
                 $location.url('/candidate/' + $routeParams.rcs);

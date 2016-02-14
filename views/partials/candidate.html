@@ -72,9 +72,6 @@
                 <dt>Nominations</dt>
                 <dd>330/600</dd>
 
-                <dt>Hometown</dt>
-                <dd>New York, NY</dd>
-
                 <dt>Class year</dt>
                 <dd ng-bind="candidate.grad_date.substr(0,4)"></dd>
 
@@ -88,14 +85,14 @@
                     </span>
                 </dd>
 
-                <dt>Favorite food</dt>
-                <dd>Apples</dd>
+                <dt ng-if="candidate.experience">Experience</dt>
+                <dd ng-if="candidate.experience" ng-bind="candidate.experience"></dd>
 
-                <dt>Favorite song</dt>
-                <dd>"Beautiful Day" &ndash; U2</dd>
+                <dt ng-if="candidate.activities">Activities</dt>
+                <dd ng-if="candidate.activities" ng-bind="candidate.activities"></dd>
 
-                <dt>Current involvement</dt>
-                <dd>Senator, Vice-president of Club name, Fraternity name, another club</dd>
+                <dt ng-repeat-start="m in candidate.misc_info_obj" ng-bind="m.label"></dt>
+                <dd ng-repeat-end ng-bind="m.entry"></dd>
             </dl>
         </div>
         <div class="col-md-7" ng-if="currentSection == 'about'">
