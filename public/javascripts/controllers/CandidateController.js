@@ -15,6 +15,12 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
 
                 $scope.candidate = responses[0].data[0];
 
+
+                for(var i = 1; i < responses[0].data.length; i++) {
+                    $scope.candidate.office_name += (i === responses[0].data.length - 1 ? ((i > 1 ? "," : "") + " and ") : ", ") +
+                        " " + responses[0].data[i].office_name;
+                }
+
                 if ($location.path().split('/')[$location.path().split('/').length - 1] === 'edit' &&
                     (!$scope.editPermissions && $scope.username !== $scope.candidate.rcs_id)) {
                     $location.url('/offices');
@@ -33,35 +39,12 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
                 }
 
                 $scope.parties = responses[1].data;
-                $scope.parties.push({party_id:null, name: "Unaffiliated"});
+                $scope.parties.push({party_id: null, name: "Unaffiliated"});
             }, function () {
                 alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
             }).finally(function () {
                 $scope.dataLoaded = true;
             });
-            //$http.get('/api/candidates/rcs/' + $routeParams.rcs).then(function (response) {
-            //    console.log(response.data);
-            //    if (!response.data[0]) {
-            //        $location.path("/offices");
-            //        return;
-            //    }
-            //
-            //    $scope.candidate = response.data[0];
-            //    if ($scope.candidate.video_url) {
-            //        $scope.candidate.video_url_trusted = $sce.trustAsResourceUrl($scope.candidate.video_url);
-            //    }
-            //
-            //    if($scope.candidate.major) {
-            //        var majors = $scope.candidate.major.split(';');
-            //        if (majors.length > 1) {
-            //            $scope.candidate.majors = majors;
-            //        }
-            //    }
-            //}, function () {
-            //    alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
-            //}).finally(function () {
-            //    $scope.dataLoaded = true;
-            //});
         };
         loadData();
 
