@@ -26,16 +26,9 @@
                 <a class="btn btn-primary btn-justified" ng-click="setEditId('new')" ng-disabled="currentEditId=='new'">
                     Create event
                 </a>
-            </div>
-            <br/>
-            <div class="btn-group btn-group-justified">
-                <a class="btn btn-primary btn-justified" ng-click="toggleBulkDelete()" ng-hide="bulkDelete || !numEvents()">
-                    Bulk delete
-                </a>
-            </div>
-            <div class="btn-group btn-group-justified">
-                <a class="btn btn-default btn-justified" ng-click="toggleBulkDelete()" ng-hide="!bulkDelete || !numEvents()">
-                    Done
+                <a class="btn btn-default btn-justified" ng-click="toggleBulkDelete()">
+                    <span ng-hide="bulkDelete || !numEvents()">Bulk delete</span>
+                    <span ng-hide="!bulkDelete || !numEvents()">Done</span>
                 </a>
             </div>
             <br/>
