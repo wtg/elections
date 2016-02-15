@@ -25,10 +25,8 @@ app.controller('NominationsController', ['$scope', '$routeParams', '$http', '$q'
                     });
                 }
 
-                if ($location.path().split('/')[$location.path().split('/').length - 1] === 'edit' &&
-                    !$scope.editPermissions) {
+                if (!$scope.editPermissions) {
                     $location.url('/offices');
-                    return;
                 }
             }, function () {
                 alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
@@ -44,8 +42,7 @@ app.controller('NominationsController', ['$scope', '$routeParams', '$http', '$q'
             for(var i = 0; i < 25; i++) {
                 $scope.nominations.push({
                     rin: "",
-                    initials: "",
-                    status: -1
+                    initials: ""
                 });
             }
         };
@@ -54,5 +51,21 @@ app.controller('NominationsController', ['$scope', '$routeParams', '$http', '$q'
         $scope.formName = function () {
             return ($scope.candidate.preferred_name ? $scope.candidate.preferred_name : $scope.candidate.first_name) +
                 " " + $scope.candidate.last_name;
+        };
+
+        $scope.colorInputs = function (nomination) {
+            return {
+                'has-success': $scope.nominationsSubmitted && nomination.status === 'success',
+                'has-warning': $scope.nominationsSubmitted && (nomination.status === 'wrongclass' || nomination.status === 'already'),
+                'has-error': $scope.nominationsSubmitted && (nomination.status === 'invalid' || nomination.status === 'initials')
+            };
+        };
+
+        $scope.submit = function () {
+            $http.post('/api/nominations/' + $scope.candidate.office_id + '/' + $routeParams.rcs, $scope.nominations).then(function (response) {
+                console.log(response.data);
+                $scope.nominationsSubmitted = true;
+                $scope.nominations = response.data;
+            });
         };
     }]);

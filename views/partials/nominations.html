@@ -21,28 +21,28 @@
         <div class="col-xs-12">
             <div class="row" ng-repeat-start="n in nominations">
                 <div class="col-sm-5" ng-class="{'col-sm-offset-1':!nominationsSubmitted}">
-                    <div class="input-group">
+                    <div class="input-group" ng-class="colorInputs(n)">
                         <span class="input-group-addon" id="basic-addon{{$index}}">66</span>
                         <input class="form-control" placeholder="RIN" ng-model="n.rin" aria-describedby="basic-addon{{$index}}">
                     </div>
                 </div>
-                <div class="col-sm-5">
+                <div class="col-sm-5" ng-class="colorInputs(n)">
                     <input class="form-control" placeholder="Initials" ng-model="n.initials">
                 </div>
                 <div class="col-sm-2">
-                    <p class="form-control-static text-success" ng-if="r < 21">
+                    <p class="form-control-static text-success" ng-if="n.status === 'success'">
                         <i class="fa fa-check"></i> Valid
                     </p>
-                    <p class="form-control-static text-danger" ng-if="r == 21">
+                    <p class="form-control-static text-danger" ng-if="n.status === 'invalid'">
                         <i class="fa fa-exclamation-circle"></i> Invalid RIN
                     </p>
-                    <p class="form-control-static text-danger" ng-if="r == 22">
+                    <p class="form-control-static text-danger" ng-if="n.status === 'initials'">
                         <i class="fa fa-exclamation-circle"></i> Invalid Initials for RIN
                     </p>
-                    <p class="form-control-static text-warning" ng-if="r == 23">
+                    <p class="form-control-static text-warning" ng-if="n.status === 'already'">
                         <i class="fa fa-exclamation-triangle"></i> Already nominated
                     </p>
-                    <p class="form-control-static text-warning" ng-if="r == 24">
+                    <p class="form-control-static text-warning" ng-if="n.status === 'wrongclass'">
                         <i class="fa fa-exclamation-triangle"></i> Invalid cohort
                     </p>
 
@@ -51,7 +51,7 @@
             <br ng-repeat-end/>
             <div class="row">
                 <div class="col-md-4 col-md-offset-4 text-center">
-                    <button class="btn btn-primary">Submit Nominations</button>
+                    <button class="btn btn-primary" ng-click="submit()">Submit Nominations</button>
                 </div>
             </div>
         </div>

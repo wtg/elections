@@ -149,7 +149,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`nominations` (" +
     "`rcs_id` VARCHAR(45) NOT NULL," +
     "`office_id` INT NOT NULL," +
     "`nomination_rin` VARCHAR(9) NOT NULL," +
-    "`date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP," +
+    "`date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP," +
     "INDEX `nominations_fk2_idx` (`office_id` ASC) ," +
     "PRIMARY KEY (`nomination_id`) ," +
     "INDEX `nominations_fk3_idx` (`election_id` ASC) ," +
