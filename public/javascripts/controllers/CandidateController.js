@@ -29,7 +29,7 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
 
                 if ($location.path().split('/')[$location.path().split('/').length - 1] === 'edit' &&
                     (!$scope.editPermissions && $scope.username !== $scope.candidate.rcs_id)) {
-                    $location.url('/offices');
+                    $location.url('/candidate/' + $routeParams.rcs);
                     return;
                 }
 

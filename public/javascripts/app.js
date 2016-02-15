@@ -38,7 +38,7 @@ app.config(['$routeProvider', function ($routeProvider) {
     }).
     when('/candidate/:rcs/nominations', {
         templateUrl: 'partials/nominations.html',
-        controller: 'CandidateController'
+        controller: 'NominationsController'
     }).
     when('/candidate/:rcs/:section', {
         templateUrl: 'partials/candidate.html',

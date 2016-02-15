@@ -55,9 +55,14 @@
                 </li>
             </ul>
         </div>
-        <div class="col-md-1 col-md-offset-3 col-xs-1 col-xs-offset-0">
-            <a class="btn btn-primary pull-right" href="#/candidate/{{candidate.rcs_id}}/edit"
-               ng-if="editPermissions || (candidate.rcs_id === username)">Edit</a>
+        <div class="col-md-3 col-md-offset-1 col-xs-1 col-xs-offset-0"
+             ng-if="editPermissions || (candidate.rcs_id === username)">
+            <div class="btn-group pull-right">
+                <a class="btn btn-primary" href="#/candidate/{{candidate.rcs_id}}/edit"
+                   ng-if="editPermissions || (candidate.rcs_id === username)">Edit</a>
+                <a class="btn btn-default" href="#/candidate/{{candidate.rcs_id}}/nominations"
+                   ng-if="editPermissions">Nominations</a>
+            </div>
         </div>
     </div>
     <hr/>
