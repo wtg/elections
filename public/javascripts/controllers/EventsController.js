@@ -228,7 +228,7 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
 
             $http.delete('/api/events/delete/' + eventIndex).then(function () {
                 addNewAlert("success", "The event entitled " + title + " was permanently deleted!", "delete");
-                if (!bulk || !numEvents()) $route.reload();
+                if (!bulk || !$scope.numEvents()) $route.reload();
                 else $scope.events.splice(position, 1);
             }, function (response) {
                 addNewAlert("error", response.statusText + " (code: " + response.status + ")", "delete");
