@@ -28,15 +28,30 @@
                 </a>
             </div>
             <br/>
+            <div class="btn-group btn-group-justified">
+                <a class="btn btn-primary btn-justified" ng-click="toggleBulkDelete()" ng-hide="bulkDelete || !numEvents()">
+                    Bulk delete
+                </a>
+            </div>
+            <div class="btn-group btn-group-justified">
+                <a class="btn btn-default btn-justified" ng-click="toggleBulkDelete()" ng-hide="!bulkDelete || !numEvents()">
+                    Done
+                </a>
+            </div>
+            <br/>
             <ul class="nav nav-pills nav-stacked">
                 <li role="presentation" ng-repeat="e in events track by $index"
                     ng-class="{'active': e.event_id==currentEditId}" ng-click="setEditId(e.event_id)">
                     <a>
                         <span ng-bind="e.title"></span>
                         <span ng-if="e.title.length === 0">Untitled event</span>
+                        <div class="bulk-delete-box pull-right" ng-hide="!bulkDelete" ng-click="deleteEvent(e.event_id, true)">
+                            <span class="glyphicon glyphicon-trash pull-right"></span>
+                        </div>
                     </a>
                 </li>
             </ul>
+            <br/>
         </div>
         <div class="col-md-9" ng-show="currentEditId == 'new'">
             <h2 class="office-title">
@@ -170,7 +185,7 @@
             <br/>
 
             <p>
-                <button class="btn btn-danger" ng-click="deleteEvent(e.id)">Delete Event</button>
+                <button class="btn btn-danger" ng-click="deleteEvent(e.event_id, false)">Delete Event</button>
             </p>
             <p class="text-muted"><span class="text-danger">Caution:</span> this action will <b>permanently</b> delete
                 this event from the Elections site.</p>

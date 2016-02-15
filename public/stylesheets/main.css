@@ -182,6 +182,10 @@ footer {
     margin-left: 10%;
 }
 
+.bulk-delete-box:hover {
+  color: #555555;
+}
+
 .event-list > li:first-child:before {
     content: none;
 }

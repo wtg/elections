@@ -104,6 +104,19 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
             }
         };
 
+        $scope.numEvents = function () {
+          return $scope.events.length;
+        }
+
+        $scope.toggleBulkDelete = function () {
+            if ($scope.bulkDelete) {
+              $scope.bulkDelete = false;
+            }
+            else {
+              $scope.bulkDelete = true;
+            }
+        };
+
         $scope.$on('$routeChangeStart', function () {
             if ($location.path().split('/')[$location.path().split('/').length - 1] === 'edit') {
                 $cookies.putObject(EDIT_ID_COOKIE_LABEL, {val: $scope.currentEditId});
@@ -128,7 +141,7 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
         };
 
         /**
-         * Creates a new party
+         * Creates a new event
          */
         $scope.createEvent = function () {
             var title = $scope.new.title;
@@ -202,20 +215,21 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
         };
 
         /**
-         * Deletes an party based on the given edit id
+         * Deletes an event based on the given edit id
          */
-        $scope.deleteEvent = function () {
-            var position = findEvent($scope.currentEditId);
+        $scope.deleteEvent = function (eventIndex, bulk) {
+            var position = findEvent(eventIndex);
             var title = $scope.events[position].title;
 
-            if (!confirm("Are you sure you want to permanently delete this event?") ||
-                isNaN($scope.currentEditId) || position == -1) {
+            if (!confirm("Are you sure you want to permanently delete this event? \"" + title + "\" will not be recoverable!") ||
+                isNaN(eventIndex) || position == -1) {
                 return;
             }
 
-            $http.delete('/api/events/delete/' + $scope.currentEditId).then(function () {
+            $http.delete('/api/events/delete/' + eventIndex).then(function () {
                 addNewAlert("success", "The event entitled " + title + " was permanently deleted!", "delete");
-                $route.reload();
+                if (!bulk || !numEvents()) $route.reload();
+                else $scope.events.splice(position, 1);
             }, function (response) {
                 addNewAlert("error", response.statusText + " (code: " + response.status + ")", "delete");
             })
