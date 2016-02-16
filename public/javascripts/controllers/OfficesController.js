@@ -8,9 +8,10 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
          */
         var loadData = function () {
             $q.all([
-                $http.get('/api/offices/election/1'),
+                $http.get('/api/offices/election/active'),
                 $http.get('/api/candidates'),
-                $http.get('/api/offices/types')
+                $http.get('/api/offices/types'),
+                $http.get('/api/nominations')
             ]).then(function (responses) {
                 responses[0].data.forEach(function (elem) {
                     $scope.offices.push({
@@ -43,6 +44,7 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                                 rcsId: c_elem.rcs_id,
                                 major: c_elem.major,
                                 nominations: c_elem.nominations,
+                                overridden: c_elem.nominations > 0,
                                 experience: c_elem.experience,
                                 activities: c_elem.activities,
                                 facebook: c_elem.facebook,
@@ -75,6 +77,19 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                 });
 
                 $scope.filterOptions = $scope.filterOptions.concat($filter('orderBy')(filterOpt, "slug"));
+
+                responses[3].data.forEach(function (n_elem) {
+                    $scope.offices.forEach(function (o_elem) {
+                        if(n_elem.office_id === o_elem.id) {
+                            o_elem.candidates.forEach(function (c_elem) {
+                                console.log(n_elem.rcs_id + ", " + c_elem.rcsId + ", " + c_elem.overridden);
+                                if(n_elem.rcs_id === c_elem.rcsId && !c_elem.overridden) {
+                                    c_elem.nominations = n_elem.nominations;
+                                }
+                            });
+                        }
+                    });
+                });
             }, function (status, error) {
                 alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
             }).finally(function () {
@@ -220,28 +235,6 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
             } else {
                 return $filter('filter')($scope.offices, {type: filter, disabled: false}).length;
             }
-        };
-
-        /**
-         * Determines the percentage of nominations earned; used to populate the loading bar
-         * @param obtained
-         * @param required
-         * @returns {*}
-         */
-        $scope.nominationPercentage = function (obtained, required) {
-            if (obtained > required) {
-                return 100;
-            } else if (obtained < 0) {
-                return 0;
-            } else if (required == 0) {
-                if (obtained == 0) {
-                    return 100;
-                } else {
-                    return 0;
-                }
-            }
-
-            return Math.round((obtained / required) * 100) + '%';
         };
 
         /**

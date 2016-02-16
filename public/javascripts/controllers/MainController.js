@@ -25,4 +25,26 @@ app.controller('MainController', ['$scope', '$location', '$http', function ($sco
     $scope.isPastEvent = function (date) {
         return date.toISOString().substr(0,10) < new Date().toISOString().substr(0,10);
     };
+
+    /**
+     * Determines the percentage of nominations earned; used to populate the loading bar
+     * @param obtained
+     * @param required
+     * @returns {*}
+     */
+    $scope.nominationPercentage = function (obtained, required) {
+        if (obtained > required) {
+            return 100;
+        } else if (obtained < 0) {
+            return 0;
+        } else if (required == 0) {
+            if (obtained == 0) {
+                return 100;
+            } else {
+                return 0;
+            }
+        }
+
+        return Math.round((obtained / required) * 100) + '%';
+    };
 }]);

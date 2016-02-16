@@ -15,6 +15,7 @@ app.controller('NominationsController', ['$scope', '$routeParams', '$http', '$q'
                 $scope.candidate.offices = [
                     {office_id: $scope.candidate.office_id, office_name: $scope.candidate.office_name}
                 ];
+                $scope.selectedOfficeId = $scope.candidate.office_id;
 
                 for (var i = 1; i < response.data.length; i++) {
                     $scope.candidate.office_name += (i === response.data.length - 1 ? ((i > 1 ? "," : "") + " and ") : ", ") +
@@ -36,6 +37,9 @@ app.controller('NominationsController', ['$scope', '$routeParams', '$http', '$q'
         };
         loadData();
 
+        $scope.changeSelectedOffice = function (newId) {
+            $scope.selectedOfficeId = newId;
+        };
 
         var constructNominationTemplate = function() {
             $scope.nominations = [];
@@ -62,7 +66,7 @@ app.controller('NominationsController', ['$scope', '$routeParams', '$http', '$q'
         };
 
         $scope.submit = function () {
-            $http.post('/api/nominations/' + $scope.candidate.office_id + '/' + $routeParams.rcs, $scope.nominations).then(function (response) {
+            $http.post('/api/nominations/' + $scope.selectedOfficeId + '/' + $routeParams.rcs, $scope.nominations).then(function (response) {
                 console.log(response.data);
                 $scope.nominationsSubmitted = true;
                 $scope.nominations = response.data;

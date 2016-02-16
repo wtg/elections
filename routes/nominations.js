@@ -7,9 +7,9 @@ var express = require('express'),
     Q = require('q');
 
 var queries = {
-    allCounts: "SELECT rcs_id,COUNT(*) as nominations FROM `rpielections`.`nominations` GROUP BY rcs_id ORDER BY nominations DESC",
+    allCounts: "SELECT rcs_id, office_id, COUNT(*) as nominations FROM `rpielections`.`nominations` GROUP BY rcs_id, office_id ORDER BY nominations DESC",
     rcs: "SELECT nomination_rin FROM `rpielections`.`nominations` WHERE rcs_id = ",
-    rcsCounts: "SELECT rcs_id,COUNT(*) as nominations FROM `rpielections`.`nominations` WHERE rcs_id = % GROUP BY rcs_id ORDER BY nominations DESC",
+    rcsCounts: "SELECT rcs_id, office_id, COUNT(*) as nominations FROM `rpielections`.`nominations` WHERE rcs_id = % GROUP BY rcs_id, office_id ORDER BY nominations DESC",
     selectCandidate: "SELECT * FROM `rpielections`.`candidates` WHERE rcs_id = ",
     activeElection: "(SELECT `value` FROM `configurations` WHERE `key` = 'active_election_id')",
     post: "INSERT INTO `rpielections`.`nominations` (`rcs_id`, `office_id`, `nomination_rin`, `election_id`) VALUES "

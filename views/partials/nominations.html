@@ -17,13 +17,26 @@
         </div>
     </div>
     <hr/>
+    <div class="row" ng-if="candidate.offices.length > 0">
+        <div class="col-xs-12">
+            <ul class="nav nav-tabs">
+                <li ng-repeat="o in candidate.offices" role="presentation" ng-class="{'active': o.office_id === selectedOfficeId}">
+                    <a ng-click="changeSelectedOffice(o.office_id)" ng-bind="o.office_name">Home</a>
+                </li>
+            </ul>
+            <br/>
+        </div>
+    </div>
     <div class="row">
         <div class="col-xs-12">
             <div class="row" ng-repeat-start="n in nominations">
                 <div class="col-sm-5" ng-class="{'col-sm-offset-1':!nominationsSubmitted}">
-                    <div class="input-group" ng-class="colorInputs(n)">
-                        <span class="input-group-addon" id="basic-addon{{$index}}">66</span>
-                        <input class="form-control" placeholder="RIN" ng-model="n.rin" aria-describedby="basic-addon{{$index}}">
+                    <!--<div class="input-group" ng-class="colorInputs(n)">-->
+                        <!--<span class="input-group-addon" id="basic-addon{{$index}}">66</span>-->
+                        <!--<input class="form-control" placeholder="RIN" ng-model="n.rin" aria-describedby="basic-addon{{$index}}">-->
+                    <!--</div>-->
+                    <div class="form-group" ng-class="colorInputs(n)">
+                        <input class="form-control" placeholder="RIN" ng-model="n.rin">
                     </div>
                 </div>
                 <div class="col-sm-5" ng-class="colorInputs(n)">

@@ -6,7 +6,8 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
             $scope.dataLoaded = false;
             $q.all([
                 $http.get('/api/candidates/rcs/' + $routeParams.rcs),
-                $http.get('/api/parties/')
+                $http.get('/api/parties/'),
+                $http.get('/api/nominations/' + $routeParams.rcs)
             ]).then(function (responses) {
                 if (!responses[0].data[0]) {
                     $location.url("/offices");
@@ -15,7 +16,13 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
 
                 $scope.candidate = responses[0].data[0];
                 $scope.candidate.offices = [
-                    {office_id: $scope.candidate.office_id, office_name: $scope.candidate.office_name}
+                    {
+                        office_id: $scope.candidate.office_id,
+                        office_name: $scope.candidate.office_name,
+                        nominations: $scope.candidate.nominations,
+                        overridden: $scope.candidate.nominations > 0,
+                        office_nominations_required: $scope.candidate.office_nominations_required
+                    }
                 ];
 
                 for (var i = 1; i < responses[0].data.length; i++) {
@@ -23,7 +30,10 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
                         " " + responses[0].data[i].office_name;
                     $scope.candidate.offices.push({
                         office_id: responses[0].data[i].office_id,
-                        office_name: responses[0].data[i].office_name
+                        office_name: responses[0].data[i].office_name,
+                        nominations: responses[0].data[i].nominations,
+                        overridden: responses[0].data[i].nominations > 0,
+                        office_nominations_required: responses[0].data[i].office_nominations_required
                     });
                 }
 
@@ -46,6 +56,15 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
 
                 $scope.parties = responses[1].data;
                 $scope.parties.push({party_id: null, name: "Unaffiliated"});
+
+                responses[2].data.forEach(function (n_elem) {
+                    $scope.candidate.offices.forEach(function (o_elem) {
+                        if(n_elem.office_id === o_elem.office_id && !o_elem.overridden) {
+                            o_elem.nominations = n_elem.nominations;
+                        }
+                    });
+                });
+                console.log($scope.candidate.offices);
             }, function () {
                 alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
             }).finally(function () {
