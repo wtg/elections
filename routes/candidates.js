@@ -136,7 +136,8 @@ router.get('/office/:office_id', function (req, res) {
 
 router.post('/create/:rcs_id/:office_id', function (req, res) {
     if (!functions.verifyPermissions(req).admin) {
-        res.status(401);
+        res.sendStatus(401);
+        return;
     }
 
     var rcs_id = req.params.rcs_id,
@@ -194,52 +195,55 @@ router.post('/create/:rcs_id/:office_id', function (req, res) {
 
 router.put('/update/:rcs_id', function (req, res) {
     if (!functions.verifyPermissions(req).admin && req.session.cas_user !== req.params.rcs_id) {
-
-        var connection = functions.dbConnect(res);
-
-        var rcs_id = req.params.rcs_id,
-            data = req.body;
-
-        if (!data) res.status(204);
-
-        var query = queries.updateParty.replace(/<>/g, !isNaN(parseInt(data.party_id)) ? data.party_id : "NULL") +
-            mysql.escape(data.rcs_id);
-        console.log(query);
-        connection.query(query, function (err) {
-            if (err) {
-                console.log(err);
-                res.sendStatus(500);
-                connection.end();
-                return;
-            }
-
-            var fields = [
-                'preferred_name', 'first_name', 'middle_name', 'last_name', 'major', 'about', 'platform', 'video_url',
-                'misc_info'
-            ];
-
-            var assignments = "";
-
-            fields.forEach(function (elem, index) {
-                if (data.hasOwnProperty(elem)) {
-                    assignments += "`" + elem + "` = " + mysql.escape(data[elem]) + (index < fields.length - 1 ? ", " : "");
-                }
-            });
-
-            query = queries.update.replace(/<>/g, assignments) + mysql.escape(rcs_id);
-
-            connection.query(query, functions.defaultJSONCallback(res));
-
-            logger.write(connection, req.session.cas_user, "CANDIDATE_MODIFY", "Modified " + rcs_id);
-
-            connection.end();
-        });
+        res.sendStatus(401);
+        return;
     }
+
+    var connection = functions.dbConnect(res);
+
+    var rcs_id = req.params.rcs_id,
+        data = req.body;
+
+    if (!data) res.status(204);
+
+    var query = queries.updateParty.replace(/<>/g, !isNaN(parseInt(data.party_id)) ? data.party_id : "NULL") +
+        mysql.escape(data.rcs_id);
+    console.log(query);
+    connection.query(query, function (err) {
+        if (err) {
+            console.log(err);
+            res.sendStatus(500);
+            connection.end();
+            return;
+        }
+
+        var fields = [
+            'preferred_name', 'first_name', 'middle_name', 'last_name', 'major', 'about', 'platform', 'video_url',
+            'misc_info'
+        ];
+
+        var assignments = "";
+
+        fields.forEach(function (elem, index) {
+            if (data.hasOwnProperty(elem)) {
+                assignments += "`" + elem + "` = " + mysql.escape(data[elem]) + (index < fields.length - 1 ? ", " : "");
+            }
+        });
+
+        query = queries.update.replace(/<>/g, assignments) + mysql.escape(rcs_id);
+
+        connection.query(query, functions.defaultJSONCallback(res));
+
+        logger.write(connection, req.session.cas_user, "CANDIDATE_MODIFY", "Modified " + rcs_id);
+
+        connection.end();
+    });
 });
 
 router.delete('/delete/:rcs_id/:office_id', function (req, res) {
     if (!functions.verifyPermissions(req).admin) {
-        res.status(401);
+        res.sendStatus(401);
+        return;
     }
 
     var connection = functions.dbConnect(res);
