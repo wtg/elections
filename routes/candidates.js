@@ -3,7 +3,14 @@ var express = require('express'),
     mysql = require('mysql'),
     functions = require('../functions.js'),
     cms = require('../cms.js'),
-    logger = require('../logger.js');
+    logger = require('../logger.js'),
+    uid = require('uid2'),
+    mime = require('mime'),
+    fs = require('fs'),
+    path = require('path');
+
+var IMAGE_TYPES = ['image/jpeg', 'image/png'];
+var TARGET_PATH = path.resolve(__dirname, '../public/usr_content');
 
 var queries = {
     allNoData: "SELECT * FROM `candidates`",
@@ -259,6 +266,54 @@ router.delete('/delete/:rcs_id/:office_id', function (req, res) {
         " from office #" + office_id);
 
     connection.end();
+});
+
+router.get('/upload', function (req, res) {
+    // Source
+    //http://blog.robertonodi.me/simple-image-upload-with-express/
+
+    // Variables
+    var is, os, targetPath, targetName, tempPath = req.files.file.path;
+    
+    // Get Image
+    var type = mime.lookup(req.files.file.path);
+    var extension = req.files.file.path.split(/[. ]+/).pop();
+    
+    // Check Type
+    if (IMAGE_TYPES.indexOf(type) == -1) {
+        return res.send(415, 'Supported image formats: jpeg, jpg, jpe, png.');
+    }
+
+    // Store Image
+    targetName = uid(22) + '.' + extension;
+    targetPath = path.join(TARGET_PATH, targetName);
+
+    // Read and Write Streams
+    is = fs.createReadStream(tempPath);
+    os = fs.createWriteStream(targetPath);
+    is.pipe(os);
+
+    // Error Handling
+    is.on('error', function() {
+        if (err) {
+            console.log(err);
+            return res.send(500, 'Something went wrong');
+        }
+    });
+
+    // Clean Up
+    is.on('end', function() {
+        fs.unlink(tempPath, function(err) {
+            if (err) {
+                return res.send(500, 'Something went wrong');
+            }
+            res.render('image', {
+                name: targetName,
+                type: type,
+                extension: extension
+            });
+        });
+    });
 });
 
 module.exports = router;

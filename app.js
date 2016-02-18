@@ -53,6 +53,7 @@ app.use(express.static(path.join(__dirname, '/public')));
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
 
 app.use('/', routes);
+app.use('/images', express.static(__dirname + '/public/usr_content'));
 app.use('/api/offices', offices);
 app.use('/api/candidates', candidates);
 app.use('/api/nominations', nominations);
