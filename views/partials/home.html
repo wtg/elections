@@ -60,10 +60,10 @@
 		<div class="col-md-4 home-sidebar">
 			<h2 ng-bind="candidateHeader"></h2>
 			<div ng-show="randomCandidate.rcsId">
-				<img class="pull-left spotlight-img" ng-src="{{randomCandidate.img}}">
+				<img class="pull-left spotlight-img" ng-src="{{randomCandidate.profile_url}}">
 				<h4 ng-bind="randomCandidate.name"></h4>
 				<h5 ng-bind="randomCandidate.position"></h5>
-				<p ng-bind="randomCandidate.bio"></p>
+				<p ng-bind-html="markdown(randomCandidate.bio)"></p>
 				<div class="btn-toolbar pull-right">
 					<button class="btn btn-default">
 						<span class="fa fa-random"></span> Refresh

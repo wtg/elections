@@ -1,4 +1,4 @@
-app.controller('HomeController', ['$scope', '$sce', '$http', function($scope, $sce, $http) {
+app.controller('HomeController', ['$scope', '$sce', '$showdown', '$http', function($scope, $sce, $showdown, $http) {
 	var loadData = function() {
 		$scope.events = [];
 
@@ -7,6 +7,13 @@ app.controller('HomeController', ['$scope', '$sce', '$http', function($scope, $s
 				$scope.randomCandidate.name = response.data[0].first_name + " " + response.data[0].last_name;
 				$scope.randomCandidate.position = response.data[0].name + " Candidate";
 				$scope.randomCandidate.rcsId = response.data[0].rcs_id;
+				$scope.randomCandidate.bio = response.data[0].about;
+
+				if($scope.randomCandidate.bio && $scope.randomCandidate.bio.length > 250) {
+					$scope.randomCandidate.bio = $scope.randomCandidate.bio.substr(0,250) + "...";
+				}
+
+				$scope.randomCandidate.profile_url = response.data[0].profile_url ? response.data[0].profile_url : 'silhouette.png'
 			}
 
 			$scope.randomCandidate.loaded = true;
@@ -104,7 +111,6 @@ app.controller('HomeController', ['$scope', '$sce', '$http', function($scope, $s
 		position: "",
 		bio: "",
 		rcsId: "",
-		img: "rotating_card_profile2.png",
 		loaded: false
 	};
 
@@ -112,7 +118,11 @@ app.controller('HomeController', ['$scope', '$sce', '$http', function($scope, $s
 
 	$scope.trust = function(str) {
 		return $sce.trustAsHtml(str);
-	}
+	};
+
+	$scope.markdown = function(str) {
+		return $showdown.makeHtml(str);
+	};
 
 	angular.element('.carousel').carousel({
 		interval: 4000

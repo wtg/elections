@@ -16,8 +16,8 @@ var queries = {
     allNoData: "SELECT * FROM `candidates`",
     allWithData: "SELECT C.*, D.preferred_name, D.first_name, D.middle_name, D.last_name, D.greek_affiliated, " +
     "D.entry_date, D.class_by_credit, D.grad_date, D.rin, D.major, D.about, D.platform, D.video_url, D.misc_info, " +
-    "O.name AS office_name, O.description AS office_description, O.openings AS office_openings, " +
-    "O.nominations_required AS office_nominations_required, O.type AS office_type, " +
+    "D.profile_url, D.cover_url, O.name AS office_name, O.description AS office_description, " +
+    "O.openings AS office_openings, O.nominations_required AS office_nominations_required, O.type AS office_type, " +
     "O.disabled AS office_disabled, P.name AS party_name, P.platform AS party_platform " +
     "FROM `candidates` C LEFT JOIN `candidate_data` D ON C.rcs_id = D.rcs_id LEFT JOIN " +
     "`offices` O ON C.office_id = O.office_id LEFT JOIN `parties` P ON C.party_id = P.party_id",
@@ -26,7 +26,8 @@ var queries = {
     rcs: " WHERE C.rcs_id = ",
     office: " WHERE C.office_id = ",
     random: "SELECT C.*, D.preferred_name, D.first_name, D.middle_name, D.last_name, D.greek_affiliated, D.misc_info, " +
-    "D.entry_date, D.class_by_credit, D.grad_date, D.rin, D.major, D.about, D.platform, D.video_url FROM " +
+    "D.entry_date, D.class_by_credit, D.grad_date, D.rin, D.major, D.about, D.platform, D.video_url, D.misc_info, " +
+    "D.profile_url, D.cover_url FROM " +
     "(SELECT O.*, R.rcs_id FROM (SELECT * FROM `candidates` WHERE RAND()<(SELECT ((1/COUNT(*))*10) FROM " +
     "`candidates`) ORDER BY RAND() LIMIT 1) AS R INNER JOIN `offices` AS O WHERE O.office_id = R.office_id) " +
     "AS C LEFT JOIN `candidate_data` AS D ON C.rcs_id = D.rcs_id",
@@ -226,7 +227,7 @@ router.put('/update/:rcs_id', function (req, res) {
 
         var fields = [
             'preferred_name', 'first_name', 'middle_name', 'last_name', 'major', 'about', 'platform', 'video_url',
-            'misc_info'
+            'profile_url', 'cover_url', 'misc_info'
         ];
 
         var assignments = "";

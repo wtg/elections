@@ -134,6 +134,41 @@
     <hr/>
     <div class="row">
         <div class="col-xs-12">
+            <h3>Profile &amp; Cover Images</h3>
+        </div>
+        <div class="col-xs-12">
+            <ul class="nav nav-tabs">
+                <li class="active"><a>URL</a></li>
+                <li class="disabled"><a>Upload (coming soon!)</a></li>
+            </ul>
+            <br/>
+        </div>
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label for="urlCandidateProfileImage" class="col-sm-3 control-label">Profile Image</label>
+
+                <div class="col-sm-9">
+                    <div class="form-group">
+                        <input type="url" class="form-control" name="urlCandidateProfileImage" id="urlCandidateProfileImage"
+                               ng-model="candidate.profile_url" placeholder="http://"/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="urlCandidateCoverImage" class="col-sm-3 control-label">Cover Image</label>
+
+                <div class="col-sm-9">
+                    <div class="form-group">
+                        <input type="url" class="form-control" name="urlCandidateCoverImage" id="urlCandidateCoverImage"
+                               ng-model="candidate.cover_url" placeholder="http://"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-xs-12">
             <h3>Miscellaneous Facts</h3>
             <div class="form-group">
 				<textarea class="form-control" name="candidateMiscInfo" id="candidateMiscInfo"

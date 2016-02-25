@@ -123,5 +123,9 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
             }, function () {
                 alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
             });
-        }
+        };
+
+        $scope.profileCSS = function () {
+            return 'url(\'' + ($scope.candidate.profile_url ? $scope.candidate.profile_url : 'silhouette.png') + '\')';
+        };
     }]);

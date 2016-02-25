@@ -246,6 +246,10 @@
 	background-color: #EB5E66;
 }
 
+.baby-blue {
+    background-color: #C5E0DC; /*83AF9B;*/
+}
+
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
     .front, .back{
         -ms-backface-visibility: visible;

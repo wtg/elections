@@ -165,6 +165,7 @@ footer {
 .spotlight-img {
 	margin-right: 10px;
 	margin-bottom: 5px;
+    width: 148px;
 }
 
 .event-list, .election-tips {
@@ -211,7 +212,6 @@ footer {
 .profile {
     border-radius: 100%;
     border: 1em solid white;
-    background-image: url('../rotating_card_profile2.png');
     background-size: cover;
     background-repeat: no-repeat;
     width: 250px;

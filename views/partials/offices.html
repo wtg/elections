@@ -48,11 +48,12 @@
             <div class="card-container manual-flip">
                 <div class="card">
                     <div class="front">
-                        <div class="cover">
-                            <img src="rotating_card_thumb.png">
+                        <div class="cover" ng-class="showColor(c)">
+                            <img ng-src="{{c.cover_url}}" ng-if="c.cover_url">
                         </div>
                         <div class="user">
-                            <img class="img-circle" src="rotating_card_profile2.png">
+                            <img class="img-circle" ng-src="{{c.profile_url}}" ng-if="c.profile_url">
+                            <img class="img-circle" ng-src="silhouette.png" ng-if="!c.profile_url">
                         </div>
                         <div class="content">
                             <div class="main">
