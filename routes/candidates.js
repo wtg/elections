@@ -163,6 +163,15 @@ router.post('/create/:rcs_id/:office_id', function (req, res) {
         try {
             cms_data = JSON.parse(response);
 
+            if(!cms_data.entry_date) {
+                console.log("Non-student account attempted (" + cms_data.username + "). The client was notified.");
+
+                logger.write(null, req.session.cas_user, "CMS_INVALID", "Non-student RCS: " + cms_data.username);
+
+                res.status(400).send("Non-student account attempted");
+                return;
+            }
+
             var connection = functions.dbConnect(res);
 
             var values = functions.constructSQLArray([

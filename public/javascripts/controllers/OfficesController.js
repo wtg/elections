@@ -300,7 +300,9 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                 $scope.newCandidate.rcs = "";
                 $route.reload();
             }, function (response) {
-                addNewAlert("error", response.statusText + " (code: " + response.status + ")", "add_candidate");
+                console.log(response);
+                addNewAlert("error", (response.data ? response.data : response.statusText) +
+                    " (code: " + response.status + ")", "add_candidate");
             });
         };
 
@@ -441,19 +443,4 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                 addNewAlert("error", response.statusText + " (code: " + response.status + ")", "toggle");
             });
         };
-
-        $scope.showColor = function (candidate) {
-            //var classes = [
-            //    'baby_blue', 'baby_blue', 'baby_blue', 'baby_blue'
-            //];
-            //
-            //var obj = {};
-            //var index = Math.round(Math.random()*(classes.length-1));
-            //console.log(index);
-            //
-            //obj[classes[index]] = !candidate.cover_url;
-            //console.log(obj);
-            //
-            //return obj;
-        }
     }]);

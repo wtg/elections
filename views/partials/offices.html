@@ -37,18 +37,20 @@
                 <h2 class="fa fa-info-circle"></h2>
             </button>
         </div>
-        <div class="col-xs-12" ng-if="o.candidates === undefined || o.candidates.length == 0">
+        <div class="col-xs-12" ng-if="(o.candidates === undefined || o.candidates.length == 0) && !o.showDesc">
             <p>No candidates are running for this position!</p>
         </div>
         <div class="col-xs-12" ng-show="o.showDesc">
-            <p style="font-size: 16px"><strong>About this office: </strong>
-            <span ng-bind="o.description"></span></p>
+            <div class="alert alert-info">
+                <strong>About this office: </strong>
+                <span ng-bind="o.description"></span>
+            </div>
         </div>
         <div class="col-md-3 col-sm-6 col-xs-12" ng-repeat="c in o.candidates" ng-hide="o.showDesc">
             <div class="card-container manual-flip">
                 <div class="card">
                     <div class="front">
-                        <div class="cover" ng-class="showColor(c)">
+                        <div class="cover">
                             <img ng-src="{{c.cover_url}}" ng-if="c.cover_url">
                         </div>
                         <div class="user">

@@ -247,7 +247,16 @@
 }
 
 .baby-blue {
-    background-color: #C5E0DC; /*83AF9B;*/
+    background-color: #C5E0DC;
+}
+.light-green {
+    background-color: #83AF9B;
+}
+.light-blue {
+    background-color: #2aabd2;
+}
+.light-yellow {
+    background-color: #F1D4AF;
 }
 
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
