@@ -32,12 +32,12 @@ var queries = {
     "`candidates`) ORDER BY RAND() LIMIT 1) AS R INNER JOIN `offices` AS O WHERE O.office_id = R.office_id) " +
     "AS C LEFT JOIN `candidate_data` AS D ON C.rcs_id = D.rcs_id",
 
-    post: "INSERT INTO `rpielections`.`candidates` (`rcs_id`, `office_id`, `election_id`) VALUES ",
-    postCMSData: "INSERT INTO `rpielections`.`candidate_data` (`rcs_id`, `preferred_name`, `first_name`, " +
+    post: "INSERT INTO " + functions.dbName() + ".`candidates` (`rcs_id`, `office_id`, `election_id`) VALUES ",
+    postCMSData: "INSERT INTO " + functions.dbName() + ".`candidate_data` (`rcs_id`, `preferred_name`, `first_name`, " +
     "`middle_name`, `last_name`, `greek_affiliated`, `entry_date`, `class_by_credit`, `grad_date`, `rin`) VALUES ",
-    remove: "DELETE FROM `rpielections`.`candidates` ",
-    update: "UPDATE `rpielections`.`candidate_data` SET <> WHERE rcs_id = ",
-    updateParty: "UPDATE `rpielections`.`candidates` SET `party_id` = <> WHERE rcs_id = ",
+    remove: "DELETE FROM " + functions.dbName() + ".`candidates` ",
+    update: "UPDATE " + functions.dbName() + ".`candidate_data` SET <> WHERE rcs_id = ",
+    updateParty: "UPDATE " + functions.dbName() + ".`candidates` SET `party_id` = <> WHERE rcs_id = ",
 
     duplicateRCS: " ON DUPLICATE KEY UPDATE rcs_id = "
 };

@@ -6,10 +6,10 @@ var express = require('express'),
     logger = require('../logger.js');
 
 var queries = {
-    all: "SELECT * FROM `rpielections`.`events` ORDER BY date, start, end",
-    post: "INSERT INTO `rpielections`.`events` (`title`, `location`, `date`, `start`, `end`, `description`) VALUES ",
-    update: "UPDATE `rpielections`.`events` SET <> WHERE event_id = ",
-    remove: "DELETE FROM `rpielections`.`events` WHERE event_id = "
+    all: "SELECT * FROM " + functions.dbName() + ".`events` ORDER BY date, start, end",
+    post: "INSERT INTO " + functions.dbName() + ".`events` (`title`, `location`, `date`, `start`, `end`, `description`) VALUES ",
+    update: "UPDATE " + functions.dbName() + ".`events` SET <> WHERE event_id = ",
+    remove: "DELETE FROM " + functions.dbName() + ".`events` WHERE event_id = "
 };
 
 router.get('/', function (req, res) {

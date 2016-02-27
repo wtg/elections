@@ -1,7 +1,7 @@
 // Club Management System API operations
 var https = require('https'),
     Q = require('q'),
-    token = require('./token.js');
+    token = require('./config.js').cms;
 
 var defaults = {
     method: "GET",

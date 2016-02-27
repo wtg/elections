@@ -1,12 +1,13 @@
-var db = require('./db.js'),
+var db = require('./config.js').db,
     mysql = require('mysql'),
-    cms = require('./cms.js');
+    cms = require('./cms.js'),
+    db_name = mysql.escapeId(require('./config.js').db_name);
 
 module.exports = {
     dbConnect: function (res) {
         var connection = mysql.createConnection(db);
         connection.connect();
-        connection.query("USE `rpielections`;", function (err) {
+        connection.query("USE " + db_name, function (err) {
             if (err) {
                 console.error(err);
                 if(res) {
@@ -15,6 +16,9 @@ module.exports = {
             }
         });
         return connection;
+    },
+    dbName: function () {
+        return db_name;
     },
     defaultJSONCallback: function (res) {
         return function (err, result) {
@@ -62,7 +66,7 @@ module.exports = {
         connection = functions.dbConnect();
       }
 
-      connection.query("INSERT INTO rpielections.log (rcs_id, type, description, time) VALUES ('" + rcsid + "', '" + type + "', '" + description + "', NOW())");
+      connection.query("INSERT INTO log (rcs_id, type, description, time) VALUES ('" + rcsid + "', '" + type + "', '" + description + "', NOW())");
 
       if(!providedConnection) {
         connection.end();

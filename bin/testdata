@@ -5,6 +5,7 @@
  */
 var mysql = require('mysql');
 var connection = mysql.createConnection(require('../db.js'));
+var db_name = mysql.escapeId(require('../config.js').db_name);
 
 /**
  * Generic callback to handle any errors returned by the executed MySQL Queries
@@ -21,7 +22,7 @@ connection.connect();
 /**
  * Designate the database for use
  */
-connection.query("USE `rpielections`", errorCallback);
+connection.query("USE " + db_name, errorCallback);
 
 /**
  * Add example elections into the elections table

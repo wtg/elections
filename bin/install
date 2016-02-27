@@ -4,7 +4,8 @@
  * Dependencies
  */
 var mysql = require('mysql');
-var connection = mysql.createConnection(require('../db.js'));
+var db_name = mysql.escapeId(require('../config.js').db_name);
+var connection = mysql.createConnection(require('../config.js').db);
 
 
 /**
@@ -32,15 +33,15 @@ connection.query("SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE=\'TRADITIONAL,ALLOW_INV
 /**
  * Establish the database and use it for subsequent queries
  */
-connection.query("CREATE SCHEMA IF NOT EXISTS `rpielections` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci", errorCallback);
-connection.query("USE `rpielections`", errorCallback);
+connection.query("CREATE SCHEMA IF NOT EXISTS " + db_name + " DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci", errorCallback);
+connection.query("USE " + db_name, errorCallback);
 
 
 /**
  * Execute the creation of the elections table. This table keeps track of individual elections (i.e. GM Week 20xx, etc.)
  * for the purpose of associating different items together and manage duplicate nominations, candidates, etc.
  */
-connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`elections` (" +
+connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`elections` (" +
     "`election_id` INT NOT NULL AUTO_INCREMENT," +
     "`election_name` VARCHAR(45) NOT NULL," +
     "`primary_date` DATE NOT NULL," +
@@ -54,7 +55,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`elections` (" +
  * Execute the creation of the offices table. This table maintains the positions available for election (using the
  * election_id as a foreign key)
  */
-connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`offices` (" +
+connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`offices` (" +
     "`office_id` INT NOT NULL AUTO_INCREMENT," +
     "`election_id` INT NOT NULL," +
     "`name` VARCHAR(255) NOT NULL," +
@@ -67,7 +68,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`offices` (" +
     "INDEX `offices_fk1_idx` (`election_id` ASC) ," +
     "CONSTRAINT `offices_fk1`" +
     "  FOREIGN KEY (`election_id`)" +
-    "  REFERENCES `rpielections`.`elections` (`election_id`)" +
+    "  REFERENCES " + db_name + ".`elections` (`election_id`)" +
     "  ON DELETE NO ACTION" +
     "  ON UPDATE NO ACTION)", errorCallback);
 
@@ -75,7 +76,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`offices` (" +
 /**
  * Execute the creation of the parties table. This table maintains the parties active in an election
  */
-connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`parties` (" +
+connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`parties` (" +
     "`party_id` INT NOT NULL AUTO_INCREMENT," +
     "`name` VARCHAR(45) NOT NULL," +
     "`platform` TEXT NOT NULL," +
@@ -87,7 +88,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`parties` (" +
  * Execute the creation of the candidates table. This table maintains all candidates running for all elections (using
  * election_id and office_id as foreign keys)
  */
-connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`candidates` (" +
+connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`candidates` (" +
     "`rcs_id` VARCHAR(45) NOT NULL," +
     "`office_id` INT NOT NULL," +
     "`election_id` INT NOT NULL," +
@@ -97,17 +98,17 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`candidates` (" +
     "INDEX `candidates_fk2_idx` (`election_id` ASC) ," +
     "CONSTRAINT `candidates_fk1`" +
     "  FOREIGN KEY (`office_id`)" +
-    "  REFERENCES `rpielections`.`offices` (`office_id`)" +
+    "  REFERENCES " + db_name + ".`offices` (`office_id`)" +
     "  ON DELETE CASCADE" +
     "  ON UPDATE NO ACTION," +
     "CONSTRAINT `candidates_fk2`" +
     "  FOREIGN KEY (`election_id`)" +
-    "  REFERENCES `rpielections`.`elections` (`election_id`)" +
+    "  REFERENCES " + db_name + ".`elections` (`election_id`)" +
     "  ON DELETE NO ACTION" +
     "  ON UPDATE NO ACTION," +
     "CONSTRAINT `candidates_fk3`" +
     "  FOREIGN KEY (`party_id`)" +
-    "  REFERENCES `rpielections`.`parties` (`party_id`)" +
+    "  REFERENCES " + db_name + ".`parties` (`party_id`)" +
     "  ON DELETE NO ACTION" +
     "  ON UPDATE SET NULL)" +
     "ENGINE = InnoDB", errorCallback);
@@ -117,7 +118,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`candidates` (" +
  * Execute the creation of the candidate_data table. This table maintains the metadata for candidates, that shouldn't
  * be duplicated (if a candidate is running for multiple positions)
  */
-connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`candidate_data` (" +
+connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`candidate_data` (" +
     "`rcs_id` VARCHAR(45) NOT NULL," +
     "`preferred_name` VARCHAR(45) NULL," +
     "`first_name` VARCHAR(45) NULL," +
@@ -145,7 +146,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`candidate_data` (" 
  * Execute the creation of the nominations table. This table maintains all nominations for all candidates (using
  * election_id, office_id, and rcs_id as foreign keys)
  */
-connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`nominations` (" +
+connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`nominations` (" +
     "`nomination_id` INT NOT NULL AUTO_INCREMENT," +
     "`election_id` INT NOT NULL," +
     "`rcs_id` VARCHAR(45) NOT NULL," +
@@ -157,17 +158,17 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`nominations` (" +
     "INDEX `nominations_fk3_idx` (`election_id` ASC) ," +
     "CONSTRAINT `nominations_fk1`" +
     "  FOREIGN KEY (`rcs_id` , `office_id`)" +
-    "  REFERENCES `rpielections`.`candidates` (`rcs_id` , `office_id`)" +
+    "  REFERENCES " + db_name + ".`candidates` (`rcs_id` , `office_id`)" +
     "  ON DELETE CASCADE" +
     "  ON UPDATE CASCADE," +
     "CONSTRAINT `nominations_fk2`" +
     "  FOREIGN KEY (`office_id`)" +
-    "  REFERENCES `rpielections`.`offices` (`office_id`)" +
+    "  REFERENCES " + db_name + ".`offices` (`office_id`)" +
     "  ON DELETE CASCADE" +
     "  ON UPDATE CASCADE," +
     "CONSTRAINT `nominations_fk3`" +
     "  FOREIGN KEY (`election_id`)" +
-    "  REFERENCES `rpielections`.`elections` (`election_id`)" +
+    "  REFERENCES " + db_name + ".`elections` (`election_id`)" +
     "  ON DELETE CASCADE" +
     "  ON UPDATE CASCADE)" +
     "ENGINE = InnoDB", errorCallback);
@@ -176,7 +177,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`nominations` (" +
 /**
  * Execute the creation of the party_officers table. This table maintains all party officers for all parties
  */
-connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`party_officers` (" +
+connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`party_officers` (" +
     "`party_id` INT NOT NULL," +
     "`rcs_id` VARCHAR(45) NOT NULL," +
     "`position` VARCHAR(45) NOT NULL," +
@@ -190,7 +191,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`party_officers` (" 
     "UNIQUE KEY `party_officer_id` (`rcs_id`, `party_id`)," +
     "CONSTRAINT `officer_fk1`" +
     "  FOREIGN KEY (`party_id`)" +
-    "  REFERENCES `rpielections`.`parties` (`party_id`)" +
+    "  REFERENCES " + db_name + ".`parties` (`party_id`)" +
     "  ON DELETE CASCADE" +
     "  ON UPDATE NO ACTION)" +
     "ENGINE = InnoDB;", errorCallback);
@@ -199,7 +200,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`party_officers` (" 
 /**
  * Execute the creation of the assistants table. This table maintains all candidate assistants for all candidates
  */
-connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`assistants` (" +
+connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`assistants` (" +
     "`assistant_id` INT NOT NULL AUTO_INCREMENT," +
     "`rcs_id` VARCHAR(45) NOT NULL," +
     "`candidate_rcs_id` VARCHAR(45) NOT NULL," +
@@ -212,7 +213,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`assistants` (" +
     "INDEX `assistant_fk1_idx` (`rcs_id` ASC)," +
     "CONSTRAINT `assistant_fk1`" +
     "  FOREIGN KEY (`rcs_id`)" +
-    "  REFERENCES `rpielections`.`candidates` (`rcs_id`)" +
+    "  REFERENCES " + db_name + ".`candidates` (`rcs_id`)" +
     "  ON DELETE NO ACTION" +
     "  ON UPDATE NO ACTION)" +
     "ENGINE = InnoDB;", errorCallback);
@@ -222,7 +223,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`assistants` (" +
  * Execute the creation of a log table. This table is used to log actions taken by users and administrators, to ensure
  * accountability and deter tampering of campaign data
  */
-connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`log` (" +
+connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`log` (" +
     "`log_id` INT NOT NULL AUTO_INCREMENT," +
     "`rcs_id` VARCHAR(45) NOT NULL," +
     "`type` VARCHAR(45) NOT NULL," +
@@ -236,7 +237,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`log` (" +
  * Execute the creation of an adminsitrators table. This table tracks who has adminsitrative access, and what level of
  * access
  */
-connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`administrators` (" +
+connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`administrators` (" +
     "`rcs_id` VARCHAR(45) NOT NULL," +
     "`admin_type` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '0 = no admin\n1 = RnE\n2 = WTG\n3 = Full Admin'," +
     "PRIMARY KEY (`rcs_id`) )" +
@@ -246,7 +247,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`administrators` (" 
 /**
  * Execute the creation of a views table. This table stores public pages that administrators can add, delete, and modify
  */
-connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`pages` (" +
+connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`pages` (" +
     "`page_id` INT NOT NULL AUTO_INCREMENT," +
     "`title` VARCHAR(45) NOT NULL," +
     "`slug` VARCHAR(45) NOT NULL," +
@@ -261,7 +262,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`pages` (" +
 /**
  * Execute the creation of a configurations table. This table holds sitewide settings, in the format of [key, value]
  */
-connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`configurations` (" +
+connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`configurations` (" +
     "`configuration_id` INT NOT NULL AUTO_INCREMENT," +
     "`key` varchar(45) NOT NULL," +
     "`value` varchar(200) NOT NULL," +
@@ -271,7 +272,7 @@ connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`configurations` (" 
 /**
  * Execute the creation of a events table. This table holds event information.
  */
-connection.query("CREATE TABLE IF NOT EXISTS `rpielections`.`events` (" +
+connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`events` (" +
     "`event_id` INT NOT NULL AUTO_INCREMENT," +
     "`title` VARCHAR(45) NOT NULL," +
     "`date` DATE NOT NULL," +

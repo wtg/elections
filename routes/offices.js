@@ -12,11 +12,11 @@ var queries = {
     activeElection: "(SELECT `value` FROM `configurations` WHERE `key` = 'active_election_id')",
     types: "SELECT DISTINCT type FROM `offices` WHERE NOT type = 'all'",
 
-    post: "INSERT INTO `rpielections`.`offices` (`election_id`, `name`, `description`, `openings`, " +
+    post: "INSERT INTO " + functions.dbName() + ".`offices` (`election_id`, `name`, `description`, `openings`, " +
     "`nominations_required`, `type`, `disabled`) VALUES ",
     update: "UPDATE offices SET <> WHERE office_id = ",
     toggle: "UPDATE offices SET disabled = IF((SELECT disabled WHERE office_id = @), 0, 1) WHERE office_id = @",
-    remove: "DELETE FROM `rpielections`.`offices` "
+    remove: "DELETE FROM " + functions.dbName() + ".`offices` "
 };
 
 router.get('/', function (req, res) {

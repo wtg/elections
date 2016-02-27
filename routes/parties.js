@@ -10,15 +10,15 @@ var queries = {
     withLeader: "SELECT P.*, O.rcs_id, O.position FROM `parties` P LEFT JOIN `party_officers` O ON P.party_id = " +
     "O.party_id AND O.is_highest = 1",
     officers: "SELECT * FROM `party_officers`",
-    post: "INSERT INTO `rpielections`.`parties` (`name`, `platform`) VALUES ",
+    post: "INSERT INTO " + functions.dbName() + ".`parties` (`name`, `platform`) VALUES ",
     update: "UPDATE parties SET <> WHERE party_id = ",
-    remove: "DELETE FROM `rpielections`.`parties` WHERE party_id = ",
-    newOfficer: "INSERT INTO `rpielections`.`party_officers` (`party_id`, `rcs_id`, `position`, `is_highest`, `first_name`, " +
+    remove: "DELETE FROM " + functions.dbName() + ".`parties` WHERE party_id = ",
+    newOfficer: "INSERT INTO " + functions.dbName() + ".`party_officers` (`party_id`, `rcs_id`, `position`, `is_highest`, `first_name`, " +
     "`preferred_name`, `middle_name`, `last_name`) VALUES ",
-    demoteLeader: "UPDATE `rpielections`.`party_officers` SET `is_highest` = 0, `position` = 'Officer' WHERE `party_id` = ",
-    promoteOfficer: "UPDATE `rpielections`.`party_officers` SET `is_highest` = 1, `position` = 'Leader' WHERE `party_id` = ",
-    removeOfficer: "DELETE FROM `rpielections`.`party_officers`",
-    affiliateCandidate: "UPDATE `rpielections`.`candidates` SET `party_id` = <> WHERE rcs_id = "
+    demoteLeader: "UPDATE " + functions.dbName() + ".`party_officers` SET `is_highest` = 0, `position` = 'Officer' WHERE `party_id` = ",
+    promoteOfficer: "UPDATE " + functions.dbName() + ".`party_officers` SET `is_highest` = 1, `position` = 'Leader' WHERE `party_id` = ",
+    removeOfficer: "DELETE FROM " + functions.dbName() + ".`party_officers`",
+    affiliateCandidate: "UPDATE " + functions.dbName() + ".`candidates` SET `party_id` = <> WHERE rcs_id = "
 };
 
 router.get('/', function (req, res) {
