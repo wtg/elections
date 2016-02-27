@@ -65,7 +65,7 @@
 				<h5 ng-bind="randomCandidate.position"></h5>
 				<p ng-bind-html="markdown(randomCandidate.bio)"></p>
 				<div class="btn-toolbar pull-right">
-					<button class="btn btn-default">
+					<button class="btn btn-default" ng-click="reloadRandom()">
 						<span class="fa fa-random"></span> Refresh
 					</button>
 					<a class="btn btn-primary" ng-href="#/candidate/{{randomCandidate.rcsId}}">
