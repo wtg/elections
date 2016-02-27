@@ -108,8 +108,7 @@ app.use(function (req, res, next) {
 // will print stacktrace
 if (app.get('env') === 'development') {
     app.use(function (err, req, res, next) {
-        res.status(err.status || 500);
-        res.send("<!DOCTYPE html><html><body><h1>There's an error (" + err.status + ")!</h1>" +
+        res.status(err.status || 500).send("<!DOCTYPE html><html><body><h1>There's an error (" + err.status + ")!</h1>" +
             "<p>" + err.message + "</p><p>" + err + "</p></body></html>");
     });
 }
@@ -117,8 +116,7 @@ if (app.get('env') === 'development') {
 // production error handler
 // no stacktraces leaked to user
 app.use(function (err, req, res, next) {
-    res.status(err.status || 500);
-    res.send("<!DOCTYPE html><html><body><h1>There's an error (" + err.status + ")!</h1>" +
+    res.status(err.status || 500).send("<!DOCTYPE html><html><body><h1>There's an error (" + err.status + ")!</h1>" +
         "<p>" + err.message + "</p></body></html>");
 });
 
