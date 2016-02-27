@@ -9,6 +9,7 @@ var session = require('express-session');
 var CASAuthentication = require('cas-authentication');
 var Q = require('q');
 var cms = require('./cms.js');
+var config = require('./config.js');
 var custom_logger = require('./logger.js');
 
 // Routes 
@@ -39,7 +40,7 @@ app.use(session({
 // Create a new instance of CASAuthentication.
 var cas = new CASAuthentication({
     cas_url: 'https://cas-auth.rpi.edu/cas',
-    service_url: 'http://localhost:3000',
+    service_url: config.service_url,
     cas_version: '2.0'
 });
 

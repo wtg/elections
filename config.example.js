@@ -20,5 +20,5 @@ module.exports = {
     },
     db_name: 'rpielections',
     cms: '',
-    service_url: 'localhost:3000'
+    service_url: 'http://localhost:3000'
 };
