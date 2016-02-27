@@ -6,6 +6,7 @@
     "start": "node ./bin/www",
     "prestart": "node ./bin/install"
   },
+  "main": "bin/www",
   "dependencies": {
     "angular": "^1.4.7",
     "body-parser": "~1.13.2",
