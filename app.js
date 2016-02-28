@@ -14,6 +14,7 @@ var custom_logger = require('./logger.js');
 
 // Routes 
 var routes = require('./routes/index');
+var assistants = require('./routes/assistants');
 var offices = require('./routes/offices');
 var candidates = require('./routes/candidates');
 var nominations = require('./routes/nominations');
@@ -55,6 +56,7 @@ app.use('/bower_components', express.static(__dirname + '/bower_components'));
 
 app.use('/', routes);
 app.use('/images', express.static(__dirname + '/public/usr_content'));
+app.use('/api/assistants', assistants);
 app.use('/api/offices', offices);
 app.use('/api/candidates', candidates);
 app.use('/api/nominations', nominations);

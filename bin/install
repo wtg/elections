@@ -210,9 +210,9 @@ connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`assistants` (" +
     "`preferred_name` VARCHAR(45) NULL," +
     "`rin` VARCHAR(9) NOT NULL," +
     "PRIMARY KEY (`assistant_id`)," +
-    "INDEX `assistant_fk1_idx` (`rcs_id` ASC)," +
+    "INDEX `assistant_fk1_idx` (`candidate_rcs_id` ASC)," +
     "CONSTRAINT `assistant_fk1`" +
-    "  FOREIGN KEY (`rcs_id`)" +
+    "  FOREIGN KEY (`candidate_rcs_id`)" +
     "  REFERENCES " + db_name + ".`candidates` (`rcs_id`)" +
     "  ON DELETE NO ACTION" +
     "  ON UPDATE NO ACTION)" +

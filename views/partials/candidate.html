@@ -42,11 +42,12 @@
                 <li role="presentation" ng-class="{'active': currentSection === 'platform'}">
                     <a href="#/candidate/{{candidate.rcs_id}}/platform">Platform</a>
                 </li>
-                <li role="presentation" ng-class="{'active': currentSection === 'ama'}">
-                    <a href="#/candidate/{{candidate.rcs_id}}/ama">AMA</a>
-                </li>
+                <!--<li role="presentation" ng-class="{'active': currentSection === 'ama'}">-->
+                    <!--<a href="#/candidate/{{candidate.rcs_id}}/ama">AMA</a>-->
+                <!--</li>-->
                 <li role="presentation" ng-class="{'active': currentSection === 'contact'}">
-                    <a href="#/candidate/{{candidate.rcs_id}}/contact">Contact</a>
+                    <!--<a href="#/candidate/{{candidate.rcs_id}}/contact">Contact</a>-->
+                    <a ng-href="mailto:{{candidate.rcs_id}}@rpi.edu">Contact</a>
                 </li>
             </ul>
         </div>
@@ -98,7 +99,7 @@
             <h3>Candidate Facts</h3>
             <dl class="dl-horizontal">
                 <dt>Nominations</dt>
-                <dd>330/600</dd>
+                <dd>{{o.nominations}}/{{o.office_nominations_required}}</dd>
 
                 <dt>Class year</dt>
                 <dd ng-bind="candidate.grad_date.substr(0,4)"></dd>
@@ -122,14 +123,25 @@
                 <dt ng-repeat-start="m in candidate.misc_info_obj" ng-bind="m.label"></dt>
                 <dd ng-repeat-end ng-bind="m.entry"></dd>
             </dl>
+
+            <section ng-if="assistants.length > 0">
+                <hr/>
+                <h3>Candidate Assistants</h3>
+                <p>
+                    <span ng-repeat="a in assistants"
+                          ng-bind="formName(a) + ($index < assistants.length-1 ? ', ' : '')"></span>
+                </p>
+            </section>
         </div>
         <div class="col-md-7" ng-if="currentSection == 'about'">
             <h2 class="no-margin-top">About me</h2>
             <div ng-bind-html="convertMarkdown(candidate.about)"></div>
+            <div ng-if="!candidate.about">This candidate has not yet provided a biography!</div>
         </div>
         <div class="col-md-7" ng-if="currentSection == 'platform'">
             <h2 class="no-margin-top">Platform</h2>
             <div ng-bind-html="convertMarkdown(candidate.platform)"></div>
+            <div ng-if="!candidate.platform">This candidate has not yet provided a platform!</div>
         </div>
         <div class="col-md-7" ng-if="currentSection == 'ama'">
             <h2 class="no-margin-top">Ask Me Anything</h2>

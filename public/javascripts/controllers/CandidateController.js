@@ -1,5 +1,5 @@
-app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$sce', '$http', '$q', '$location',
-    function ($scope, $routeParams, $showdown, $sce, $http, $q, $location) {
+app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$showdown', '$sce', '$http', '$q', '$location',
+    function ($scope, $route, $routeParams, $showdown, $sce, $http, $q, $location) {
         var loadData = function () {
             $scope.candidate = {};
             $scope.parties = [];
@@ -7,7 +7,8 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
             $q.all([
                 $http.get('/api/candidates/rcs/' + $routeParams.rcs),
                 $http.get('/api/parties/'),
-                $http.get('/api/nominations/' + $routeParams.rcs)
+                $http.get('/api/nominations/' + $routeParams.rcs),
+                $http.get('/api/assistants/candidate/' + $routeParams.rcs)
             ]).then(function (responses) {
                 if (!responses[0].data[0]) {
                     $location.url("/offices");
@@ -64,7 +65,9 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
                         }
                     });
                 });
-                console.log($scope.candidate.offices);
+
+                console.log(responses[3].data);
+                $scope.assistants = responses[3].data;
             }, function () {
                 alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
             }).finally(function () {
@@ -77,9 +80,9 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
             return $scope.candidate.party_name.split(' ')[$scope.candidate.party_name.split(' ').length - 1].toLowerCase() !== "party";
         };
 
-        $scope.formName = function () {
-            return ($scope.candidate.preferred_name ? $scope.candidate.preferred_name : $scope.candidate.first_name) +
-                " " + $scope.candidate.last_name;
+        $scope.formName = function (person) {
+            if(!person) person = $scope.candidate;
+            return (person.preferred_name ? person.preferred_name : person.first_name) + " " + person.last_name;
         };
 
         $scope.currentSection = $routeParams.section === undefined ? "about" : $routeParams.section;
@@ -127,5 +130,37 @@ app.controller('CandidateController', ['$scope', '$routeParams', '$showdown', '$
 
         $scope.profileCSS = function () {
             return 'url(\'' + ($scope.candidate.profile_url ? $scope.candidate.profile_url : 'silhouette.png') + '\')';
+        };
+
+        $scope.newAssistant = {
+            rcs: ""
+        };
+
+        $scope.addAssistantKeypressEvent = function (keyEvent) {
+            if (keyEvent.which === 13 && $scope.newAssistant.rcs) {
+                $scope.addAssistant();
+            }
+        };
+
+        $scope.addAssistant = function () {
+            if (!$scope.newAssistant.rcs) {
+                return;
+            }
+
+            $http.post('/api/assistants/create/' + $routeParams.rcs + '/' + $scope.newAssistant.rcs + '/').then(function () {
+                $route.reload();
+            }, function (response) {
+                console.log(response);
+            });
+        };
+
+        $scope.removeAssistant = function (rcsId) {
+            if (confirm("Are you sure you want to remove " + rcsId + " as an assistant?")) {
+                $http.delete('/api/assistants/delete/' + $routeParams.rcs + '/' + rcsId + '/').then(function () {
+                    $route.reload();
+                }, function (response) {
+                    console.log(response);
+                });
+            }
         };
     }]);
