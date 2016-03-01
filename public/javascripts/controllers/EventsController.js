@@ -160,8 +160,8 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
             }
 
             if($scope.new.start) {
-              preparedData.start = $scope.events[position].start.getHours() + ":" +
-              $scope.events[position].start.getMinutes() + ":" + $scope.new.start.getSeconds();
+              preparedData.start = $scope.new.start.getHours() + ":" +
+              $scope.new.start.getMinutes() + ":" + $scope.new.start.getSeconds();
             }
 
             if($scope.new.end) {
