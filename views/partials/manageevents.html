@@ -36,7 +36,7 @@
                 <li role="presentation" ng-repeat="e in events track by $index"
                     ng-class="{'active': e.event_id==currentEditId}" ng-click="setEditId(e.event_id)">
                     <a>
-                        <span ng-bind="e.title"></span>
+                        <span ng-bind="::e.title"></span>
                         <span ng-if="e.title.length === 0">Untitled event</span>
                         <div class="bulk-delete-box pull-right" ng-hide="!bulkDelete" ng-click="deleteEvent(e.event_id, true)">
                             <span class="glyphicon glyphicon-trash pull-right"></span>
@@ -116,7 +116,7 @@
             <div class="row" ng-repeat="e in events track by $index" ng-show="currentEditId == e.event_id">
                 <h2 class="office-title">
                     <i class="text-muted">Editing:</i>
-                    <span ng-bind="e.title"></span>
+                    <span ng-bind="::e.title"></span>
                     <span ng-if="e.title.length === 0">Untitled event</span>
                     <button class="btn btn-success pull-right" ng-click="saveEdits()" ng-disabled="!e.changesPending">
                         Save
