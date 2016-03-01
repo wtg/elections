@@ -145,18 +145,28 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
          */
         $scope.createEvent = function () {
             var title = $scope.new.title;
+
             var preparedData = {
                 title: $scope.new.title,
                 location: $scope.new.location,
-                date: $scope.new.date.toISOString().substr(0,10),
-                start: $scope.new.start.getHours() + ":" +
-                $scope.new.start.getMinutes() + ":" + $scope.new.start.getSeconds(),
+                date: "",
+                start: "",
+                end: "",
                 description: $scope.new.description
             };
 
+            if($scope.new.date) {
+              preparedData.date = $scope.new.date.toISOString().substr(0,10);
+            }
+
+            if($scope.new.start) {
+              preparedData.start = $scope.events[position].start.getHours() + ":" +
+              $scope.events[position].start.getMinutes() + ":" + $scope.new.start.getSeconds();
+            }
+
             if($scope.new.end) {
                 preparedData.end = $scope.new.end.getHours() + ":" +
-                    $scope.new.end.getMinutes() + ":" + $scope.new.end.getSeconds();
+                $scope.new.end.getMinutes() + ":" + $scope.new.end.getSeconds();
             }
 
             if (!$scope.formFilled(preparedData, "create")) return;
@@ -183,11 +193,20 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
             var preparedData = {
                 title: $scope.events[position].title,
                 location: $scope.events[position].location,
-                date: $scope.events[position].date.toISOString().substr(0,10),
-                start: $scope.events[position].start.getHours() + ":" +
-                $scope.events[position].start.getMinutes() + ":" + $scope.events[position].start.getSeconds(),
+                date: "",
+                start: "",
+                end: "",
                 description: $scope.events[position].description
             };
+
+            if($scope.events[position].date) {
+              preparedData.date = $scope.events[position].date.toISOString().substr(0,10);
+            }
+
+            if($scope.events[position].start) {
+              preparedData.start = $scope.events[position].start.getHours() + ":" +
+              $scope.events[position].start.getMinutes() + ":" + $scope.events[position].start.getSeconds();
+            }
 
             if($scope.events[position].end) {
                 preparedData.end = $scope.events[position].end.getHours() + ":" +
@@ -223,7 +242,9 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
                 fieldlist += ", ";
               }
             }
-            addNewAlert("error", "You didn't enter the following for your event: " + fieldlist, from);
+            if (failedFields.length) {
+                addNewAlert("error", "You didn't enter the following for your event: " + fieldlist, from);
+            }
             return !failedFields.length;
         }
 
