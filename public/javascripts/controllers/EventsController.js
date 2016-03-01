@@ -159,12 +159,7 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
                     $scope.new.end.getMinutes() + ":" + $scope.new.end.getSeconds();
             }
 
-            for(var i in preparedData) {
-                if(preparedData.hasOwnProperty(i) && !preparedData[i]) {
-                    addNewAlert("error", "You didn't enter a(n) " + i + " for the event!", "update");
-                    return;
-                }
-            }
+            if (!$scope.formFilled(preparedData, "create")) return;
 
             $http.post('/api/events/create', preparedData).then(function () {
                 addNewAlert("success", "The new event, entitled " + title + ", was created successfully!", "create");
@@ -175,7 +170,7 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
         };
 
         /**
-         * Saves any pending edits on the currently selected party
+         * Saves any pending edits on the currently selected event
          */
         $scope.saveEdits = function () {
             var position = findEvent($scope.currentEditId);
@@ -199,12 +194,7 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
                 $scope.events[position].end.getMinutes() + ":" + $scope.events[position].end.getSeconds();
             }
 
-            for(var i in preparedData) {
-                if(preparedData.hasOwnProperty(i) && !preparedData[i]) {
-                    addNewAlert("error", "You didn't enter a(n) " + i + " for the event!", "update");
-                    return;
-                }
-            }
+            if (!$scope.formFilled(preparedData, "update")) return;
 
             $http.put('/api/events/update/' + $scope.currentEditId, preparedData).then(function () {
                 addNewAlert("success", "The event entitled " + title + " was successfully updated!", "update");
@@ -213,6 +203,29 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
                 addNewAlert("error", response.statusText + " (code: " + response.status + ")", "update");
             })
         };
+
+        $scope.formFilled = function (preparedData, from) {
+            var failedFields = []
+            for(var i in preparedData) {
+                if(preparedData.hasOwnProperty(i) && !preparedData[i]) {
+                    if(i !== "description" || (!failedFields.length &&
+                        !confirm("Are you sure you want this event to have no " +
+                        "description? It's better to have one! Click OK to proceed "+
+                        "anyway."))) {
+                        failedFields.push(i);
+                    }
+                }
+            }
+            var fieldlist = "";
+            for (var i in failedFields) {
+              fieldlist += failedFields[i];
+              if (i < failedFields.length - 1) {
+                fieldlist += ", ";
+              }
+            }
+            addNewAlert("error", "You didn't enter the following for your event: " + fieldlist, from);
+            return !failedFields.length;
+        }
 
         /**
          * Deletes an event based on the given edit id
