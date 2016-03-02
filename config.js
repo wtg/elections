@@ -9,9 +9,9 @@ try {
 	module.exports = require('./devconfig.js');
 } catch(e) {
 	module.exports = {
-    	db: process.env.DATABASE_URL,
-    	db_name: process.env.DB_NAME,
-    	cms: process.env.CMS_API_TOKEN,
-    	service_url: process.env.SERVICE_URL
+		db: process.env.DATABASE_URL,
+		db_name: process.env.DB_NAME,
+		cms: process.env.CMS_API_TOKEN,
+		service_url: process.env.SERVICE_URL
 	};
 }
