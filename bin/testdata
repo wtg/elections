@@ -4,7 +4,7 @@
  * Dependencies
  */
 var mysql = require('mysql');
-var connection = mysql.createConnection(require('../db.js'));
+var connection = mysql.createConnection(require('../config.js').db);
 var db_name = mysql.escapeId(require('../config.js').db_name);
 
 /**
@@ -63,7 +63,7 @@ connection.query("INSERT INTO `offices` VALUES " +
 /**
  * Insert necessary configuration row
  */
-connection.query("INSERT INTO `rpielections`.`configurations` (`key`, `value`) VALUES ('active_election_id', 1)",
+connection.query("INSERT INTO " + db_name + ".`configurations` (`key`, `value`) VALUES ('active_election_id', 1)",
     errorCallback());
 
 /**

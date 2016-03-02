@@ -12,8 +12,9 @@
  *  - service_url: the url (and port, if not 80) that the user is accessing your app from; used by the RPI Central
  *  Authentication System
  */
+
 module.exports = {
-    db : {
+    db: {
         host     : 'localhost',
         user     : 'root',
         password : ''
