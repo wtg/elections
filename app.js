@@ -33,7 +33,7 @@ app.set('view engine', 'html');
 
 // Set up an Express session, which is required for CASAuthentication.
 app.use(session({
-    secret: 'super secret key',
+    secret: process.env.SESSION_SECRET || 'super secret key',
     resave: false,
     saveUninitialized: true
 }));
