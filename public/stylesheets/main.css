@@ -187,6 +187,10 @@ footer {
   color: #555555;
 }
 
+.bulk-delete-box:active {
+  color: #aaaaaa;
+}
+
 .event-list > li:first-child:before {
     content: none;
 }

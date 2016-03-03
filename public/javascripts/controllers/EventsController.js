@@ -69,6 +69,7 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
          * @param from
          */
         var addNewAlert = function (type, message, from) {
+            $scope.showAlerts = true;
             if (type != 'error' && type != 'success') {
                 type = 'info';
             }
@@ -85,7 +86,7 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
                 message: message,
                 from: from
             });
-            $cookies.putObject(ALERTS_COOKIE_LABEL, {array: $scope.alerts}, {expires: new Date(new Date().getTime() + 300000)});
+            $cookies.putObject(ALERTS_COOKIE_LABEL, {array: $scope.alerts});
         };
 
         /**
@@ -94,7 +95,7 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
          */
         $scope.removeAlert = function (index) {
             $scope.alerts.splice(index, 1);
-            $cookies.putObject(ALERTS_COOKIE_LABEL, {array: $scope.alerts}, {expires: new Date(new Date().getTime() + 300000)});
+            $cookies.putObject(ALERTS_COOKIE_LABEL, {array: $scope.alerts});
         };
 
         $scope.setEditId = function (newId) {
