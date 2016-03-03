@@ -46,10 +46,10 @@ describe('users API', function() {
 		request
 			.get('/api/users')
 			.expect(200, {
-	            'authenticated': false,
-	            'username': null,
-	            'admin': false
-	        }, done);
+				'authenticated': false,
+				'username': null,
+				'admin': false
+			}, done);
 	});
 
 	it('login', function(done) {
@@ -66,9 +66,9 @@ describe('users API', function() {
 		request
 			.get('/api/users')
 			.expect(200, {
-	            'authenticated': true,
-	            'username': 'kochms',
-	            'admin': true
-	        }, done);
+				'authenticated': true,
+				'username': 'kochms',
+				'admin': true
+			}, done);
 	});
 });
