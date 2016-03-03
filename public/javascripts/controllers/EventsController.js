@@ -100,10 +100,14 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
 
         $scope.setEditId = function (newId) {
             $scope.currentEditId = newId;
-            if(newId !== "new") {
+            $cookies.putObject(EDIT_ID_COOKIE_LABEL, {val: $scope.currentEditId});
+        };
+
+        $scope.$on('$routeChangeStart', function () {
+            if ($location.path().split('/')[$location.path().split('/').length - 1] === 'edit') {
                 $cookies.putObject(EDIT_ID_COOKIE_LABEL, {val: $scope.currentEditId});
             }
-        };
+        });
 
         $scope.numEvents = function () {
           return $scope.events.length;
@@ -117,12 +121,6 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
               $scope.bulkDelete = true;
             }
         };
-
-        $scope.$on('$routeChangeStart', function () {
-            if ($location.path().split('/')[$location.path().split('/').length - 1] === 'edit') {
-                $cookies.putObject(EDIT_ID_COOKIE_LABEL, {val: $scope.currentEditId});
-            }
-        });
 
         /**
          * Finds an event's index in the event array based on the ID
@@ -238,13 +236,24 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
             }
             var fieldlist = "";
             for (var i in failedFields) {
-              fieldlist += failedFields[i];
+              if (failedFields[i] === "start") {
+                fieldlist += "start time";
+              }
+              else if (failedFields[i] === "end") {
+                fieldlist += "end time";
+              }
+              else {
+                fieldlist += failedFields[i];
+              }
               if (i < failedFields.length - 1) {
                 fieldlist += ", ";
               }
             }
-            if (failedFields.length) {
+            if (failedFields.length > 1) {
                 addNewAlert("error", "You didn't enter the following for your event: " + fieldlist, from);
+            }
+            else {
+                addNewAlert("error", "You didn't enter a " + fieldlist + " for your event!", from);
             }
             return !failedFields.length;
         }

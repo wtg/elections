@@ -140,6 +140,7 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
          * @param from
          */
         var addNewAlert = function (type, message, from) {
+            $scope.showAlerts = true;
             if (type != 'error' && type != 'success') {
                 type = 'info';
             }
@@ -156,7 +157,7 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                 message: message,
                 from: from
             });
-            $cookies.putObject(ALERTS_COOKIE_LABEL, {array: $scope.alerts}, {expires: new Date(new Date().getTime() + 300000)});
+            $cookies.putObject(ALERTS_COOKIE_LABEL, {array: $scope.alerts});
         };
 
         var shuffle = function (array) {
@@ -184,15 +185,8 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
          */
         $scope.removeAlert = function (index) {
             $scope.alerts.splice(index, 1);
-            $cookies.putObject(ALERTS_COOKIE_LABEL, {array: $scope.alerts}, {expires: new Date(new Date().getTime() + 300000)});
+            $cookies.putObject(ALERTS_COOKIE_LABEL, {array: $scope.alerts});
         };
-
-
-        $scope.$on('$routeChangeStart', function () {
-            if ($scope.filter === 'edit') {
-                $cookies.putObject(EDIT_ID_COOKIE_LABEL, {val: $scope.currentEditId});
-            }
-        });
 
         /**
          * Function that's called immediately to determine the filter selected
@@ -245,7 +239,14 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
         $scope.setEditId = function (newId) {
             $scope.currentEditId = newId;
             $scope.newCandidate.rcs = "";
+            $cookies.putObject(EDIT_ID_COOKIE_LABEL, {val: $scope.currentEditId});
         };
+
+        $scope.$on('$routeChangeStart', function () {
+            if ($scope.filter === 'edit') {
+                $cookies.putObject(EDIT_ID_COOKIE_LABEL, {val: $scope.currentEditId});
+            }
+        });
 
         /**
          * Removes a candidate from a given office

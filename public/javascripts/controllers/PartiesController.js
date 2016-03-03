@@ -40,6 +40,7 @@ app.controller('PartiesController', ['$scope', '$http', '$cookies', '$location',
          * @param from
          */
         var addNewAlert = function (type, message, from) {
+            $scope.showAlerts = true;
             if (type != 'error' && type != 'success') {
                 type = 'info';
             }
@@ -56,7 +57,7 @@ app.controller('PartiesController', ['$scope', '$http', '$cookies', '$location',
                 message: message,
                 from: from
             });
-            $cookies.putObject(ALERTS_COOKIE_LABEL, {array: $scope.alerts}, {expires: new Date(new Date().getTime() + 300000)});
+            $cookies.putObject(ALERTS_COOKIE_LABEL, {array: $scope.alerts});
         };
 
         $scope.getDetailActiveParty = function () {
@@ -69,11 +70,12 @@ app.controller('PartiesController', ['$scope', '$http', '$cookies', '$location',
          */
         $scope.removeAlert = function (index) {
             $scope.alerts.splice(index, 1);
-            $cookies.putObject(ALERTS_COOKIE_LABEL, {array: $scope.alerts}, {expires: new Date(new Date().getTime() + 300000)});
+            $cookies.putObject(ALERTS_COOKIE_LABEL, {array: $scope.alerts});
         };
 
         $scope.setEditId = function (newId) {
             $scope.currentEditId = newId;
+            $cookies.putObject(EDIT_ID_COOKIE_LABEL, {val: $scope.currentEditId});
         };
 
         $scope.$on('$routeChangeStart', function () {
