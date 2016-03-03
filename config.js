@@ -12,6 +12,8 @@ try {
 		db: process.env.DATABASE_URL,
 		db_name: process.env.DB_NAME,
 		cms: process.env.CMS_API_TOKEN,
-		service_url: process.env.SERVICE_URL
+		service_url: process.env.SERVICE_URL,
+		cas_dev_mode: false,
+		cas_dev_mode_user: ''
 	};
 }

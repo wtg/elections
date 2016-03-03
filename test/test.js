@@ -1,5 +1,5 @@
 var app = require('../app.js');
-var request = require('supertest')(app);
+var request = require('supertest').agent(app);
 var should = require('chai').should();
 
 describe('offices API', function() {
@@ -49,6 +49,26 @@ describe('users API', function() {
 	            'authenticated': false,
 	            'username': null,
 	            'admin': false
+	        }, done);
+	});
+
+	it('login', function(done) {
+		request
+			.get('/login')
+			.expect(302)
+			.end(function (err, res) {
+				if (err) return done(err);
+				return done();
+			});
+	});
+
+	it('should return authenticated info when logged in', function(done) {
+		request
+			.get('/api/users')
+			.expect(200, {
+	            'authenticated': true,
+	            'username': 'kochms',
+	            'admin': true
 	        }, done);
 	});
 });
