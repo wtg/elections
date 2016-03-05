@@ -141,7 +141,7 @@
             </div>
         </div>
     </div>
-    <hr ng-repeat-end ng-if="(filter == 'all' || filter == o.type) && !o.disabled"/>
+    <hr ng-repeat-end ng-if="(filter == 'all' || filter == o.type) && !o.disabled && $index < offices.length-1"/>
     <div class="row" ng-if="dataLoaded && editPermissions && filter == 'edit'">
         <hr/>
         <div class="col-md-3">
