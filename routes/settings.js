@@ -45,26 +45,4 @@ router.put('/update/:key', function (req, res) {
     connection.end();
 });
 
-router.delete('/delete/:event_id', function (req, res) {
-    try {
-        if (!functions.verifyPermissions(req).admin) {
-            res.sendStatus(401);
-            return;
-        }
-
-        var connection = functions.dbConnect(res),
-            event_id = req.params.event_id;
-
-        var query = queries.remove + event_id;
-
-        connection.query(query, functions.defaultJSONCallback(res));
-
-        logger.write(connection, req.session.cas_user, "EVENT_DELETE", "Deleted " + event_id);
-
-        connection.end();
-    } catch (e) {
-        console.error(e);
-    }
-});
-
 module.exports = router;

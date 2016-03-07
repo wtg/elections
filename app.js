@@ -21,6 +21,7 @@ var nominations = require('./routes/nominations');
 var parties = require('./routes/parties');
 var events = require('./routes/events');
 var users = require('./routes/users');
+var settings = require('./routes/settings');
 
 // App initialization
 var app = express();
@@ -65,6 +66,7 @@ app.use('/api/nominations', nominations);
 app.use('/api/parties', parties);
 app.use('/api/events', events);
 app.use('/api/users', users);
+app.use('/api/settings', settings);
 
 app.get('/login', cas.bounce, function (req, res) {
     if (!req.session || !req.session.cas_user) {
