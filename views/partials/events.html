@@ -31,12 +31,12 @@
 		<div class="col-md-4" ng-repeat="i in [0,1,2]">
 			<div class="panel panel-default" ng-repeat="e in events track by $index" ng-if="$index % 3 == i">
 				<div class="panel-heading">
-					<h2 class="panel-title">
+					<h2 class="panel-title" style="overflow: hidden">
 						<span ng-bind="e.title"></span>
 						<span ng-bind="e.date | date:'longDate'" class="pull-right text-muted"></span>
 					</h2>
 				</div>
-				<div class="panel-body" style="height: 150px">
+				<div class="panel-body" style="height: auto">
 					<p>
 						<strong>Location:</strong>
 						<span ng-bind="e.location"></span>
