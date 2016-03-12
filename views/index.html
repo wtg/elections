@@ -65,7 +65,7 @@
                     <ul class="dropdown-menu">
                         <!--<li><a href="#/">Edit Content</a></li>-->
                         <!--<li><a href="#/">Moderate Submissions</a></li>-->
-                        <!--<li><a href="#/">Admin Tasks</a></li>-->
+                        <li ng-if="editPermissions"><a href="#/settings">Admin Settings</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="/logout">Sign out</a></li>
                     </ul>
@@ -97,6 +97,7 @@
 <script src="/javascripts/controllers/EventsController.js"></script>
 <script src="/javascripts/controllers/PartiesController.js"></script>
 <script src="/javascripts/controllers/NominationsController.js"></script>
+<script src="/javascripts/controllers/SettingsController.js"></script>
 
 <script type="text/javascript">
     function rotateCard(btn) {

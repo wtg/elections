@@ -1,0 +1,38 @@
+<div class="container page shadow">
+  <div ng-if="!editPermissions">
+    <div class="row">
+  		<div class="col-sm-12 col-md-4">
+  			<h1>Sorry!</h1>
+  		</div>
+  	</div>
+    <div class="row">
+      <div class="col-xs-12">
+        <h3>You do not have permission to access this page.</h3>
+        <br/>
+      </div>
+    </div>
+  </div>
+	<div class="row" ng-if="editPermissions && !dataLoaded">
+		<div class="loader">Loading...</div>
+	</div>
+	<div class="row" ng-if="editPermissions && dataLoaded">
+		<div class="col-sm-12 col-md-4">
+			<h1>Settings</h1>
+		</div>
+	</div>
+  <div class="row" ng-if="editPermissions && dataLoaded && settings.length === 0">
+    <div class="col-xs-12">
+      <h3>No settings were found!</h3>
+    </div>
+  </div>
+	<div class="row" ng-repeat="s in settings track by $index">
+    <br/>
+    <div class="col-xs-12">
+      <span ng-bind="s.key"></span>
+      <span ng-if="s.key.length === 0">Untitled key</span>
+      <span ng-bind="s.value"></span>
+      <span ng-if="s.value.length === 0">Not set</span>
+    </div>
+	</div>
+<ng-include src="'partials/footer.html'"></ng-include>
+</div>

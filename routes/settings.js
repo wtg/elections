@@ -11,6 +11,10 @@ var queries = {
 };
 
 router.get('/', function (req, res) {
+    if (!functions.verifyPermissions(req).admin) {
+        res.sendStatus(401);
+        return;
+    }
     var connection = functions.dbConnect(res);
 
     connection.query(queries.all, functions.defaultJSONCallback(res));
