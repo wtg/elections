@@ -5,14 +5,25 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
         var loadData = function () {
             $scope.dataLoaded = false;
             $scope.settings = [];
+            $scope.elections = [];
+            $scope.active_election_id_ind = 0;
+            $scope.active_election_id = 0;
 
             $http.get('/api/settings/').then(function (response) {
                 response.data.forEach(function (elem) {
                     $scope.settings.push(elem);
+                    if (elem.key === "active_election_id") {
+                      $scope.active_election_id = elem.value/1;
+                      $scope.active_election_id_ind = elem.key;
+                    }
+                });
+            }).then($http.get('/api/settings/elections/').then(function (response) {
+                response.data.forEach(function(elem) {
+                    $scope.elections.push(elem);
                 });
             }).finally(function () {
                 $scope.dataLoaded = true;
-            });
+            }));
         };
         loadData();
 
@@ -69,4 +80,25 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
         $scope.numSettings = function () {
           return $scope.settings.length;
         };
+
+        $scope.prettifyElectionName = function (elem) {
+            var active = false;
+            var el_string = elem.election_name;
+            if ($scope.active_election_id === elem.election_id) {
+                el_string += " (active)";
+            }
+            return el_string;
+        };
+
+        $scope.setActiveEl = function (e) {
+          var preparedData = {
+              value: e.election_id
+          };
+          $http.put('/api/settings/update/active_election_id', preparedData).then(function () {
+              //addNewAlert("success", "The setting, " + key + ", was updated successfully!", "create");
+              $route.reload();
+          }, function (response) {
+              //addNewAlert("error", response.statusText + " (code: " + response.status + ")", "create");
+          });
+        }
     }]);

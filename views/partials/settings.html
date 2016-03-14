@@ -15,23 +15,58 @@
 	<div class="row" ng-if="editPermissions && !dataLoaded">
 		<div class="loader">Loading...</div>
 	</div>
-	<div class="row" ng-if="editPermissions && dataLoaded">
-		<div class="col-sm-12 col-md-4">
-			<h1>Settings</h1>
-		</div>
-	</div>
-  <div class="row" ng-if="editPermissions && dataLoaded && settings.length === 0">
-    <div class="col-xs-12">
-      <h3>No settings were found!</h3>
+  <div ng-if="editPermissions && dataLoaded">
+    <div class="row">
+      <div class="col-sm-12 col-md-4">
+        <h1>Settings</h1>
+      </div>
     </div>
-  </div>
-	<div class="row" ng-repeat="s in settings track by $index">
-    <br/>
-    <div class="col-xs-12">
-      <span ng-bind="s.key"></span>
-      <span ng-if="s.key.length === 0">Untitled key</span>
-      <span ng-bind="s.value"></span>
-      <span ng-if="s.value.length === 0">Not set</span>
+    <div class="row">
+      <div class="col-sm-12 col-md-4">
+        <h3>Manage Elections</h3>
+      </div>
+    </div>
+    <div class="row" ng-if="elections.length === 0">
+      <div class="col-xs-12">
+        <h3>No elections were found!</h3>
+      </div>
+    </div>
+    <div class="row">
+      <!--<div class="col-xs-6">
+        <select multiple class="form-control input-medium" size="7">
+          <option ng-repeat="e in elections track by $index" ng-bind="e.election_name"></option>
+        </select>
+      </div>-->
+      <div class="col-xs-6">
+        <select ng-model="electionSelection" ng-options="prettifyElectionName(e) for e in elections track by e.election_id" class="form-control input-medium">
+          <option value="" selected="selected">Select an election...</option>
+        </select>
+        <button type="button" class="btn btn-el-mgmt btn-warning" ng-click="setActiveEl(electionSelection)">Set active</button>
+        <button type="button" class="btn btn-el-mgmt btn-danger">Delete</button>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-sm-12 col-md-4">
+        <h3>Website Configuration</h3>
+      </div>
+    </div>
+    <div class="row" ng-if="settings.length === 0">
+      <div class="col-xs-12">
+        <h3>No settings were found!</h3>
+      </div>
+    </div>
+    <div class="row" ng-repeat="s in settings track by $index">
+      <br/>
+      <div class="col-xs-8">
+        <span ng-bind="s.key"></span>
+        <span ng-if="s.key.length === 0">Untitled key</span>
+        <span ng-bind="s.value"></span>
+        <span ng-if="s.value.length === 0">Not set</span>
+      </div>
+      <div class="col-xs-4">
+        <input class=""></input>
+      </div>
     </div>
 	</div>
 <ng-include src="'partials/footer.html'"></ng-include>

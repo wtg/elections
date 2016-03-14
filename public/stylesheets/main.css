@@ -4,6 +4,7 @@ Table of Contents
   * Home
   * Offices
   * Candidate Page
+  * Settings Page
   * Mobile
 */
 
@@ -295,7 +296,11 @@ footer {
     }
 }
 
-
+/* Settings Page */
+.btn-el-mgmt {
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
 
 /* Mobile */
 @media (min-width: 600px) {

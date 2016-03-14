@@ -7,7 +7,9 @@ var express = require('express'),
 
 var queries = {
     all: "SELECT * FROM " + functions.dbName() + ".`configurations`",
-    update: "UPDATE " + functions.dbName() + ".`events` SET <> WHERE key = ",
+    update: "UPDATE " + functions.dbName() + ".`configurations` SET <> WHERE `key` = ",
+    // have to backtick "key" as it's a reserved keyword; should avoid
+    elections: "SELECT * FROM " + functions.dbName() + ".`elections`",
 };
 
 router.get('/', function (req, res) {
@@ -18,6 +20,18 @@ router.get('/', function (req, res) {
     var connection = functions.dbConnect(res);
 
     connection.query(queries.all, functions.defaultJSONCallback(res));
+
+    connection.end();
+});
+
+router.get('/elections', function (req, res) {
+    if (!functions.verifyPermissions(req).admin) {
+        res.sendStatus(401);
+        return;
+    }
+    var connection = functions.dbConnect(res);
+
+    connection.query(queries.elections, functions.defaultJSONCallback(res));
 
     connection.end();
 });
@@ -40,7 +54,7 @@ router.put('/update/:key', function (req, res) {
 
     var assignments = "`value` = " + mysql.escape(data.value);
 
-    var query = queries.update.replace(/<>/g, assignments) + key;
+    var query = queries.update.replace(/<>/g, assignments) + "'" + key + "'";
 
     connection.query(query, functions.defaultJSONCallback(res));
 
