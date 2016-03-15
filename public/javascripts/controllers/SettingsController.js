@@ -6,8 +6,10 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
             $scope.dataLoaded = false;
             $scope.settings = [];
             $scope.elections = [];
+            $scope.new = {
+              election_name: "", primary_date: null, final_date: null, runoff_date: null
+            };
             $scope.blankElectionChoice = "Select an election...";
-            $scope.active_election_id_ind = 0;
             $scope.active_election_id = 0;
 
             $http.get('/api/settings/').then(function (response) {
@@ -15,7 +17,6 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
                     $scope.settings.push(elem);
                     if (elem.key === "active_election_id") {
                       $scope.active_election_id = elem.value/1;
-                      $scope.active_election_id_ind = elem.key;
                     }
                 });
             }).then($http.get('/api/settings/elections/').then(function (response) {
@@ -104,15 +105,66 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
           if (mode === "create") {
             $scope.blankElectionChoice = "Creating new election...";
             $scope.creatingElection = true;
+            return;
           }
           else if (mode === "edit") {
+            $scope.revertTo = angular.copy(e);
             $scope.editingElection = true;
+            return;
+          }
+          else if (mode === "save") {
+            if ($scope.creatingElection) {
+              var preparedData = {
+                  election_name: $scope.new.election_name,
+                  primary_date: $scope.new.primary_date.toISOString().substr(0,10),
+                  final_date: $scope.new.final_date.toISOString().substr(0,10),
+                  runoff_date: $scope.new.runoff_date.toISOString().substr(0,10)
+              };
+              $http.post('/api/settings/elections/create', preparedData).then(function () {
+                  //addNewAlert("success", "The new election, entitled " + election_name + ", was created successfully!", "create");
+                  $route.reload();
+              }, function (response) {
+                  //addNewAlert("error", response.statusText + " (code: " + response.status + ")", "create");
+              });
+            }
+            else if ($scope.editingElection) {
+              var preparedData = {
+                  election_name: e.election_name,
+                  primary_date: e.primary_date.toISOString().substr(0,10),
+                  final_date: e.final_date.toISOString().substr(0,10),
+                  runoff_date: e.runoff_date.toISOString().substr(0,10)
+              };
+              $http.put('/api/settings/elections/update/' + e.election_id, preparedData).then(function () {
+                  //addNewAlert("success", "The election entitled " + e.election_name + " was successfully updated!", "update");
+                  $route.reload();
+              }, function (response) {
+                  //addNewAlert("error", response.statusText + " (code: " + response.status + ")", "update");
+              })
+            }
+          }
+          else if (mode === "off") {
+            angular.copy($scope.revertTo, e);
           }
           else {
-            // prefered use is "setEditMode("off", electionSelection)"
-            $scope.blankElectionChoice = "Select an election...";
-            $scope.creatingElection = $scope.editingElection = false;
+            return;
           }
+          $scope.blankElectionChoice = "Select an election...";
+          $scope.creatingElection = $scope.editingElection = false;
+        }
+
+        $scope.deleteElection = function(e) {
+
+          if (!confirm("Are you sure you want to permanently delete this event? \"" + e.election_name + "\" will not be recoverable!") ||
+                  !confirm("Are you super sure? \"" + e.election_name + "\" will be GONE FOREVER!")) {
+              return;
+          }
+
+          $http.delete('/api/settings/elections/delete/' + e.election_id).then(function () {
+              //addNewAlert("success", "The election entitled " + election_name + " was permanently deleted!", "delete");
+              $route.reload();
+          }, function (response) {
+              //addNewAlert("error", response.statusText + " (code: " + response.status + ")", "delete");
+          })
         }
 
         $scope.setActiveEl = function (e) {
