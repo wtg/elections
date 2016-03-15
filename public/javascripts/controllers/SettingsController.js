@@ -6,6 +6,7 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
             $scope.dataLoaded = false;
             $scope.settings = [];
             $scope.elections = [];
+            $scope.blankElectionChoice = "Select an election...";
             $scope.active_election_id_ind = 0;
             $scope.active_election_id = 0;
 
@@ -19,6 +20,9 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
                 });
             }).then($http.get('/api/settings/elections/').then(function (response) {
                 response.data.forEach(function(elem) {
+                    elem.primary_date = new Date(elem.primary_date);
+                    elem.final_date = new Date(elem.final_date);
+                    elem.runoff_date = new Date(elem.runoff_date);
                     $scope.elections.push(elem);
                 });
             }).finally(function () {
@@ -87,8 +91,29 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
             if ($scope.active_election_id === elem.election_id) {
                 el_string += " (active)";
             }
+            if ($scope.creatingElection) {
+              el_string = "Creating new election...";
+            }
+            if ($scope.editingElection) {
+              el_string = "Currently editing: " + el_string;
+            }
             return el_string;
         };
+
+        $scope.setElEditMode = function(mode, e) {
+          if (mode === "create") {
+            $scope.blankElectionChoice = "Creating new election...";
+            $scope.creatingElection = true;
+          }
+          else if (mode === "edit") {
+            $scope.editingElection = true;
+          }
+          else {
+            // prefered use is "setEditMode("off", electionSelection)"
+            $scope.blankElectionChoice = "Select an election...";
+            $scope.creatingElection = $scope.editingElection = false;
+          }
+        }
 
         $scope.setActiveEl = function (e) {
           var preparedData = {
