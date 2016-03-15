@@ -26,6 +26,9 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
                     elem.runoff_date = new Date(elem.runoff_date);
                     $scope.elections.push(elem);
                 });
+                if ($scope.elections.length === 0) {
+                  $scope.blankElectionChoice = "No elections found!";
+                }
             }).finally(function () {
                 $scope.dataLoaded = true;
             }));
@@ -168,9 +171,9 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
         }
 
         $scope.setActiveEl = function (e) {
-          var preparedData = {
-              value: e.election_id
-          };
+          var preparedData = { value: "" };
+          if ($scope.active_election_id === e.election_id) { preparedData.value = "0"; }
+          else { preparedData.value = e.election_id; }
           $http.put('/api/settings/update/active_election_id', preparedData).then(function () {
               //addNewAlert("success", "The setting, " + key + ", was updated successfully!", "create");
               $route.reload();
