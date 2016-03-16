@@ -94,12 +94,22 @@
                 </div>
             </div>
             <div class="form-group">
+                <label for="candidateYoutube" class="col-sm-3 control-label">Youtube Video Embed Link</label>
+
+                <div class="col-sm-9">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="candidateYoutube" id="candidateYoutube"
+                               ng-model="candidate.video_url" placeholder="http://"/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
                 <label for="candidateFacebook" class="col-sm-3 control-label">Facebook Link</label>
 
                 <div class="col-sm-9">
                     <div class="form-group">
                         <input type="text" class="form-control" name="candidateFacebook" id="candidateFacebook"
-                               ng-model="candidate.facebook"/>
+                               ng-model="candidate.facebook" placeholder="http://"/>
                     </div>
                 </div>
             </div>
@@ -109,7 +119,7 @@
                 <div class="col-sm-9">
                     <div class="form-group">
                         <input type="text" class="form-control" name="candidateTwitter" id="candidateTwitter"
-                               ng-model="candidate.twitter"/>
+                               ng-model="candidate.twitter" placeholder="http://"/>
                     </div>
                 </div>
             </div>

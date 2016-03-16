@@ -21,6 +21,7 @@ var nominations = require('./routes/nominations');
 var parties = require('./routes/parties');
 var events = require('./routes/events');
 var users = require('./routes/users');
+var static_routes = require('./routes/static');
 var settings = require('./routes/settings');
 
 // App initialization
@@ -66,6 +67,7 @@ app.use('/api/nominations', nominations);
 app.use('/api/parties', parties);
 app.use('/api/events', events);
 app.use('/api/users', users);
+app.use('/api/static', static_routes);
 app.use('/api/settings', settings);
 
 app.get('/login', cas.bounce, function (req, res) {

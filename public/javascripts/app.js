@@ -4,6 +4,11 @@ var dependencies = [
 
 var app = angular.module('Elections', dependencies);
 
+app.config(['$showdownProvider', function ($showdownProvider) {
+    $showdownProvider.setOption('headerLevelStart', 3);
+    $showdownProvider.setOption('simplifiedAutoLink', true);
+}]);
+
 app.config(['$routeProvider', function ($routeProvider) {
     var views = [
         "Home", "Offices"
@@ -66,6 +71,10 @@ app.config(['$routeProvider', function ($routeProvider) {
     when('/events/edit', {
         templateUrl: 'partials/manageevents.html',
         controller: 'EventsController'
+    }).
+    when('/handbook', {
+        templateUrl: 'partials/static.html',
+        controller: 'StaticPageController'
     }).
     when('/settings', {
         templateUrl: 'partials/settings.html',

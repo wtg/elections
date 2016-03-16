@@ -20,6 +20,11 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, p, .p {
 	font-family: 'Droid Sans', sans-serif;
 }
 
+h5 {
+  font-weight: bold;
+  font-size: 15px;
+}
+
 h1, .header-btns {
 	margin-top: 10px;
 }
