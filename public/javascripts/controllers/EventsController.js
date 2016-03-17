@@ -20,6 +20,7 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
         var loadData = function () {
             $scope.dataLoaded = false;
             $scope.events = [];
+            $scope.pastEvents = [];
 
             $http.get('/api/events/').then(function (response) {
                 response.data.forEach(function (elem) {
@@ -34,9 +35,10 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
 
                     if(!$scope.isPastEvent(elem.date)) {
                         $scope.events.push(elem);
-                    } /*else {
+                    }
+                    else {
                         $scope.pastEvents.push(elem);
-                    }*/
+                    }
                 });
 
                 $scope.currentEditId = $cookies.getObject(EDIT_ID_COOKIE_LABEL) ?
@@ -114,12 +116,10 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
         }
 
         $scope.toggleBulkDelete = function () {
-            if ($scope.bulkDelete) {
-              $scope.bulkDelete = false;
+            if(!$scope.editPermissions) {
+                return;
             }
-            else {
-              $scope.bulkDelete = true;
-            }
+            $scope.bulkDelete = !$scope.bulkDelete;
         };
 
         /**
