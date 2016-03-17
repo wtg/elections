@@ -74,7 +74,8 @@
         </div>
     </div>
 </nav>
-<ng-view></ng-view>
+<ng-include ng-if="maintenanceMode" src="'partials/maintenance.html'"></ng-include>
+<ng-view ng-hide="maintenanceMode && !editPermissions"></ng-view>
 
 <!--Scripts-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>

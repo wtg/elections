@@ -6,11 +6,15 @@ app.controller('MainController', ['$scope', '$location', '$http', function ($sco
     $scope.editPermissions = false;
     $scope.authenticated = false;
     $scope.username = null;
+    $scope.maintenanceMode = false;
 
     $http.get("/api/users/").then(function (response) {
         $scope.editPermissions = response.data.admin;
         $scope.authenticated = response.data.authenticated;
         $scope.username = response.data.username;
+    });
+    $http.get("/api/settings/maintenance_mode").then(function (response) {
+        $scope.maintenanceMode = response.data[0].value/1;
     });
 
     $scope.formatTime = function (time) {

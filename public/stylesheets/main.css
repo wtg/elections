@@ -79,6 +79,15 @@ a:hover {
 	}
 }
 
+#maintenanceBoxAdmin {
+  margin-top: -20px;
+  padding: 5px;
+  position: relative;
+  z-index: 100;
+  background-color: yellow;
+  color: black;
+}
+
 footer {
 	padding-bottom: 15px;
 }

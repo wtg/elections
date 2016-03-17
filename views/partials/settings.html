@@ -57,6 +57,8 @@
                     ng-click="deleteElection(electionSelection)"
                     ng-disabled="!electionSelection">Delete</button>
           </div>
+          <br/>
+          <br/>
         </div>
         <div ng-if="creatingElection || editingElection">
           <br/>
@@ -66,6 +68,7 @@
           <div class="btn-el-mgmt pull-right">
             <button type="button" class="btn btn-sm btn-success"  ng-click="setElEditMode('save', electionSelection)">Save</button>
           </div>
+          <br/>
           <br/>
         </div>
       </div>
@@ -137,6 +140,18 @@
     <hr>
     <div class="row">
       <div class="col-sm-12 col-md-4">
+        <h3>Maintenance Mode</h3>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-5">
+        <button type="button" class="btn btn-danger" ng-if="!maintenanceMode" ng-click="toggleMaintenance()">Turn on</button>
+        <button type="button" class="btn btn-danger" ng-if="maintenanceMode" ng-click="toggleMaintenance()">Turn off</button>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-sm-12 col-md-4">
         <h3>Website Configuration</h3>
       </div>
     </div>
@@ -154,7 +169,7 @@
         <span ng-if="s.value.length === 0">Not set</span>
       </div>
       <div class="col-xs-4">
-        <input class=""></input>
+        <input class="form-control"></input>
       </div>
     </div>
 	</div>

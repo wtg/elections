@@ -151,7 +151,12 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
           else {
             return;
           }
-          $scope.blankElectionChoice = "Select an election...";
+          if ($scope.elections.length === 0) {
+            $scope.blankElectionChoice = "No elections found!";
+          }
+          else {
+            $scope.blankElectionChoice = "Select an election...";
+          }
           $scope.creatingElection = $scope.editingElection = false;
         }
 
@@ -161,6 +166,9 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
                   !confirm("Are you super sure? \"" + e.election_name + "\" will be GONE FOREVER!")) {
               return;
           }
+
+          // Deactivate the election before deleting
+          if($scope.active_election_id === e.election_id) { $scope.setActiveEl(e); }
 
           $http.delete('/api/settings/elections/delete/' + e.election_id).then(function () {
               //addNewAlert("success", "The election entitled " + election_name + " was permanently deleted!", "delete");
@@ -177,6 +185,20 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
           $http.put('/api/settings/update/active_election_id', preparedData).then(function () {
               //addNewAlert("success", "The setting, " + key + ", was updated successfully!", "create");
               $route.reload();
+          }, function (response) {
+              //addNewAlert("error", response.statusText + " (code: " + response.status + ")", "create");
+          });
+        }
+
+        $scope.toggleMaintenance = function() {
+          var preparedData = { value: "" };
+          if ($scope.maintenanceMode) { preparedData.value = "0"; }
+          else { preparedData.value = "1" }
+          $http.put('/api/settings/update/maintenance_mode', preparedData).then(function () {
+              //addNewAlert("success", "The setting, " + key + ", was updated successfully!", "create");
+              window.location.reload();
+              // maintenance mode relies on index.html to display properly
+              // entire page needs to be reloaded
           }, function (response) {
               //addNewAlert("error", response.statusText + " (code: " + response.status + ")", "create");
           });
