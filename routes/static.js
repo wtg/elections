@@ -6,9 +6,18 @@ var express = require('express'),
     logger = require('../logger.js');
 
 var queries = {
+    listAll: "SELECT slug FROM rpielections.pages",
     get: "SELECT title, slug, content FROM rpielections.pages WHERE slug = ",
     update: "UPDATE rpielections.pages SET <> WHERE slug = "
 };
+
+router.get('/listallpages', function (req, res) {
+    var connection = functions.dbConnect(res);
+
+    connection.query(queries.listAll, functions.defaultJSONCallback(res));
+
+    connection.end();
+});
 
 router.get('/:page', function (req, res) {
     var connection = functions.dbConnect(res);

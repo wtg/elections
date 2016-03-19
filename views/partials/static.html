@@ -33,13 +33,17 @@
                 <label for="editStaticTitle">Title</label>
                 <input class="form-control" ng-model="title" id="editStaticTitle" name="editStaticTitle">
             </div>
+            <hr />
             <div class="form-group">
                 <label for="editStaticContent">Content</label>
                 <textarea class="form-control" ng-model="content"
                           id="editStaticContent" name="editStaticContent"
                           style="min-height: 160px; resize: vertical;"></textarea>
-                <p class="help-block">Markdown is supported!</p>
+                <p class="help-block">Markdown is supported! Find a list of rules <a href="#/markdown">here</a>!</p>
             </div>
+            <hr />
+            <label>Live Preview</label>
+            <div class="md-live-preview" markdown-to-html="content"></div>
             <button class="btn btn-success" ng-click="save(title, content)">Save</button>
         </div>
     </div>

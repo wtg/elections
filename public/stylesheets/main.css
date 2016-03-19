@@ -29,6 +29,16 @@ h1, .header-btns {
 	margin-top: 10px;
 }
 
+.md-live-preview {
+	background: lightgrey;
+	max-height: 200px;
+	overflow-y: scroll;
+	border: 1px solid #999999;
+	border-radius: 4px;
+	padding: 20px;
+	margin-bottom: 20px;
+}
+
 .btn-facebook {
     background-color: #3b5998;
     border-color: #3b5998;

@@ -132,7 +132,14 @@
             <div class="form-group">
 				<textarea class="form-control" name="candidateAbout" id="candidateAbout"
                           ng-model="candidate.about" style="min-height: 160px; resize: vertical;"></textarea>
+                <p class="help-block">Markdown is supported! Find a list of rules <a href="#/markdown">here</a>!</p>
             </div>
+            <button class="btn btn-xs btn-primary " ng-click="aboutPreview = !aboutPreview" ng-class="{'active': aboutPreview}">
+                <span ng-if="!aboutPreview">Show</span>
+                <span ng-if="aboutPreview">Hide</span>
+                Live Preview
+            </button>
+            <div class="md-live-preview" markdown-to-html="candidate.about" ng-if="aboutPreview"></div>
         </div>
     </section>
     <hr/>
@@ -142,7 +149,14 @@
             <div class="form-group">
 				<textarea class="form-control" name="candidatePlatform" id="candidatePlatform"
                           ng-model="candidate.platform" style="min-height: 200px; resize: vertical;"></textarea>
+                <p class="help-block">Markdown is supported! Find a list of rules <a href="#/markdown">here</a>!</p>
             </div>
+            <button class="btn btn-xs btn-primary" ng-click="platformPreview = !platformPreview" ng-class="{'active': platformPreview}">
+                <span ng-if-"!platformPreview">Show</span>
+                <span ng-if-"platformPreview">Hide</span>
+                Live Preview
+            </button>
+            <div class="md-live-preview" markdown-to-html="candidate.platform" ng-if="platformPreview"></div>
         </div>
     </section>
     <hr/>
