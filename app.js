@@ -23,6 +23,7 @@ var events = require('./routes/events');
 var users = require('./routes/users');
 var static_routes = require('./routes/static');
 var settings = require('./routes/settings');
+var elections = require('./routes/elections');
 
 // App initialization
 var app = express();
@@ -69,6 +70,7 @@ app.use('/api/events', events);
 app.use('/api/users', users);
 app.use('/api/static', static_routes);
 app.use('/api/settings', settings);
+app.use('/api/elections', elections);
 
 app.get('/login', cas.bounce, function (req, res) {
     if (!req.session || !req.session.cas_user) {
