@@ -343,6 +343,11 @@ footer {
   color: #888888;
 }
 
+.maintenance {
+	margin-top: 90px;
+	margin-bottom: 90px;
+}
+
 /* Mobile */
 @media (min-width: 600px) {
     .shadow {
