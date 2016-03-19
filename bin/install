@@ -263,11 +263,9 @@ connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`pages` (" +
  * Execute the creation of a configurations table. This table holds sitewide settings, in the format of [key, value]
  */
 connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`configurations` (" +
-    "`configuration_id` INT NOT NULL AUTO_INCREMENT," +
     "`key` varchar(45) NOT NULL," +
     "`value` varchar(200) NOT NULL," +
-    "PRIMARY KEY (`configuration_id`)," +
-    "UNIQUE KEY (`key`)" +
+    "PRIMARY KEY (`key`)" +
     ") ENGINE=InnoDB;", errorCallback);
 
 /**
