@@ -1,5 +1,5 @@
 var dependencies = [
-    'ngRoute', 'ng-showdown', 'ngCookies'
+    'ngRoute', 'ng-showdown', 'ngCookies', 'yaru22.angular-timeago'
 ];
 
 var app = angular.module('Elections', dependencies);

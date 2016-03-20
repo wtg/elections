@@ -8,7 +8,8 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
                 $http.get('/api/candidates/rcs/' + $routeParams.rcs),
                 $http.get('/api/parties/'),
                 $http.get('/api/nominations/' + $routeParams.rcs),
-                $http.get('/api/assistants/candidate/' + $routeParams.rcs)
+                $http.get('/api/assistants/candidate/' + $routeParams.rcs),
+                $http.get('/api/ama/candidate/' + $routeParams.rcs)
             ]).then(function (responses) {
                 if (!responses[0].data[0]) {
                     $location.url("/offices");
@@ -66,8 +67,9 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
                     });
                 });
 
-                console.log(responses[3].data);
                 $scope.assistants = responses[3].data;
+
+                $scope.ama = responses[4].data;
             }, function () {
                 alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
             }).finally(function () {

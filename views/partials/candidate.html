@@ -42,9 +42,9 @@
                 <li role="presentation" ng-class="{'active': currentSection === 'platform'}">
                     <a href="#/candidate/{{candidate.rcs_id}}/platform">Platform</a>
                 </li>
-                <!--<li role="presentation" ng-class="{'active': currentSection === 'ama'}">-->
-                    <!--<a href="#/candidate/{{candidate.rcs_id}}/ama">AMA</a>-->
-                <!--</li>-->
+                <li role="presentation" ng-class="{'active': currentSection === 'ama'}">
+                    <a href="#/candidate/{{candidate.rcs_id}}/ama">AMA</a>
+                </li>
                 <li role="presentation" ng-class="{'active': currentSection === 'contact'}">
                     <!--<a href="#/candidate/{{candidate.rcs_id}}/contact">Contact</a>-->
                     <a ng-href="mailto:{{candidate.rcs_id}}@rpi.edu">Contact</a>
@@ -98,8 +98,6 @@
             <hr/>
             <h3>Candidate Facts</h3>
             <dl class="dl-horizontal">
-                <dt>Nominations</dt>
-                <dd>{{o.nominations}}/{{o.office_nominations_required}}</dd>
 
                 <dt>Class year</dt>
                 <dd ng-bind="candidate.grad_date.substr(0,4)"></dd>
@@ -145,33 +143,38 @@
         </div>
         <div class="col-md-7" ng-if="currentSection == 'ama'">
             <h2 class="no-margin-top">Ask Me Anything</h2>
-            <div class="form-group">
-                <textarea class="form-control" placeholder="Question"></textarea>
-            </div>
-            <div class="form-group">
-                <p class="text-muted pull-left">
-                    Note: questions that violate the Terms of Use will be removed.
+            <div ng-if="!authenticated">
+                <p>
+                    Sign in to ask this candidate a question!
                 </p>
-                <button class="btn btn-primary btn-sm pull-right">Ask</button>
             </div>
-            <div class="clearfix"></div>
+            <div ng-if="authenticated">
+                <div class="form-group">
+                    <textarea class="form-control" placeholder="Question" ng-model="newAMA.question_text"></textarea>
+                </div>
+                <div class="form-group">
+                    <p class="text-muted pull-left">
+                        <input type="checkbox" ng-model="newAMA.is_anonymous" /> Ask anonymously<br />
+                        <span style="font-size:10pt">Questions should follow the Terms of Use.</span>
+                        <span style="font-size:10pt"></span>
+                    </p>
+                    <button class="btn btn-primary btn-sm pull-right">Ask</button>
+                </div>
+                <div class="clearfix"></div>
+            </div>
             <hr/>
-            <div class="media" ng-repeat="r in [0,1,2,3,4]">
+            <div class="media" ng-repeat="a in ama">
                 <div class="media-body">
-                    <h4 class="media-heading">What is your stance on Arizona in Fathers?</h4>
-                    <p class="text-muted small">Asked by rcsId
-                        <span class="pull-right">April 11, 2015 | 3 pm</span>
+                    <h4 class="media-heading" ng-bind="a.question_text"></h4>
+                    <p class="text-muted small">
+                        <span ng-if="!a.is_anonymous">Asked by {{a.rcs_id}}</span>
+                        <span ng-if="a.is_anonymous">Asked anonymously</span>
+                        <span class="pull-right" ng-bind="a.timestamp | timeAgo"></span>
                     </p>
-                    <p>
-                        I think that this issue is super important, and I will
-                        do whatever I can to make this thing be a thing. I promise
-                        to always be transparent, clear, visible, and open all
-                        the time with everything I do, even when I'm not being
-                        in student government stuff.
-                    </p>
+                    <p ng-bind="a.answer_text"></p>
                 </div>
             </div>
-            <button class="btn btn-default btn-sm">
+            <button class="btn btn-default btn-sm" ng-if="ama.length > 5">
                 <span class="fa fa-arrow-down"></span>
                 Show more
             </button>
