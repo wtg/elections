@@ -1,7 +1,9 @@
-app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$showdown', '$sce', '$http', '$q', '$location',
-    function ($scope, $route, $routeParams, $showdown, $sce, $http, $q, $location) {
+app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$showdown', '$sce', '$http', '$q', '$location', '$filter',
+    function ($scope, $route, $routeParams, $showdown, $sce, $http, $q, $location, $filter) {
         var loadData = function () {
             $scope.candidate = {};
+            $scope.newAMA = {};
+            $scope.amaFilter = 0;
             $scope.parties = [];
             $scope.dataLoaded = false;
             $q.all([
@@ -134,9 +136,7 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
             return 'url(\'' + ($scope.candidate.profile_url ? $scope.candidate.profile_url : 'silhouette.png') + '\')';
         };
 
-        $scope.newAssistant = {
-            rcs: ""
-        };
+        $scope.newAssistant = {};
 
         $scope.addAssistantKeypressEvent = function (keyEvent) {
             if (keyEvent.which === 13 && $scope.newAssistant.rcs) {
@@ -164,5 +164,33 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
                     console.log(response);
                 });
             }
+        };
+
+        $scope.getAMAs = function () {
+            if($scope.amaFilter === 0) {
+                var AMAs = $scope.ama
+            } else if($scope.amaFilter === 1) {
+                var AMAs = $filter('filter')($scope.ama, { answer_text: '!!' });
+            } else if($scope.amaFilter === 2) {
+                var AMAs = $filter('filter')($scope.ama, { answer_text: '!' });
+            }
+
+            return $filter('orderBy')(AMAs, '-timestamp');
+        };
+
+        $scope.setAMAFilter = function (index) {
+            $scope.amaFilter = index;
+            console.log($scope.amaFilter);
+        };
+
+        $scope.submitAMA = function () {
+            if(!$scope.newAMA.question_text) return;
+            $scope.newAMA.is_anonymous = $scope.newAMA.is_anonymous ? 1 : 0;
+
+            $http.post('/api/ama/candidate/' + $routeParams.rcs, $scope.newAMA).then(function () {
+                $location.url('/candidate/' + $routeParams.rcs + '/ama');
+            }, function () {
+                alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
+            })
         };
     }]);

@@ -7,7 +7,10 @@ var express = require('express'),
 
 var queries = {
     all: "SELECT * FROM `ama_questions`",
-    rcs: " WHERE candidate_rcs_id = "
+    rcs: " WHERE candidate_rcs_id = ",
+    post: "INSERT INTO `ama_questions` (`candidate_rcs_id`, `rcs_id`, " +
+        "`question_text`, `is_anonymous`, `election_id`) VALUES ",
+    activeElection: "(SELECT `value` FROM `configurations` WHERE `key` = 'active_election_id')"
 };
 
 var handleAnonymity = function (result) {
@@ -17,6 +20,24 @@ var handleAnonymity = function (result) {
 
     return result;
 };
+
+router.get('/', function (req, res) {
+    var connection = functions.dbConnect(res);
+
+    connection.query(queries.all, function (err, result) {
+        if (err) {
+            console.log(err);
+            res.sendStatus(500);
+            return;
+        }
+
+        result = handleAnonymity(result);
+
+        res.json(result);
+    });
+
+    connection.end();
+});
 
 router.get('/candidate/:rcs_id', function (req, res) {
     var connection = functions.dbConnect(res),
@@ -42,21 +63,33 @@ router.get('/candidate/:rcs_id', function (req, res) {
     connection.end();
 });
 
-router.get('/', function (req, res) {
-    var connection = functions.dbConnect(res);
+router.post('/candidate/:rcs_id', function (req, res) {
+    if (!functions.verifyPermissions(req).authenticated) {
+        res.sendStatus(401);
+        return;
+    }
 
-    connection.query(queries.all, function (err, result) {
-        if (err) {
-            console.log(err);
-            res.sendStatus(500);
-            return;
-        }
+    var connection = functions.dbConnect(res),
+        data = req.body,
+        candidate_rcs_id = req.params.rcs_id;
 
-        result = handleAnonymity(result);
+    if (!data) {
+        res.sendStatus(204);
+        return;
+    }
 
-        res.json(result);
-    });
+    var values = functions.constructSQLArray([
+        candidate_rcs_id, req.session.cas_user, data.question_text,
+        data.is_anonymous
+    ]);
 
+    var query = queries.post + values.substr(0, values.length - 1) + ", " + queries.activeElection + ")";
+
+    console.log(query);
+
+    try {
+        connection.query(query, functions.defaultJSONCallback(res));
+    } catch(e) {console.log(e);}
     connection.end();
 });
 

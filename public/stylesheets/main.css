@@ -198,14 +198,18 @@ footer {
 	padding-left: 0;
 }
 
-.event-list > li:before {
+.event-list > li:before, .ama_question:before {
 	content: "";
     display: block;
     width: 80%;
     height: 1px;
     background: linear-gradient(to right, white, #EB5E66, white);
-    margin-bottom: 10px;
+    margin-bottom: 22px;
     margin-left: 10%;
+}
+
+.ama-filter-tabs {
+  margin-bottom: 20px;
 }
 
 .bulk-delete-box:hover {
@@ -216,7 +220,7 @@ footer {
   color: #aaaaaa;
 }
 
-.event-list > li:first-child:before {
+.event-list > li:first-child:before, .ama_questions > div:first-child:before {
     content: none;
 }
 

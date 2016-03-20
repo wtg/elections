@@ -158,20 +158,37 @@
                         <span style="font-size:10pt">Questions should follow the Terms of Use.</span>
                         <span style="font-size:10pt"></span>
                     </p>
-                    <button class="btn btn-primary btn-sm pull-right">Ask</button>
+                    <button class="btn btn-primary btn-sm pull-right"
+                            ng-disabled="!newAMA.question_text"
+                            ng-click="submitAMA()">Ask</button>
                 </div>
                 <div class="clearfix"></div>
             </div>
-            <hr/>
-            <div class="media" ng-repeat="a in ama">
-                <div class="media-body">
-                    <h4 class="media-heading" ng-bind="a.question_text"></h4>
-                    <p class="text-muted small">
-                        <span ng-if="!a.is_anonymous">Asked by {{a.rcs_id}}</span>
-                        <span ng-if="a.is_anonymous">Asked anonymously</span>
-                        <span class="pull-right" ng-bind="a.timestamp | timeAgo"></span>
-                    </p>
-                    <p ng-bind="a.answer_text"></p>
+            <ul class="nav nav-tabs ama-filter-tabs">
+                <li ng-click="setAMAFilter(0)" ng-class="{active: amaFilter === 0}">
+                    <a>All</a>
+                </li>
+                <li ng-click="setAMAFilter(1)" ng-class="{active: amaFilter === 1}">
+                    <a>Answered</a>
+                </li>
+                <li ng-click="setAMAFilter(2)" ng-class="{active: amaFilter === 2}">
+                    <a>Unanswered</a>
+                </li>
+            </ul>
+            <div class="ama_questions">
+                <div class="media ama_question" ng-repeat="a in getAMAs()">
+                    <div class="media-body">
+                        <p ng-if="!a.answer_text">
+                            <span class="label label-info">Unanswered</span>
+                        </p>
+                        <h4 class="media-heading" ng-bind="a.question_text"></h4>
+                        <p class="text-muted small">
+                            <span ng-if="!a.is_anonymous">Asked by {{a.rcs_id}}</span>
+                            <span ng-if="a.is_anonymous">Asked anonymously</span>
+                            <span class="pull-right" ng-bind="a.timestamp | timeAgo"></span>
+                        </p>
+                        <p ng-bind="a.answer_text"></p>
+                    </div>
                 </div>
             </div>
             <button class="btn btn-default btn-sm" ng-if="ama.length > 5">
