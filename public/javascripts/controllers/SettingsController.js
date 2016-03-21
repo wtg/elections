@@ -15,7 +15,7 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
             $scope.elections = [];
             $scope.fieldHasError = [];
             $scope.new = {
-              election_name: "", primary_date: null, final_date: null, runoff_date: null
+                election_name: "", primary_date: null, final_date: null, runoff_date: null
             };
             $scope.blankElectionChoice = SELECT_INIT;
             $scope.activeElectionID = 0;
@@ -25,7 +25,7 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
                 response.data.forEach(function (elem) {
                     $scope.settings.push(elem);
                     if (elem.key === "active_election_id") {
-                      $scope.activeElectionID = elem.value/1;
+                        $scope.activeElectionID = elem.value/1;
                     }
                 });
             }).then($http.get('/api/elections/').then(function (response) {
@@ -36,7 +36,7 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
                     $scope.elections.push(elem);
                 });
                 if ($scope.elections.length === 0) {
-                  $scope.blankElectionChoice = SELECT_NONE;
+                    $scope.blankElectionChoice = SELECT_NONE;
                 }
             }).finally(function () {
                 $scope.dataLoaded = true;
@@ -101,143 +101,137 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
                 el_string += SELECT_ACTIVE;
             }
             if ($scope.creatingElection) {
-              el_string = SELECT_NEW;
+                el_string = SELECT_NEW;
             }
             if ($scope.editingElection) {
-              el_string = SELECT_EDIT + el_string;
+                el_string = SELECT_EDIT + el_string;
             }
             return el_string;
         };
 
         $scope.setElEditMode = function(mode, e) {
-          $scope.fieldHasError = [];
-          $scope.electionErrorText = "";
-          if (mode === "create") {
-            $scope.blankElectionChoice = SELECT_NEW;
-            $scope.creatingElection = true;
-            return;
-          }
-          else if (mode === "edit") {
-            $scope.revertTo = angular.copy(e);
-            $scope.editingElection = true;
-            return;
-          }
-          else if (mode === "save") {
-            if ($scope.creatingElection) {
-              var preparedData = {
-                  election_name: $scope.new.election_name,
-                  primary_date: $scope.new.primary_date,
-                  final_date: $scope.new.final_date,
-                  runoff_date: $scope.new.runoff_date
-              };
-
-              if (!$scope.validateForm(preparedData)) {
+            $scope.fieldHasError = [];
+            $scope.electionErrorText = "";
+            if (mode === "create") {
+                $scope.blankElectionChoice = SELECT_NEW;
+                $scope.creatingElection = true;
                 return;
-              }
-
-              $http.post('/api/elections/create', preparedData).then(function () {
-                  //addNewAlert("success", "The new election, entitled " + election_name + ", was created successfully!", "create");
-                  $route.reload();
-              }, function (response) {
-                  //addNewAlert("error", response.statusText + " (code: " + response.status + ")", "create");
-              });
             }
-            else if ($scope.editingElection) {
-              var preparedData = {
-                  election_name: e.election_name,
-                  primary_date: e.primary_date,
-                  final_date: e.final_date,
-                  runoff_date: e.runoff_date
-              };
-              if (!$scope.validateForm(preparedData)) {
+            else if (mode === "edit") {
+                $scope.revertTo = angular.copy(e);
+                $scope.editingElection = true;
                 return;
-              }
-              $http.put('/api/elections/update/' + e.election_id, preparedData).then(function () {
-                  //addNewAlert("success", "The election entitled " + e.election_name + " was successfully updated!", "update");
-                  $route.reload();
-              }, function (response) {
-                  //addNewAlert("error", response.statusText + " (code: " + response.status + ")", "update");
-              })
             }
-          }
-          else if (mode === "off") {
-            angular.copy($scope.revertTo, e);
-          }
-          else {
-            return;
-          }
-          if ($scope.elections.length === 0) {
-            $scope.blankElectionChoice = "No elections found!";
-          }
-          else {
-            $scope.blankElectionChoice = SELECT_INIT;
-          }
-          $scope.creatingElection = $scope.editingElection = false;
+            else if (mode === "save") {
+                if ($scope.creatingElection) {
+                    var preparedData = {
+                        election_name: $scope.new.election_name,
+                        primary_date: $scope.new.primary_date,
+                        final_date: $scope.new.final_date,
+                        runoff_date: $scope.new.runoff_date
+                    };
+
+                    if (!$scope.validateForm(preparedData)) return;
+
+                    $http.post('/api/elections/create', preparedData).then(function () {
+                        //addNewAlert("success", "The new election, entitled " + election_name + ", was created successfully!", "create");
+                        $route.reload();
+                    }, function (response) {
+                        //addNewAlert("error", response.statusText + " (code: " + response.status + ")", "create");
+                    });
+                }
+                else if ($scope.editingElection) {
+                    var preparedData = {
+                        election_name: e.election_name,
+                        primary_date: e.primary_date,
+                        final_date: e.final_date,
+                        runoff_date: e.runoff_date
+                    };
+                    if (!$scope.validateForm(preparedData)) return;
+                    $http.put('/api/elections/update/' + e.election_id, preparedData).then(function () {
+                        //addNewAlert("success", "The election entitled " + e.election_name + " was successfully updated!", "update");
+                        $route.reload();
+                    }, function (response) {
+                        //addNewAlert("error", response.statusText + " (code: " + response.status + ")", "update");
+                    })
+                }
+            }
+            else if (mode === "off") {
+                angular.copy($scope.revertTo, e);
+            }
+            else {
+                return;
+            }
+            if ($scope.elections.length === 0) {
+                $scope.blankElectionChoice = "No elections found!";
+            }
+            else {
+                $scope.blankElectionChoice = SELECT_INIT;
+            }
+            $scope.creatingElection = $scope.editingElection = false;
         }
 
         $scope.validateForm = function(data) {
           var failedFields = 0;
           $scope.fieldHasError = [];
           for (var key in data) {
-            if (!data[key]) {
-              $scope.fieldHasError[key] = true;
-              failedFields++;
-
-            }
+              if (!data[key]) {
+                  $scope.fieldHasError[key] = true;
+                  failedFields++;
+              }
           }
           if (failedFields) {
-            $scope.electionErrorText = "Invalid data. Please try again.";
-            return false;
+              $scope.electionErrorText = "Invalid data. Please try again.";
+              return false;
           }
           else {
-            data.primary_date = data.primary_date.toISOString().substr(0,10);
-            data.final_date = data.final_date.toISOString().substr(0,10);
-            data.runoff_date = data.runoff_date.toISOString().substr(0,10);
-            return true;
+              data.primary_date = data.primary_date.toISOString().substr(0,10);
+              data.final_date = data.final_date.toISOString().substr(0,10);
+              data.runoff_date = data.runoff_date.toISOString().substr(0,10);
+              return true;
           }
         }
 
         $scope.deleteElection = function(e) {
+            if (!confirm("Are you sure you want to permanently delete this event? \"" + e.election_name + "\" will not be recoverable!") ||
+                    !confirm("Are you super sure? \"" + e.election_name + "\" will be GONE FOREVER!")) {
+                return;
+            }
 
-          if (!confirm("Are you sure you want to permanently delete this event? \"" + e.election_name + "\" will not be recoverable!") ||
-                  !confirm("Are you super sure? \"" + e.election_name + "\" will be GONE FOREVER!")) {
-              return;
-          }
+            // Deactivate the election before deleting
+            if($scope.activeElectionID === e.election_id) { $scope.setActiveEl(e); }
 
-          // Deactivate the election before deleting
-          if($scope.activeElectionID === e.election_id) { $scope.setActiveEl(e); }
-
-          $http.delete('/api/elections/delete/' + e.election_id).then(function () {
-              //addNewAlert("success", "The election entitled " + election_name + " was permanently deleted!", "delete");
-              $route.reload();
-          }, function (response) {
-              //addNewAlert("error", response.statusText + " (code: " + response.status + ")", "delete");
-          })
+            $http.delete('/api/elections/delete/' + e.election_id).then(function () {
+                //addNewAlert("success", "The election entitled " + election_name + " was permanently deleted!", "delete");
+                $route.reload();
+            }, function (response) {
+                //addNewAlert("error", response.statusText + " (code: " + response.status + ")", "delete");
+            })
         }
 
         $scope.setActiveEl = function (e) {
-          var preparedData = { value: "" };
-          if ($scope.activeElectionID === e.election_id) { preparedData.value = "0"; }
-          else { preparedData.value = e.election_id; }
-          $http.put('/api/settings/update/active_election_id', preparedData).then(function () {
-              //addNewAlert("success", "The setting, " + key + ", was updated successfully!", "create");
-              $route.reload();
-          }, function (response) {
-              //addNewAlert("error", response.statusText + " (code: " + response.status + ")", "create");
-          });
+            var preparedData = { value: "" };
+            if ($scope.activeElectionID === e.election_id) { preparedData.value = "0"; }
+            else { preparedData.value = e.election_id; }
+            $http.put('/api/settings/update/active_election_id', preparedData).then(function () {
+                //addNewAlert("success", "The setting, " + key + ", was updated successfully!", "create");
+                $route.reload();
+            }, function (response) {
+                //addNewAlert("error", response.statusText + " (code: " + response.status + ")", "create");
+            });
         }
 
         $scope.toggleMaintenance = function() {
-          var preparedData = { value: "" };
-          if ($scope.maintenanceMode) { preparedData.value = "0"; }
-          else { preparedData.value = "1" }
-          $http.put('/api/settings/update/maintenance_mode', preparedData).then(function () {
-              //addNewAlert("success", "The setting, " + key + ", was updated successfully!", "create");
-              window.location.reload();
-              // maintenance mode relies on index.html to display properly
-              // entire page needs to be reloaded
-          }, function (response) {
-              //addNewAlert("error", response.statusText + " (code: " + response.status + ")", "create");
-          });
+            var preparedData = { value: "" };
+            if ($scope.maintenanceMode) { preparedData.value = "0"; }
+            else { preparedData.value = "1" }
+            $http.put('/api/settings/update/maintenance_mode', preparedData).then(function () {
+                //addNewAlert("success", "The setting, " + key + ", was updated successfully!", "create");
+                window.location.reload();
+                // maintenance mode relies on index.html to display properly
+                // entire page needs to be reloaded
+            }, function (response) {
+                //addNewAlert("error", response.statusText + " (code: " + response.status + ")", "create");
+            });
         }
     }]);
