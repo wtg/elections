@@ -1,0 +1,10 @@
+<div class="container page text-center shadow" ng-if="!editPermissions">
+  <p class="lead text-center maintenance">
+    The site is under maintenance. Check back soon!
+  </p>
+  <ng-include src="'partials/footer.html'"></ng-include>
+</div>
+
+<div class="text-center" id="maintenanceBoxAdmin" ng-if="editPermissions" >
+  The site is in maintenance mode. All pages are inaccessible to normal users.
+</div>

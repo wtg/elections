@@ -1,10 +1,24 @@
 var dependencies = [
-    'ngRoute', 'ng-showdown', 'ngCookies'
+    'ngRoute', 'ng-showdown', 'ngCookies', 'yaru22.angular-timeago'
 ];
 
 var app = angular.module('Elections', dependencies);
 
+app.config(['$showdownProvider', function ($showdownProvider) {
+    $showdownProvider.setOption('headerLevelStart', 3);
+    $showdownProvider.setOption('simplifiedAutoLink', true);
+}]);
+
 app.config(['$routeProvider', function ($routeProvider) {
+    angular.element.get('/api/static/listallpages', function (response) {
+        response.forEach(function (view) {
+            $routeProvider.when('/' + view.slug, {
+                templateUrl: 'partials/static.html',
+                controller: 'StaticPageController'
+            });
+        });
+    });
+
     var views = [
         "Home", "Offices"
     ];
@@ -66,6 +80,10 @@ app.config(['$routeProvider', function ($routeProvider) {
     when('/events/edit', {
         templateUrl: 'partials/manageevents.html',
         controller: 'EventsController'
+    }).
+    when('/settings', {
+        templateUrl: 'partials/settings.html',
+        controller: 'SettingsController'
     }).
     otherwise({
         redirectTo: '/home'

@@ -31,7 +31,7 @@
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
+            <ul class="nav navbar-nav" ng-if="!maintenanceMode || editPermissions">
                 <li ng-class="{'active':isCurrentPage('offices') || isCurrentPage('candidate')}">
                     <a href="#/offices">Offices <span class="sr-only">(current)</span></a>
                 </li>
@@ -46,26 +46,32 @@
                        aria-expanded="false">Run for Office <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="#/">Necessary Forms</a></li>
-                        <li><a href="#/">GM Week Handbook</a></li>
-                        <li><a href="#/">Election Do's and Dont's</a></li>
+                        <li><a href="#/handbook">Election Handbook</a></li>
+                        <!-- <li><a href="#/">Election Do's and Dont's</a></li> -->
                         <li role="separator" class="divider"></li>
                         <li><a href="#/">Sanctions &amp; Decisions</a></li>
                         <li><a href="#/">Updates</a></li>
-                        <li><a href="#/">About RnE</a></li>
+                        <li><a href="#/about">About RnE &amp; WTG</a></li>
                     </ul>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li ng-if="!authenticated"><a href="/login">Candidate Login</a></li>
+                <li ng-if="!authenticated">
+                    <a href="/login">
+                        <span ng-if="!maintenanceMode">Candidate</span>
+                        <span ng-if="maintenanceMode">Admin</span>
+                        Login
+                    </a>
+                </li>
                 <li class="dropdown" ng-if="authenticated">
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">
                         Signed in as <i ng-bind="username"></i> <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="#/">Edit Content</a></li>
-                        <li><a href="#/">Moderate Submissions</a></li>
-                        <li><a href="#/">Admin Tasks</a></li>
+                        <!--<li><a href="#/">Edit Content</a></li>-->
+                        <!--<li><a href="#/">Moderate Submissions</a></li>-->
+                        <li ng-if="editPermissions"><a href="#/settings">Admin Settings</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="/logout">Sign out</a></li>
                     </ul>
@@ -74,7 +80,8 @@
         </div>
     </div>
 </nav>
-<ng-view></ng-view>
+<ng-include ng-if="maintenanceMode" src="'partials/maintenance.html'"></ng-include>
+<ng-view ng-hide="maintenanceMode && !editPermissions"></ng-view>
 
 <!--Scripts-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -88,6 +95,7 @@
 <script type="text/javascript" src="components/showdown/dist/showdown.min.js"></script>
 <script type="text/javascript" src="components/ng-showdown/dist/ng-showdown.min.js"></script>
 <script type="text/javascript" src="components/angular-cookies/angular-cookies.min.js"></script>
+<script type="text/javascript" src="components/angular-timeago/dist/angular-timeago.min.js"></script>
 
 <script src="/javascripts/app.js"></script>
 <script src="/javascripts/controllers/MainController.js"></script>
@@ -97,6 +105,8 @@
 <script src="/javascripts/controllers/EventsController.js"></script>
 <script src="/javascripts/controllers/PartiesController.js"></script>
 <script src="/javascripts/controllers/NominationsController.js"></script>
+<script src="/javascripts/controllers/StaticPageController.js"></script>
+<script src="/javascripts/controllers/SettingsController.js"></script>
 
 <script type="text/javascript">
     function rotateCard(btn) {

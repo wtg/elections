@@ -10,9 +10,9 @@
         </div>
         <div class="col-sm-12 col-md-4">
             <div class="btn-group pull-right header-btns">
-                <a class="btn btn-default" href="#/candidate/{{candidate.rcs_id}}">
+                <button class="btn btn-default" ng-click="backToCandidate()">
                     Done
-                </a>
+                </button>
             </div>
         </div>
     </div>
@@ -31,16 +31,12 @@
         <div class="col-xs-12">
             <div class="row" ng-repeat-start="n in nominations">
                 <div class="col-sm-5" ng-class="{'col-sm-offset-1':!nominationsSubmitted}">
-                    <!--<div class="input-group" ng-class="colorInputs(n)">-->
-                        <!--<span class="input-group-addon" id="basic-addon{{$index}}">66</span>-->
-                        <!--<input class="form-control" placeholder="RIN" ng-model="n.rin" aria-describedby="basic-addon{{$index}}">-->
-                    <!--</div>-->
                     <div class="form-group" ng-class="colorInputs(n)">
-                        <input class="form-control" placeholder="RIN" ng-model="n.rin">
+                        <input class="form-control" placeholder="RIN" ng-model="n.rin" ng-change="enableNominationsPending()">
                     </div>
                 </div>
                 <div class="col-sm-5" ng-class="colorInputs(n)">
-                    <input class="form-control" placeholder="Initials" ng-model="n.initials">
+                    <input class="form-control" placeholder="Initials" ng-model="n.initials" ng-change="enableNominationsPending()">
                 </div>
                 <div class="col-sm-2">
                     <p class="form-control-static text-success" ng-if="n.status === 'success'">
@@ -61,7 +57,7 @@
 
                 </div>
             </div>
-            <br ng-repeat-end/>
+            <br ng-repeat-end />
             <div class="row">
                 <div class="col-md-4 col-md-offset-4 text-center">
                     <button class="btn btn-primary" ng-click="submit()">Submit Nominations</button>

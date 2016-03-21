@@ -3,16 +3,20 @@
         <div class="loader">Loading...</div>
     </div>
 </div>
-<div class="container page shadow" ng-if="dataLoaded">
-    <div class="row">
-        <div class="col-md-12">
+<section class="container page shadow" ng-if="dataLoaded">
+    <section class="row">
+        <div class="col-xs-12">
             <button class="btn btn-success pull-right" ng-click="saveChanges()">Save</button>
             <h2 class="office-title">
                 <i class="text-muted">Editing:</i>
                 <span ng-bind="formName()"></span>
                 <!--<span class="text-muted" ng-show="o.disabled">(disabled)</span>-->
             </h2>
-            <hr/>
+        </div>
+    </section>
+    <hr/>
+    <section class="row">
+        <div class="col-xs-12">
             <div class="form-group">
                 <label for="candidateName" class="col-sm-3 control-label">Name</label>
 
@@ -90,12 +94,22 @@
                 </div>
             </div>
             <div class="form-group">
+                <label for="candidateYoutube" class="col-sm-3 control-label">Youtube Video Embed Link</label>
+
+                <div class="col-sm-9">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="candidateYoutube" id="candidateYoutube"
+                               ng-model="candidate.video_url" placeholder="http://"/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
                 <label for="candidateFacebook" class="col-sm-3 control-label">Facebook Link</label>
 
                 <div class="col-sm-9">
                     <div class="form-group">
                         <input type="text" class="form-control" name="candidateFacebook" id="candidateFacebook"
-                               ng-model="candidate.facebook"/>
+                               ng-model="candidate.facebook" placeholder="http://"/>
                     </div>
                 </div>
             </div>
@@ -105,34 +119,48 @@
                 <div class="col-sm-9">
                     <div class="form-group">
                         <input type="text" class="form-control" name="candidateTwitter" id="candidateTwitter"
-                               ng-model="candidate.twitter"/>
+                               ng-model="candidate.twitter" placeholder="http://"/>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
     <hr/>
-    <div class="row">
+    <section class="row">
         <div class="col-xs-12">
             <h3>About Me</h3>
             <div class="form-group">
 				<textarea class="form-control" name="candidateAbout" id="candidateAbout"
                           ng-model="candidate.about" style="min-height: 160px; resize: vertical;"></textarea>
+                <p class="help-block">Markdown is supported! Find a list of rules <a href="#/markdown">here</a>!</p>
             </div>
+            <button class="btn btn-xs btn-primary " ng-click="aboutPreview = !aboutPreview" ng-class="{'active': aboutPreview}">
+                <span ng-if="!aboutPreview">Show</span>
+                <span ng-if="aboutPreview">Hide</span>
+                Live Preview
+            </button>
+            <div class="md-live-preview" markdown-to-html="candidate.about" ng-if="aboutPreview"></div>
         </div>
-    </div>
+    </section>
     <hr/>
-    <div class="row">
+    <section class="row">
         <div class="col-xs-12">
             <h3>Platform</h3>
             <div class="form-group">
 				<textarea class="form-control" name="candidatePlatform" id="candidatePlatform"
                           ng-model="candidate.platform" style="min-height: 200px; resize: vertical;"></textarea>
+                <p class="help-block">Markdown is supported! Find a list of rules <a href="#/markdown">here</a>!</p>
             </div>
+            <button class="btn btn-xs btn-primary" ng-click="platformPreview = !platformPreview" ng-class="{'active': platformPreview}">
+                <span ng-if-"!platformPreview">Show</span>
+                <span ng-if-"platformPreview">Hide</span>
+                Live Preview
+            </button>
+            <div class="md-live-preview" markdown-to-html="candidate.platform" ng-if="platformPreview"></div>
         </div>
-    </div>
+    </section>
     <hr/>
-    <div class="row">
+    <section class="row">
         <div class="col-xs-12">
             <h3>Profile &amp; Cover Images</h3>
         </div>
@@ -149,7 +177,8 @@
 
                 <div class="col-sm-9">
                     <div class="form-group">
-                        <input type="url" class="form-control" name="urlCandidateProfileImage" id="urlCandidateProfileImage"
+                        <input type="url" class="form-control" name="urlCandidateProfileImage"
+                               id="urlCandidateProfileImage"
                                ng-model="candidate.profile_url" placeholder="http://"/>
                     </div>
                 </div>
@@ -165,7 +194,33 @@
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+    <hr/>
+    <section class="row" ng-if="editPermissions">
+        <div class="col-xs-12">
+            <h3>Candidate Assistants</h3>
+            <ul class="list-group">
+                <li class="list-group-item" ng-repeat="a in assistants">
+                    <button class="btn btn-default btn-xs pull-right" ng-click="removeAssistant(a.rcs_id)">
+                        <span class="fa fa-times"></span>
+                    </button>
+                    <span ng-bind="formName(a)"></span> <span class="text-muted" ng-bind="'(' + a.rcs_id + ')'"></span>
+                </li>
+            </ul>
+            <div class="input-group">
+                <input class="form-control" type="text" placeholder="New assistant's RIN or RCS ID"
+                       ng-model="newAssistant.rcs" name="addAssistantField"
+                       ng-keypress="addAssistantKeypressEvent($event)"
+                       id="addAssistantField">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="button" ng-click="addAssistant()"
+                            ng-disabled="newAssistant.rcs == ''">
+                        Add
+                    </button>
+                </span>
+            </div>
+        </div>
+    </section>
     <hr/>
     <div class="row">
         <div class="col-xs-12">
@@ -188,23 +243,24 @@ Favorite class: Data Structures"></textarea>
             <h3>Dangerous Actions</h3>
             <br/>
             <!--<p>-->
-                <!--<button ng-if="!o.disabled" class="btn btn-danger" ng-click="disablePetition(o.id)">Mark as Disqualified-->
-                <!--</button>-->
-                <!--<button ng-if="o.disabled" class="btn btn-success" ng-click="enablePetition(o.id)">Remove-->
-                    <!--Disqualification-->
-                <!--</button>-->
+            <!--<button ng-if="!o.disabled" class="btn btn-danger" ng-click="disablePetition(o.id)">Mark as Disqualified-->
+            <!--</button>-->
+            <!--<button ng-if="o.disabled" class="btn btn-success" ng-click="enablePetition(o.id)">Remove-->
+            <!--Disqualification-->
+            <!--</button>-->
             <!--</p>-->
             <!--<p class="text-muted">-->
-                <!--This action will-->
-                <!--<span ng-if="!o.disabled">disable the candidate's account and mark the candidate as disqualified.</span>-->
-                <!--<span ng-if="o.disabled">re-enable the candidate's account and remove the disqualified note.</span>-->
+            <!--This action will-->
+            <!--<span ng-if="!o.disabled">disable the candidate's account and mark the candidate as disqualified.</span>-->
+            <!--<span ng-if="o.disabled">re-enable the candidate's account and remove the disqualified note.</span>-->
             <!--</p>-->
 
             <p ng-if="candidate.offices.length === 1">
                 <button class="btn btn-danger" ng-click="deleteCandidate(candidate.office_id)">Delete Candidate</button>
             </p>
             <div class="btn-toolbar" ng-if="candidate.offices.length > 1">
-                <button class="btn btn-danger" ng-repeat="o in candidate.offices" ng-click="deleteCandidate(o.office_id)">
+                <button class="btn btn-danger" ng-repeat="o in candidate.offices"
+                        ng-click="deleteCandidate(o.office_id)">
                     Remove from <span ng-bind="o.office_name"></span>
                 </button>
             </div>

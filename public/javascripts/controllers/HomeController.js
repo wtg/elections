@@ -11,7 +11,7 @@ app.controller('HomeController', ['$scope', '$sce', '$showdown', '$http', functi
                     $scope.randomCandidate.bio = $scope.randomCandidate.bio.substr(0, 250) + "...";
                 }
 
-                $scope.randomCandidate.profile_url = response.data[0].profile_url ? response.data[0].profile_url : 'silhouette.png'
+                $scope.randomCandidate.profile_url = response.data[0].profile_url;
             }
 
             $scope.randomCandidate.loaded = true;
@@ -90,14 +90,14 @@ app.controller('HomeController', ['$scope', '$sce', '$showdown', '$http', functi
     $scope.electionTips = {
         header: "Election Rules and Tips",
         list: [
-            "<b>Don't:</b> tear down posters, even if they appear to be in violation of an RnE regulation.<br/>" +
-            "<b>Do:</b> report violations to RnE so they can take appropriate action. Email reports to <a href=\"mailto:rne@union.rpi.edu\">rne@union.rpi.edu</a>.",
+            "<b>Don't:</b> Tear down posters, even if they appear to be in violation of an RnE regulation.<br/>" +
+            "<b>Do:</b> Report violations to RnE so they can take appropriate action. Email reports to <a href=\"mailto:rne@union.rpi.edu\">rne@union.rpi.edu</a>.",
 
-            "<b>Don't:</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur commodo quam quis nulla.<br/>" +
-            "<b>Do:</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur commodo quam quis nulla.",
+            "<b>Don't:</b> Don't: Get only the exact amount of nominations required for an office.<br/>" +
+            "<b>Do:</b> Get around 15% more than is required. Inevitably, some will be invalid.",
 
-            "<b>Don't:</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur commodo quam quis nulla.<br/>" +
-            "<b>Do:</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur commodo quam quis nulla.",
+            "<b>Don't:</b> Actively campaign in dining halls or lecture halls during class hours.<br/>" +
+            "<b>Do:</b> Check the elections handbook for acceptable campaigning locations. The definition of active campaigning, along with the campaign rules, are found in Section 5.",
 
             "<b>Don't:</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur commodo quam quis nulla.<br/>" +
             "<b>Do:</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur commodo quam quis nulla.",

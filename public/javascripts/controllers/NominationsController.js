@@ -3,6 +3,7 @@ app.controller('NominationsController', ['$scope', '$routeParams', '$http', '$q'
         var loadData = function () {
             $scope.candidate = {};
             $scope.dataLoaded = false;
+            $scope.nominationsPending = false;
             $scope.nominationsSubmitted = false;
 
             $http.get('/api/candidates/rcs/' + $routeParams.rcs).then(function (response) {
@@ -37,8 +38,15 @@ app.controller('NominationsController', ['$scope', '$routeParams', '$http', '$q'
         };
         loadData();
 
+        $scope.enableNominationsPending = function () {
+            $scope.nominationsPending = true;
+        };
+
         $scope.changeSelectedOffice = function (newId) {
             $scope.selectedOfficeId = newId;
+            $scope.nominationsPending = false;
+            $scope.nominationsSubmitted = false;
+            constructNominationTemplate();
         };
 
         var constructNominationTemplate = function() {
@@ -51,6 +59,13 @@ app.controller('NominationsController', ['$scope', '$routeParams', '$http', '$q'
             }
         };
         constructNominationTemplate();
+
+        $scope.backToCandidate = function () {
+            if(!$scope.nominationsPending
+                || confirm("You're pressing done, but you have nominations pending! Are you sure you want to leave this page?")) {
+                $location.url('/candidate/' + $scope.candidate.rcs_id);
+            }
+        };
 
         $scope.formName = function () {
             return ($scope.candidate.preferred_name ? $scope.candidate.preferred_name : $scope.candidate.first_name) +

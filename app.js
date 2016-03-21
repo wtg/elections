@@ -12,14 +12,19 @@ var cms = require('./cms.js');
 var config = require('./config.js');
 var custom_logger = require('./logger.js');
 
-// Routes 
+// Routes
 var routes = require('./routes/index');
+var ama = require('./routes/ama');
+var assistants = require('./routes/assistants');
 var offices = require('./routes/offices');
 var candidates = require('./routes/candidates');
 var nominations = require('./routes/nominations');
 var parties = require('./routes/parties');
 var events = require('./routes/events');
 var users = require('./routes/users');
+var static_routes = require('./routes/static');
+var settings = require('./routes/settings');
+var elections = require('./routes/elections');
 
 // App initialization
 var app = express();
@@ -32,7 +37,7 @@ app.set('view engine', 'html');
 
 // Set up an Express session, which is required for CASAuthentication.
 app.use(session({
-    secret: 'super secret key',
+    secret: process.env.SESSION_SECRET || 'super secret key',
     resave: false,
     saveUninitialized: true
 }));
@@ -41,7 +46,9 @@ app.use(session({
 var cas = new CASAuthentication({
     cas_url: 'https://cas-auth.rpi.edu/cas',
     service_url: config.service_url,
-    cas_version: '2.0'
+    cas_version: '2.0',
+    is_dev_mode: config.cas_dev_mode,
+    dev_mode_user: config.cas_dev_mode_user
 });
 
 // uncomment after placing your favicon in /public
@@ -55,12 +62,17 @@ app.use('/bower_components', express.static(__dirname + '/bower_components'));
 
 app.use('/', routes);
 app.use('/images', express.static(__dirname + '/public/usr_content'));
+app.use('/api/ama', ama);
+app.use('/api/assistants', assistants);
 app.use('/api/offices', offices);
 app.use('/api/candidates', candidates);
 app.use('/api/nominations', nominations);
 app.use('/api/parties', parties);
 app.use('/api/events', events);
 app.use('/api/users', users);
+app.use('/api/static', static_routes);
+app.use('/api/settings', settings);
+app.use('/api/elections', elections);
 
 app.get('/login', cas.bounce, function (req, res) {
     if (!req.session || !req.session.cas_user) {
@@ -108,8 +120,7 @@ app.use(function (req, res, next) {
 // will print stacktrace
 if (app.get('env') === 'development') {
     app.use(function (err, req, res, next) {
-        res.status(err.status || 500);
-        res.send("<!DOCTYPE html><html><body><h1>There's an error (" + err.status + ")!</h1>" +
+        res.status(err.status || 500).send("<!DOCTYPE html><html><body><h1>There's an error (" + err.status + ")!</h1>" +
             "<p>" + err.message + "</p><p>" + err + "</p></body></html>");
     });
 }
@@ -117,8 +128,7 @@ if (app.get('env') === 'development') {
 // production error handler
 // no stacktraces leaked to user
 app.use(function (err, req, res, next) {
-    res.status(err.status || 500);
-    res.send("<!DOCTYPE html><html><body><h1>There's an error (" + err.status + ")!</h1>" +
+    res.status(err.status || 500).send("<!DOCTYPE html><html><body><h1>There's an error (" + err.status + ")!</h1>" +
         "<p>" + err.message + "</p></body></html>");
 });
 

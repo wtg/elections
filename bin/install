@@ -210,9 +210,9 @@ connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`assistants` (" +
     "`preferred_name` VARCHAR(45) NULL," +
     "`rin` VARCHAR(9) NOT NULL," +
     "PRIMARY KEY (`assistant_id`)," +
-    "INDEX `assistant_fk1_idx` (`rcs_id` ASC)," +
+    "INDEX `assistant_fk1_idx` (`candidate_rcs_id` ASC)," +
     "CONSTRAINT `assistant_fk1`" +
-    "  FOREIGN KEY (`rcs_id`)" +
+    "  FOREIGN KEY (`candidate_rcs_id`)" +
     "  REFERENCES " + db_name + ".`candidates` (`rcs_id`)" +
     "  ON DELETE NO ACTION" +
     "  ON UPDATE NO ACTION)" +
@@ -263,14 +263,19 @@ connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`pages` (" +
  * Execute the creation of a configurations table. This table holds sitewide settings, in the format of [key, value]
  */
 connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`configurations` (" +
-    "`configuration_id` INT NOT NULL AUTO_INCREMENT," +
     "`key` varchar(45) NOT NULL," +
     "`value` varchar(200) NOT NULL," +
-    "PRIMARY KEY (`configuration_id`)" +
+    "PRIMARY KEY (`key`)" +
     ") ENGINE=InnoDB;", errorCallback);
 
 /**
- * Execute the creation of a events table. This table holds event information.
+ * Populate the configurations table with some initial settings (if they don't exist).
+ */
+connection.query("INSERT IGNORE INTO " + db_name + ".`configurations` (`key`, `value`) VALUES ('active_election_id','0');", errorCallback);
+connection.query("INSERT IGNORE INTO " + db_name + ".`configurations` (`key`, `value`) VALUES ('maintenance_mode','0');", errorCallback);
+
+/**
+ * Execute the creation of an events table. This table holds event information.
  */
 connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`events` (" +
     "`event_id` INT NOT NULL AUTO_INCREMENT," +
@@ -282,6 +287,34 @@ connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`events` (" +
     "`location` VARCHAR(200) NULL," +
     "PRIMARY KEY (`event_id`))" +
     "ENGINE = InnoDB", errorCallback);
+
+/**
+ * Execute the creation of an AMA questions table. This table holds questions
+ * and answers of candidates on the AMA tab of their profiles.
+ */
+connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`ama_questions` (" +
+  "`question_id` INT NOT NULL," +
+  "`election_id` INT NOT NULL," +
+  "`candidate_rcs_id` VARCHAR(45) NOT NULL," +
+  "`rcs_id` VARCHAR(45) NOT NULL," +
+  "`question_text` TEXT NOT NULL," +
+  "`answer_text` TEXT NOT NULL," +
+  "`is_anonymous` TINYINT(1) NOT NULL," +
+  "`timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP," +
+  "PRIMARY KEY (`question_id`)," +
+  "INDEX `questions_fk1_idx` (`election_id` ASC)," +
+  "INDEX `questions_fk2_idx` (`candidate_rcs_id` ASC)," +
+  "CONSTRAINT `questions_fk1`" +
+  "  FOREIGN KEY (`election_id`)" +
+  "  REFERENCES `rpielections`.`elections` (`election_id`)" +
+  "  ON DELETE NO ACTION" +
+  "  ON UPDATE NO ACTION," +
+  "CONSTRAINT `questions_fk2`" +
+  "  FOREIGN KEY (`candidate_rcs_id`)" +
+  "  REFERENCES `rpielections`.`candidates` (`rcs_id`)" +
+  "  ON DELETE NO ACTION" +
+  "  ON UPDATE NO ACTION)" +
+  "ENGINE = InnoDB", errorCallback);
 
 /**
  * Re-enable the foreign key checks and standard precautions

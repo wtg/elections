@@ -26,8 +26,8 @@ This website is built in a modified MEAN stack (MySQL, Express.js, Angular.js, a
 
 5. If MySQL is installed on your computer, skip this step. Install MySQL or MariaDB (the open-source equivalent).
 
-6. Make a copy of `config.example.js` and name it `config.js`. Provide details about the database connection (host, port, username, password), as shown in the example.
-    * This could be completed in the terminal by running: `> cp config.example.js config.js`
+6. Make a copy of `devconfig.example.js` and name it `devconfig.js`. Provide details about the database connection (host, port, username, password), as shown in the example.
+    * This could be completed in the terminal by running: `> cp devconfig.example.js devconfig.js`
     * Blank configuration variables are provided in the file.
 
 8. Run the server: `npm start`. This command will also create the database for the site if it doesn't currently exist.

@@ -4,6 +4,7 @@ Table of Contents
   * Home
   * Offices
   * Candidate Page
+  * Settings Page
   * Mobile
 */
 
@@ -19,8 +20,23 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, p, .p {
 	font-family: 'Droid Sans', sans-serif;
 }
 
+h5 {
+  font-weight: bold;
+  font-size: 15px;
+}
+
 h1, .header-btns {
 	margin-top: 10px;
+}
+
+.md-live-preview {
+	background: lightgrey;
+	max-height: 200px;
+	overflow-y: scroll;
+	border: 1px solid #999999;
+	border-radius: 4px;
+	padding: 20px;
+	margin-bottom: 20px;
 }
 
 .btn-facebook {
@@ -71,6 +87,15 @@ a:hover {
 	.carousel {
 		margin-top:20px;
 	}
+}
+
+#maintenanceBoxAdmin {
+  margin-top: -20px;
+  padding: 5px;
+  position: relative;
+  z-index: 100;
+  background-color: yellow;
+  color: black;
 }
 
 footer {
@@ -173,21 +198,29 @@ footer {
 	padding-left: 0;
 }
 
-.event-list > li:before {
+.event-list > li:before, .ama_question:before {
 	content: "";
     display: block;
     width: 80%;
     height: 1px;
     background: linear-gradient(to right, white, #EB5E66, white);
-    margin-bottom: 10px;
+    margin-bottom: 22px;
     margin-left: 10%;
+}
+
+.ama-filter-tabs {
+  margin-bottom: 20px;
 }
 
 .bulk-delete-box:hover {
   color: #555555;
 }
 
-.event-list > li:first-child:before {
+.bulk-delete-box:active {
+  color: #aaaaaa;
+}
+
+.event-list > li:first-child:before, .ama_questions > div:first-child:before {
     content: none;
 }
 
@@ -291,7 +324,33 @@ footer {
     }
 }
 
+/* Settings Page */
+.btn-el-mgmt {
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
 
+.el-mgmt-row {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.el-field {
+    margin-bottom: 3px;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.dateInputLabel {
+  padding-left: 3px;
+  padding-right: 3px;
+  color: #888888;
+}
+
+.maintenance {
+	margin-top: 90px;
+	margin-bottom: 90px;
+}
 
 /* Mobile */
 @media (min-width: 600px) {
