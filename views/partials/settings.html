@@ -64,6 +64,7 @@
           <br/>
           <div class="btn-el-mgmt pull-left">
             <button type="button" class="btn btn-sm btn-danger" ng-click="setElEditMode('off', electionSelection)">Discard</button>
+            <span class="election-errortext" ng-bind="electionErrorText"></span>
           </div>
           <div class="btn-el-mgmt pull-right">
             <button type="button" class="btn btn-sm btn-success"  ng-click="setElEditMode('save', electionSelection)">Save</button>
@@ -74,28 +75,28 @@
       </div>
       <div class="col-md-7" ng-if="creatingElection">
         <div class="row el-mgmt-row">
-          <div class="el-dates">
+          <div class="el-field" ng-class="{'has-error': fieldHasError['election_name']}">
             <input class="form-control" type="text"
                     name="newElName" id="newElName" placeholder="Election Name"
                     ng-model="new.election_name"/>
           </div>
         </div>
         <div class="row el-mgmt-row">
-          <div class="col-md-4 el-dates">
+          <div class="col-md-4 el-field" ng-class="{'has-error': fieldHasError['primary_date']}">
             <span class="dateInputLabel">Primary Date</span>
             <br/>
             <input class="form-control input-sm" type="date"
                     name="newPrimary" id="newPrimary" placeholder="Primary Date"
                     ng-model="new.primary_date"/>
           </div>
-          <div class="col-md-4 el-dates">
+          <div class="col-md-4 el-field" ng-class="{'has-error': fieldHasError['final_date']}">
             <span class="dateInputLabel">Final Date</span>
             <br/>
             <input class="form-control input-sm" type="date"
                     name="newFinal" id="newFinal" placeholder="Final Date"
                     ng-model="new.final_date"/>
           </div>
-          <div class="col-md-4 el-dates">
+          <div class="col-md-4 el-field" ng-class="{'has-error': fieldHasError['runoff_date']}">
             <span class="dateInputLabel">Runoff Date</span>
             <br/>
             <input class="form-control input-sm" type="date"
@@ -106,32 +107,32 @@
       </div>
       <div class="col-md-7" ng-if="editingElection">
         <div class="row el-mgmt-row">
-          <div class="el-dates">
+          <div class="el-field" ng-class="{'has-error': fieldHasError['election_name']}">
             <input class="form-control" type="text"
-                    name="newElName" id="newElName" placeholder="Election Name"
+                    name="editElName" id="editElName" placeholder="Election Name"
                     ng-model="electionSelection.election_name"/>
           </div>
         </div>
         <div class="row el-mgmt-row">
-          <div class="col-md-4 el-dates">
+          <div class="col-md-4 el-field" ng-class="{'has-error': fieldHasError['primary_date']}">
             <span class="dateInputLabel">Primary Date</span>
             <br/>
             <input class="form-control input-sm" type="date"
-                    name="newPrimary" id="newPrimary" placeholder="Primary Date"
+                    name="editPrimary" id="editPrimary" placeholder="Primary Date"
                     ng-model="electionSelection.primary_date"/>
           </div>
-          <div class="col-md-4 el-dates">
+          <div class="col-md-4 el-field" ng-class="{'has-error': fieldHasError['final_date']}">
             <span class="dateInputLabel">Final Date</span>
             <br/>
             <input class="form-control input-sm" type="date"
-                    name="newFinal" id="newFinal" placeholder="Final Date"
+                    name="editFinal" id="editFinal" placeholder="Final Date"
                     ng-model="electionSelection.final_date"/>
           </div>
-          <div class="col-md-4 el-dates">
+          <div class="col-md-4 el-field" ng-class="{'has-error': fieldHasError['runoff_date']}">
             <span class="dateInputLabel">Runoff Date</span>
             <br/>
             <input class="form-control input-sm" type="date"
-                    name="newRunoff" id="newRunoff" placeholder="Runoff Date"
+                    name="editRunoff" id="editRunoff" placeholder="Runoff Date"
                     ng-model="electionSelection.runoff_date"/>
           </div>
         </div>
