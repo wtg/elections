@@ -92,8 +92,8 @@ router.post('/candidate/:rcs_id', function (req, res) {
 });
 
 router.put('/candidate/:rcs_id', function (req, res) {
-    if (!functions.verifyPermissions(req).authenticated ||
-        req.session.cas_user.toLowerCase() !== req.params.rcs_id ||
+    if ((!functions.verifyPermissions(req).authenticated ||
+        req.session.cas_user.toLowerCase() !== req.params.rcs_id) && 
         !functions.verifyPermissions(req).admin) {
         res.sendStatus(401);
         return;
