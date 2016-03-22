@@ -307,13 +307,13 @@ connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`ama_questions` (" 
   "CONSTRAINT `questions_fk1`" +
   "  FOREIGN KEY (`election_id`)" +
   "  REFERENCES " + db_name + ".`elections` (`election_id`)" +
-  "  ON DELETE NO ACTION" +
-  "  ON UPDATE NO ACTION," +
+  "  ON DELETE CASCADE" +
+  "  ON UPDATE CASCADE," +
   "CONSTRAINT `questions_fk2`" +
   "  FOREIGN KEY (`candidate_rcs_id`)" +
   "  REFERENCES " + db_name + ".`candidates` (`rcs_id`)" +
-  "  ON DELETE NO ACTION" +
-  "  ON UPDATE NO ACTION)" +
+  "  ON DELETE CASCADE" +
+  "  ON UPDATE CASCADE)" +
   "ENGINE = InnoDB", errorCallback);
 
 /**
