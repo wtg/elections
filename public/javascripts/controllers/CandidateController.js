@@ -188,7 +188,7 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
             $scope.newAMA.is_anonymous = $scope.newAMA.is_anonymous ? 1 : 0;
 
             $http.post('/api/ama/candidate/' + $routeParams.rcs, $scope.newAMA).then(function () {
-                $location.url('/candidate/' + $routeParams.rcs + '/ama');
+                $route.reload();
             }, function () {
                 alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
             })

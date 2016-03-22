@@ -293,7 +293,7 @@ connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`events` (" +
  * and answers of candidates on the AMA tab of their profiles.
  */
 connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`ama_questions` (" +
-  "`question_id` INT NOT NULL," +
+  "`question_id` INT NOT NULL AUTO_INCREMENT," +
   "`election_id` INT NOT NULL," +
   "`candidate_rcs_id` VARCHAR(45) NOT NULL," +
   "`rcs_id` VARCHAR(45) NOT NULL," +

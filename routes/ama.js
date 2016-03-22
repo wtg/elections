@@ -85,11 +85,8 @@ router.post('/candidate/:rcs_id', function (req, res) {
 
     var query = queries.post + values.substr(0, values.length - 1) + ", " + queries.activeElection + ")";
 
-    console.log(query);
+    connection.query(query, functions.defaultJSONCallback(res));
 
-    try {
-        connection.query(query, functions.defaultJSONCallback(res));
-    } catch(e) {console.log(e);}
     connection.end();
 });
 
