@@ -79,7 +79,7 @@ router.post('/candidate/:rcs_id', function (req, res) {
     }
 
     var values = functions.constructSQLArray([
-        candidate_rcs_id, req.session.cas_user, data.question_text,
+        candidate_rcs_id, req.session.cas_user.toLowerCase(), data.question_text,
         data.is_anonymous
     ]);
 
