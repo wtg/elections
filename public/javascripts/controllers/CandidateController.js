@@ -170,9 +170,9 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
             if($scope.amaFilter === 0) {
                 var AMAs = $scope.ama
             } else if($scope.amaFilter === 1) {
-                var AMAs = $filter('filter')($scope.ama, { answer_text: '!!' });
-            } else if($scope.amaFilter === 2) {
                 var AMAs = $filter('filter')($scope.ama, { answer_text: '!' });
+            } else if($scope.amaFilter === 2) {
+                var AMAs = $filter('filter')($scope.ama, { answer_text: '!!' });
             }
 
             return $filter('orderBy')(AMAs, '-timestamp');
