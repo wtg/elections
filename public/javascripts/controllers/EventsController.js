@@ -226,7 +226,8 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
             var failedFields = []
             for(var i in preparedData) {
                 if(preparedData.hasOwnProperty(i) && !preparedData[i]) {
-                    if(i !== "description" || (!failedFields.length &&
+                    if((i !== "description" && i !== "end") || (!failedFields.length &&
+                        i === "description" &&
                         !confirm("Are you sure you want this event to have no " +
                         "description? It's better to have one! Click OK to proceed "+
                         "anyway."))) {
@@ -238,9 +239,6 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
             for (var i in failedFields) {
               if (failedFields[i] === "start") {
                 fieldlist += "start time";
-              }
-              else if (failedFields[i] === "end") {
-                fieldlist += "end time";
               }
               else {
                 fieldlist += failedFields[i];
