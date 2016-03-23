@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "sh bin/start.sh",
     "prestart": "node ./bin/install",
     "test": "mocha",
     "coverage": "istanbul cover _mocha -- -R spec"
