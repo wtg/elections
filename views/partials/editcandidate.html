@@ -152,8 +152,8 @@
                 <p class="help-block">Markdown is supported! Find a list of rules <a href="#/markdown">here</a>!</p>
             </div>
             <button class="btn btn-xs btn-primary" ng-click="platformPreview = !platformPreview" ng-class="{'active': platformPreview}">
-                <span ng-if-"!platformPreview">Show</span>
-                <span ng-if-"platformPreview">Hide</span>
+                <span ng-if="!platformPreview">Show</span>
+                <span ng-if="platformPreview">Hide</span>
                 Live Preview
             </button>
             <div class="md-live-preview" markdown-to-html="candidate.platform" ng-if="platformPreview"></div>
