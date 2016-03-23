@@ -139,7 +139,8 @@
                 <span ng-if="aboutPreview">Hide</span>
                 Live Preview
             </button>
-            <div class="md-live-preview" markdown-to-html="candidate.about" ng-if="aboutPreview"></div>
+            <div class="md-live-preview" markdown-to-html="candidate.about" ng-if="aboutPreview && candidate.about.length"></div>
+            <div class="md-live-preview" ng-if="aboutPreview && !candidate.about.length"></div>
         </div>
     </section>
     <hr/>
@@ -156,7 +157,8 @@
                 <span ng-if="platformPreview">Hide</span>
                 Live Preview
             </button>
-            <div class="md-live-preview" markdown-to-html="candidate.platform" ng-if="platformPreview"></div>
+            <div class="md-live-preview" markdown-to-html="candidate.platform" ng-if="platformPreview && candidate.platform.length"></div>
+            <div class="md-live-preview" ng-if="platformPreview && !candidate.platform.length"></div>
         </div>
     </section>
     <hr/>
