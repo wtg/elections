@@ -6,11 +6,13 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var MySQLStore = require('express-mysql-session')(session);
 var CASAuthentication = require('cas-authentication');
 var Q = require('q');
 var cms = require('./cms.js');
 var config = require('./config.js');
 var custom_logger = require('./logger.js');
+var functions = require('./functions.js');
 
 // Routes
 var routes = require('./routes/index');
@@ -35,11 +37,15 @@ app.set('views', path.join(__dirname, 'views'));
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
+// Persistent sessions stored in MySQL
+var sessionStore = new MySQLStore({}, functions.dbConnect());
+
 // Set up an Express session, which is required for CASAuthentication.
 app.use(session({
     secret: process.env.SESSION_SECRET || 'super secret key',
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    store: sessionStore
 }));
 
 // Create a new instance of CASAuthentication.
