@@ -6,9 +6,9 @@ var express = require('express'),
     logger = require('../logger.js');
 
 var queries = {
-    listAll: "SELECT slug FROM rpielections.pages",
-    get: "SELECT title, slug, content FROM rpielections.pages WHERE slug = ",
-    update: "UPDATE rpielections.pages SET <> WHERE slug = "
+    listAll: "SELECT slug FROM pages",
+    get: "SELECT title, slug, content FROM pages WHERE slug = ",
+    update: "UPDATE pages SET <> WHERE slug = "
 };
 
 router.get('/listallpages', function (req, res) {

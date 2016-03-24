@@ -6,6 +6,7 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
             $scope.amaFilter = 0;
             $scope.parties = [];
             $scope.dataLoaded = false;
+            $scope.showAnswer = {};
             $q.all([
                 $http.get('/api/candidates/rcs/' + $routeParams.rcs),
                 $http.get('/api/parties/'),
@@ -170,9 +171,9 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
             if($scope.amaFilter === 0) {
                 var AMAs = $scope.ama
             } else if($scope.amaFilter === 1) {
-                var AMAs = $filter('filter')($scope.ama, { answer_text: '!!' });
-            } else if($scope.amaFilter === 2) {
                 var AMAs = $filter('filter')($scope.ama, { answer_text: '!' });
+            } else if($scope.amaFilter === 2) {
+                var AMAs = $filter('filter')($scope.ama, { answer_text: '!!' });
             }
 
             return $filter('orderBy')(AMAs, '-timestamp');
@@ -188,7 +189,17 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
             $scope.newAMA.is_anonymous = $scope.newAMA.is_anonymous ? 1 : 0;
 
             $http.post('/api/ama/candidate/' + $routeParams.rcs, $scope.newAMA).then(function () {
-                $location.url('/candidate/' + $routeParams.rcs + '/ama');
+                $route.reload();
+            }, function () {
+                alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
+            })
+        };
+
+        $scope.answerAMA = function(ama) {
+            ama.answer_text = ama.new_answer_text;
+
+            $http.put('/api/ama/candidate/' + $routeParams.rcs, ama).then(function () {
+                $route.reload();
             }, function () {
                 alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
             })

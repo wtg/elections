@@ -180,6 +180,9 @@
                     <div class="media-body">
                         <p ng-if="!a.answer_text">
                             <span class="label label-info">Unanswered</span>
+                            <button ng-if="candidate.rcs_id === username || editPermissions"
+                                    class="btn btn-default btn-xs"
+                                    ng-click="showAnswer[$index]=!showAnswer[$index]">Answer</button>
                         </p>
                         <h4 class="media-heading" ng-bind="a.question_text"></h4>
                         <p class="text-muted small">
@@ -188,6 +191,12 @@
                             <span class="pull-right" ng-bind="a.timestamp | timeAgo"></span>
                         </p>
                         <p ng-bind="a.answer_text"></p>
+                        <div class="form-group" ng-if="showAnswer[$index]">
+                            <textarea class="form-control" ng-model="a.new_answer_text"></textarea>
+                        </div>
+                        <button class="btn btn-primary btn-sm pull-right"
+                                ng-if="showAnswer[$index]"
+                                ng-click="answerAMA(a)">Answer</button>
                     </div>
                 </div>
             </div>

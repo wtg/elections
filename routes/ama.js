@@ -10,7 +10,8 @@ var queries = {
     rcs: " WHERE candidate_rcs_id = ",
     post: "INSERT INTO `ama_questions` (`candidate_rcs_id`, `rcs_id`, " +
         "`question_text`, `is_anonymous`, `election_id`) VALUES ",
-    activeElection: "(SELECT `value` FROM `configurations` WHERE `key` = 'active_election_id')"
+    activeElection: "(SELECT `value` FROM `configurations` WHERE `key` = 'active_election_id')",
+    update: "UPDATE ama_questions SET answer_text = "
 };
 
 var handleAnonymity = function (result) {
@@ -79,17 +80,38 @@ router.post('/candidate/:rcs_id', function (req, res) {
     }
 
     var values = functions.constructSQLArray([
-        candidate_rcs_id, req.session.cas_user, data.question_text,
+        candidate_rcs_id, req.session.cas_user.toLowerCase(), data.question_text,
         data.is_anonymous
     ]);
 
     var query = queries.post + values.substr(0, values.length - 1) + ", " + queries.activeElection + ")";
 
-    console.log(query);
+    connection.query(query, functions.defaultJSONCallback(res));
 
-    try {
-        connection.query(query, functions.defaultJSONCallback(res));
-    } catch(e) {console.log(e);}
+    connection.end();
+});
+
+router.put('/candidate/:rcs_id', function (req, res) {
+    if ((!functions.verifyPermissions(req).authenticated ||
+        req.session.cas_user.toLowerCase() !== req.params.rcs_id) && 
+        !functions.verifyPermissions(req).admin) {
+        res.sendStatus(401);
+        return;
+    }
+
+    var connection = functions.dbConnect(res),
+        data = req.body,
+        candidate_rcs_id = req.params.rcs_id;
+
+    if (!data) {
+        res.sendStatus(204);
+        return;
+    }
+
+    var query = queries.update + mysql.escape(data.answer_text) + " WHERE question_id = " + mysql.escape(data.question_id);
+
+    connection.query(query, functions.defaultJSONCallback(res));
+
     connection.end();
 });
 

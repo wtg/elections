@@ -33,7 +33,7 @@
 				<div class="panel-heading">
 					<h2 class="panel-title" style="overflow: hidden">
 						<span ng-bind="e.title"></span>
-						<span ng-bind="e.date | date:'longDate'" class="pull-right text-muted"></span>
+						<span ng-bind="e.date | date:'longDate':'UTC'" class="pull-right text-muted"></span>
 					</h2>
 				</div>
 				<div class="panel-body" style="height: auto">
@@ -43,10 +43,11 @@
 					</p>
 					<p>
 						<strong>When:</strong>
-						<span ng-bind="e.date | date:'longDate'"></span>,
+						<span ng-bind="e.date | date:'longDate':'UTC'"></span>,
 						<span ng-bind="formatTime(e.start_string)"></span>
-						<span ng-if="e.end_string">&ndash;</span>
-						<span ng-if="e.end_string" ng-bind="formatTime(e.end_string)"></span>
+						<span ng-if="e.end_string && (e.start_string != e.end_string)">&ndash;</span>
+						<span ng-if="e.end_string && (e.start_string != e.end_string)"
+							 	  ng-bind="formatTime(e.end_string)"></span>
 					</p>
 					<p>
 						<span ng-bind="e.description.substr(0,255)"></span><span ng-if="e.description.length>=255">&#8230;</span>

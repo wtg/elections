@@ -22,7 +22,7 @@ app.controller('MainController', ['$scope', '$location', '$http', function ($sco
         if (parseInt(components[0]) > 12) {
             return (parseInt(components[0]) - 12) + ":" + components[1] + " PM";
         } else {
-            return components[0] + ":" + components[1] + " AM";
+            return parseInt(components[0]) + ":" + components[1] + " AM";
         }
     };
 

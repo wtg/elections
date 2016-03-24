@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "sh bin/start.sh",
     "prestart": "node ./bin/install",
     "test": "mocha",
     "coverage": "istanbul cover _mocha -- -R spec"
@@ -19,6 +19,7 @@
     "debug": "~2.2.0",
     "ejs": "^2.3.4",
     "express": "~4.13.1",
+    "express-mysql-session": "^1.0.0-rc.0",
     "express-session": "^1.12.1",
     "font-awesome": "^4.4.0",
     "jade": "~1.11.0",

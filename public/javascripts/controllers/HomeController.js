@@ -63,26 +63,24 @@ app.controller('HomeController', ['$scope', '$sce', '$showdown', '$http', functi
     $scope.infoBlocks = [
         {
             header: "Get out and vote",
-            body: "Primary elections will take place on Monday, April 1. Final elections will take place on Thursday, April 1. " +
+            body: "Primary elections will take place on Tuesday, April 12. Final elections will take place on Thursday, April 14. " +
             "Get to Commons, the Union, or the DCC and earn a free GM Week mug by voting!",
             icon: "fa-check-square"
         },
         {
             header: "Take part in the fun",
-            body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur commodo quam quis nulla pretium elementum. Ut " +
-            "lobortis, nibh placerat iaculis feugiat, purus orci maximus nulla eget rutrum.",
+            body: "Find out about upcoming elections related events, including the debates, election dates, and info sessions!",
             icon: "fa-smile-o"
         },
         {
             header: "Meet the candidates",
-            body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur commodo quam quis nulla pretium elementum. Ut " +
-            "lobortis, nibh placerat iaculis feugiat, purus orci maximus nulla eget rutrum.",
+            body: "At the Annual Candidate Meat Up BBQ (Get it?)! Visit the Offices tab to find the candidates and their profiles.",
             icon: "fa-group"
         },
         {
             header: "Become a candidate",
-            body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur commodo quam quis nulla pretium elementum. Ut " +
-            "lobortis, nibh placerat iaculis feugiat, purus orci maximus nulla eget rutrum.",
+            body: "You’ve got nothing better to do Wednesday night, right? Learn about how to become a candidate, read the handbook, " +
+            "and find the forms needed to sign up!",
             icon: "fa-plus-square"
         }
     ];
@@ -99,11 +97,11 @@ app.controller('HomeController', ['$scope', '$sce', '$showdown', '$http', functi
             "<b>Don't:</b> Actively campaign in dining halls or lecture halls during class hours.<br/>" +
             "<b>Do:</b> Check the elections handbook for acceptable campaigning locations. The definition of active campaigning, along with the campaign rules, are found in Section 5.",
 
-            "<b>Don't:</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur commodo quam quis nulla.<br/>" +
-            "<b>Do:</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur commodo quam quis nulla.",
+            "<b>Don't:</b> Place posters on the sign boards on the footbridge.<br/>" +
+            "<b>Do:</b> Check the elections handbook for postering rules.",
 
-            "<b>Don't:</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur commodo quam quis nulla.<br/>" +
-            "<b>Do:</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur commodo quam quis nulla.",
+            "<b>Don't:</b> Have non-candidate assistants actively campaigning on your behalf.<br/>" +
+            "<b>Do:</b> Register candidate assistants with RnE using the appropriate form."
         ]
     };
 

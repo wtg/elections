@@ -47,12 +47,12 @@
 						</li>
 					</ul>
 					<div class="btn-toolbar">
-						<button class="btn btn-default">
-							<span class="fa fa-list"></span> See more tips
-						</button>
-						<button class="btn btn-primary">
+						<!-- <button class="btn btn-default"> -->
+							<!-- <span class="fa fa-list"></span> See more tips -->
+						<!-- </button> -->
+						<a class="btn btn-primary" href="#/handbook">
 							<span class="fa fa-book"></span> View the handbook
-						</button>
+						</a>
 					</div>
 				</div>
 			</div>
@@ -89,13 +89,13 @@
 				<li ng-repeat="e in events">
 					<p>
 						<strong ng-bind="e.title"></strong>
-						<span class="pull-right" ng-bind="e.date | date:'longDate'"></span>
+						<span class="pull-right" ng-bind="e.date | date:'longDate':'UTC'"></span>
 						<br/>
 						<span ng-bind="e.location"></span>
 						<span class="pull-right">
 							<span ng-bind="formatTime(e.start)"></span>
-							<span ng-if="e.end">&ndash;</span>
-							<span ng-if="e.end" ng-bind="formatTime(e.end)"></span>
+							<span ng-if="e.end && (e.start != e.end)">&ndash;</span>
+							<span ng-if="e.end && (e.start != e.end)" ng-bind="formatTime(e.end)"></span>
 						</span>
 					</p>
 					<p ng-bind="e.desc"></p>
