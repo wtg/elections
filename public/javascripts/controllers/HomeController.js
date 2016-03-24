@@ -91,7 +91,7 @@ app.controller('HomeController', ['$scope', '$sce', '$showdown', '$http', functi
             "<b>Don't:</b> Tear down posters, even if they appear to be in violation of an RnE regulation.<br/>" +
             "<b>Do:</b> Report violations to RnE so they can take appropriate action. Email reports to <a href=\"mailto:rne@union.rpi.edu\">rne@union.rpi.edu</a>.",
 
-            "<b>Don't:</b> Don't: Get only the exact amount of nominations required for an office.<br/>" +
+            "<b>Don't:</b> Get only the exact amount of nominations required for an office.<br/>" +
             "<b>Do:</b> Get around 15% more than is required. Inevitably, some will be invalid.",
 
             "<b>Don't:</b> Actively campaign in dining halls or lecture halls during class hours.<br/>" +
