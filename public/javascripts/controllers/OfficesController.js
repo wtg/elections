@@ -38,7 +38,7 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                             }
 
                             o_elem.candidates.push({
-                                name: c_elem.first_name + " " + c_elem.last_name,
+                                name: (c_elem.preferred_name ? c_elem.preferred_name : c_elem.first_name) + " " + c_elem.last_name,
                                 party_id: c_elem.party_id,
                                 party_name: c_elem.party_name,
                                 rcsId: c_elem.rcs_id,
