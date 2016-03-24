@@ -389,7 +389,8 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
             } else if (!preparedData.description) {
                 addNewAlert("error", "You didn't enter a description for the office!", "update");
                 return;
-            } else if (!preparedData.nominations_required) {
+            } else if (!preparedData.nominations_required && preparedData.nominations_required !== 0 &&
+                        preparedData.nominations_required !== "0") {
                 addNewAlert("error", "You didn't enter a required number of nominations for the office!", "update");
                 return;
             } else if (!preparedData.openings) {
