@@ -109,6 +109,9 @@ router.get('/', function (req, res) {
 router.get('/random', function (req, res) {
     var connection = functions.dbConnect(res);
 
+    // forces the client to re-pull every time the random route is called
+    res.set("Cache-Control", "no-cache, no-store, must-revalidate");
+
     connection.query(queries.random, functions.defaultJSONCallback(res));
 
     connection.end();
