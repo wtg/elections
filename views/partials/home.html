@@ -94,8 +94,8 @@
 						<span ng-bind="e.location"></span>
 						<span class="pull-right">
 							<span ng-bind="formatTime(e.start)"></span>
-							<span ng-if="e.end">&ndash;</span>
-							<span ng-if="e.end" ng-bind="formatTime(e.end)"></span>
+							<span ng-if="e.end && (e.start != e.end)">&ndash;</span>
+							<span ng-if="e.end && (e.start != e.end)" ng-bind="formatTime(e.end)"></span>
 						</span>
 					</p>
 					<p ng-bind="e.desc"></p>
