@@ -1,4 +1,5 @@
-# RPI Elections
+# RPI Elections [![Stories in Ready](https://badge.waffle.io/wtg/elections.svg?label=ready&title=Ready)](http://waffle.io/wtg/elections)
+
 A modern platform for managing elections, designed specifically for GM Week and other student government elections at RPI.
 
 ## Features
@@ -9,7 +10,7 @@ A modern platform for managing elections, designed specifically for GM Week and 
 
 ## Deployment
 
-This website is built in a modified MEAN stack (MySQL, Express.js, Angular.js, and Node.js), and can be deployed using the following steps:
+This website is built in a modified MEAN stack (MariaDB, Express.js, Angular.js, and Node.js), and can be deployed using the following steps:
 
 1. Clone this git repository by running the following command in a Git-enabled terminal:
     * `> git clone https://github.com/wtg/elections.git`
@@ -43,7 +44,8 @@ This project was created by the [Web Technologies Group](http://www.rpiwtg.com/)
 The core development team consists of:
 
 * [Justin Etzine](http://github.com/justetz)
-* [Rob Russo](http://github.com/rickrizzo)
 * [Jason Lee](http://github.com/jzblee)
+* [Sidney Kochman](http://github.com/kochman)
+* [Rob Russo](http://github.com/rickrizzo)
 
 A list of all contributors can be found [here](https://github.com/wtg/elections/graphs/contributors).
