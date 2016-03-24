@@ -205,7 +205,7 @@ connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`assistants` (" +
     "`rcs_id` VARCHAR(45) NOT NULL," +
     "`candidate_rcs_id` VARCHAR(45) NOT NULL," +
     "`first_name` VARCHAR(45) NOT NULL," +
-    "`middle_name` VARCHAR(45) NOT NULL," +
+    "`middle_name` VARCHAR(45) NULL," +
     "`last_name` VARCHAR(45) NOT NULL," +
     "`preferred_name` VARCHAR(45) NULL," +
     "`rin` VARCHAR(9) NOT NULL," +
