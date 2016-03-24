@@ -43,7 +43,7 @@
 					</p>
 					<p>
 						<strong>When:</strong>
-						<span ng-bind="e.date | date:'longDate'"></span>,
+						<span ng-bind="e.date | date:'longDate':'UTC'"></span>,
 						<span ng-bind="formatTime(e.start_string)"></span>
 						<span ng-if="e.end_string && (e.start_string != e.end_string)">&ndash;</span>
 						<span ng-if="e.end_string && (e.start_string != e.end_string)"

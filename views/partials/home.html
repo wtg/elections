@@ -89,7 +89,7 @@
 				<li ng-repeat="e in events">
 					<p>
 						<strong ng-bind="e.title"></strong>
-						<span class="pull-right" ng-bind="e.date | date:'longDate'"></span>
+						<span class="pull-right" ng-bind="e.date | date:'longDate':'UTC'"></span>
 						<br/>
 						<span ng-bind="e.location"></span>
 						<span class="pull-right">
