@@ -65,7 +65,7 @@
 
                                 <p ng-if="c.party_name" class="profession"
                                    ng-bind="c.party_name"></p>
-                                <h5 ng-hide="!c.major">
+                                <h5 ng-hide="!c.major" ng-class="{'major-height-adjust': c.major.length > 25}">
                                     <i class="fa fa-graduation-cap fa-fw text-muted"></i>
                                     <span ng-bind="c.major"></span>
                                 </h5>

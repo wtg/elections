@@ -259,6 +259,10 @@
     background-color: #F1D4AF;
 }
 
+.major-height-adjust {
+   margin-top: -20px !IMPORTANT;
+}
+
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
     .front, .back{
         -ms-backface-visibility: visible;
