@@ -216,9 +216,8 @@ router.post('/create/:rcs_id/:office_id', function (req, res) {
 });
 
 router.put('/update/:rcs_id', function (req, res) {
-    console.log(req.session.cas_user);
-    console.log(req.params.rcs_id);
-    if (!functions.verifyPermissions(req).admin && req.session.cas_user != req.params.rcs_id) {
+    var userData = functions.verifyPermissions(req);
+    if (!userData.admin && userData.username != req.params.rcs_id) {
         res.sendStatus(401);
         return;
     }
