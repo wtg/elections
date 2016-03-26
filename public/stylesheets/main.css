@@ -346,6 +346,11 @@ footer {
     padding-right: 15px;
 }
 
+.el-error {
+    float: left;
+    margin: 8px;
+}
+
 .el-field {
     margin-bottom: 3px;
     padding-left: 3px;
