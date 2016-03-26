@@ -273,6 +273,7 @@ connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`configurations` ("
  */
 connection.query("INSERT IGNORE INTO " + db_name + ".`configurations` (`key`, `value`) VALUES ('active_election_id','0');", errorCallback);
 connection.query("INSERT IGNORE INTO " + db_name + ".`configurations` (`key`, `value`) VALUES ('maintenance_mode','0');", errorCallback);
+connection.query("INSERT IGNORE INTO " + db_name + ".`configurations` (`key`, `value`) VALUES ('maintenance_message','');", errorCallback);
 
 /**
  * Execute the creation of an events table. This table holds event information.

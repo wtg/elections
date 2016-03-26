@@ -15,7 +15,8 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
             $scope.elections = [];
             $scope.fieldHasError = [];
             $scope.new = {
-                election_name: "", primary_date: null, final_date: null, runoff_date: null
+                election_name: "", primary_date: null, final_date: null, runoff_date: null,
+                maintenance_message: ""
             };
             $scope.blankElectionChoice = SELECT_INIT;
             $scope.activeElectionID = 0;
@@ -26,6 +27,9 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
                     $scope.settings.push(elem);
                     if (elem.key === "active_election_id") {
                         $scope.activeElectionID = elem.value/1;
+                    }
+                    if (elem.key === "maintenance_message") {
+                        $scope.new.maintenance_message = elem.value;
                     }
                 });
             }).then($http.get('/api/elections/').then(function (response) {
@@ -95,7 +99,6 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
         };
 
         $scope.prettifyElectionName = function (elem) {
-            var active = false;
             var el_string = elem.election_name;
             if ($scope.activeElectionID === elem.election_id) {
                 el_string += SELECT_ACTIVE;
@@ -157,7 +160,12 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
                 }
             }
             else if (mode === "off") {
-                angular.copy($scope.revertTo, e);
+                if ($scope.creatingElection) {
+                    $scope.new = [];
+                }
+                else if ($scope.editingElection) {
+                    angular.copy($scope.revertTo, e);
+                }
             }
             else {
                 return;
@@ -229,6 +237,17 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
                 //addNewAlert("success", "The setting, " + key + ", was updated successfully!", "create");
                 window.location.reload();
                 // maintenance mode relies on index.html to display properly
+                // entire page needs to be reloaded
+            }, function (response) {
+                //addNewAlert("error", response.statusText + " (code: " + response.status + ")", "create");
+            });
+        }
+        $scope.saveMaintenanceMessage = function() {
+            var preparedData = { value: $scope.new.maintenance_message };
+            $http.put('/api/settings/update/maintenance_message', preparedData).then(function () {
+                //addNewAlert("success", "The setting, " + key + ", was updated successfully!", "create");
+                window.location.reload();
+                // a message change relies on index.html to display properly
                 // entire page needs to be reloaded
             }, function (response) {
                 //addNewAlert("error", response.statusText + " (code: " + response.status + ")", "create");

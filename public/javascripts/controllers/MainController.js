@@ -7,6 +7,7 @@ app.controller('MainController', ['$scope', '$location', '$http', function ($sco
     $scope.authenticated = false;
     $scope.username = null;
     $scope.maintenanceMode = false;
+    $scope.maintenanceMessage = "";
 
     $http.get("/api/users/").then(function (response) {
         $scope.editPermissions = response.data.admin;
@@ -15,6 +16,12 @@ app.controller('MainController', ['$scope', '$location', '$http', function ($sco
     });
     $http.get("/api/settings/maintenance_mode").then(function (response) {
         $scope.maintenanceMode = response.data[0].value/1;
+    });
+    $http.get("/api/settings/maintenance_message").then(function (response) {
+        $scope.maintenanceMessage = response.data[0].value;
+        if (!$scope.maintenanceMessage) {
+          $scope.maintenanceMessage = "The site is under maintenance. Check back soon!"
+        }
     });
 
     $scope.formatTime = function (time) {
