@@ -113,6 +113,7 @@
 }
 .card .back .content .main {
     height: 215px;
+    overflow: scroll;
 }
 .card .name {
     font-size: 22px;
