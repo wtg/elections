@@ -86,9 +86,8 @@
     height: 105px;
     overflow: hidden;
     border-radius: 4px 4px 0 0;
-}
-.card .cover img{
-    width: 100%;
+    background-position: center;
+    background-size: cover;
 }
 .card .user{
     border-radius: 50%;
