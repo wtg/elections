@@ -73,13 +73,13 @@
             <h3>
                 Nominations
                 <span class="text-muted pull-right" ng-if="candidate.offices.length === 1">
-                    {{candidate.nominations}}/{{candidate.office_nominations_required}}
+                    {{candidate.offices[0].nominations}}/{{candidate.office_nominations_required}}
                 </span>
             </h3>
             <div class="progress" ng-if="candidate.offices.length === 1">
-                <div class="progress-bar" role="progressbar" aria-valuenow="{{candidate.nominations}}" aria-valuemin="0"
+                <div class="progress-bar" role="progressbar" aria-valuenow="{{candidate.offices[0].nominations}}" aria-valuemin="0"
                      aria-valuemax="{{candidate.office_nominations_required}}"
-                     ng-style="{'width': nominationPercentage(candidate.nominations, candidate.office_nominations_required)}">
+                     ng-style="{'width': nominationPercentage(candidate.offices[0].nominations, candidate.office_nominations_required)}">
                 </div>
             </div>
 
