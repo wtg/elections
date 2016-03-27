@@ -81,7 +81,12 @@ app.controller('NominationsController', ['$scope', '$routeParams', '$http', '$q'
         };
 
         $scope.submit = function () {
-            $http.post('/api/nominations/' + $scope.selectedOfficeId + '/' + $routeParams.rcs, $scope.nominations).then(function (response) {
+            var nomsToSubmit = [];
+            for(var i = 0; i < $scope.nominations.length; i++) {
+               nomsToSubmit.push({rin: $scope.nominations[i].rin, initials: $scope.nominations[i].initials});
+            }
+
+            $http.post('/api/nominations/' + $scope.selectedOfficeId + '/' + $routeParams.rcs, nomsToSubmit).then(function (response) {
                 console.log(response.data);
                 $scope.nominationsSubmitted = true;
                 $scope.nominations = response.data;

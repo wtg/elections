@@ -102,7 +102,7 @@ router.post('/:office_id/:rcs_id', function (req, res) {
                     var nomination_ids = [];
 
                     for (var x = 0; x < data.length; x++) {
-                        if (data[x].rin != '' && data[x].initials != '') {
+                        if (data[x].rin != '' && data[x].initials != '' && data[x].status !== "valid") {
                             promises.push(cms.getRIN(data[x].rin));
                             nomination_ids.push(x);
                         }
