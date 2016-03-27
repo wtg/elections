@@ -52,17 +52,13 @@
                     <div class="front">
                         <div class="cover" ng-if="!c.cover_url"></div>
                         <div class="cover" ng-if="c.cover_url" ng-style="{'background-image': 'url(' + c.cover_url + ')'}"></div>
-                        <div class="user">
-                            <a ng-href="#/candidate/{{c.rcsId}}">
-                                <img class="img-circle" ng-src="{{c.profile_url}}" ng-if="c.profile_url">
-                                <img class="img-circle" ng-src="silhouette.png" ng-if="!c.profile_url">
-                            </a>
-                        </div>
+                        <a class="user" ng-href="#/candidate/{{c.rcsId}}"
+                           ng-style="{'background-image': profileCSS(c)}"></a>
                         <div class="content">
                             <div class="main">
                                 <h3 class="name">{{c.name}}</h3>
 
-                                <p ng-if="!c.party_name" class="profession">&nbsp;</p>
+                                <p ng-if="!c.party_name && c.name.length <= 17" class="profession">&nbsp;</p>
 
                                 <p ng-if="c.party_name" class="profession"
                                    ng-bind="c.party_name"></p>

@@ -188,6 +188,10 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
             $cookies.putObject(ALERTS_COOKIE_LABEL, {array: $scope.alerts});
         };
 
+        $scope.profileCSS = function (candidate) {
+            return 'url(\'' + (candidate.profile_url ? candidate.profile_url : 'silhouette.png') + '\')';
+        };
+
         /**
          * Function that's called immediately to determine the filter selected
          */

@@ -96,11 +96,9 @@
     margin: -55px auto 0;
     overflow: hidden;
     width: 120px;
-}
-.card .user img{
-    background: none repeat scroll 0 0 #FFFFFF;
+    background-size: cover;
     border: 4px solid #FFFFFF;
-    width: 100%;
+    background-position-x: center;
 }
 
 .card .content{
