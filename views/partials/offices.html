@@ -4,16 +4,17 @@
             <h1>Available Offices</h1>
         </div>
         <div class="col-sm-12 col-md-8">
-            <div class="btn-group pull-right header-btns">
+            <div class="btn-group pull-right header-btns" ng-class="{'btn-group-sm'}">
                 <button class="btn btn-default" ng-repeat="f in filterOptions"
                         ng-click="setFilter(f.slug)" ng-class="{'active': filter == f.slug}">
                     {{f.label}}
                 </button>
-                <button class="btn btn-primary" ng-if="editPermissions" ng-click="setFilter('edit')"
-                        ng-class="{'active': filter == 'edit'}">
-                    Edit Offices
-                </button>
             </div>
+            <div class="clearfix"></div>
+            <button class="btn btn-primary pull-right" ng-if="editPermissions" ng-click="setFilter('edit')"
+                    ng-class="{'active': filter == 'edit'}">
+                Edit Offices
+            </button>
         </div>
     </div>
     <div class="row" ng-if="!dataLoaded">
