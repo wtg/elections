@@ -17,12 +17,37 @@ var queries = {
 };
 
 var verifyCohort = function (candidate, nomination, type) {
-    return !type || type.toLowerCase() === 'all' ||
-        (type.toLowerCase() === 'greek' && nomination.greek_affiliated) ||
-        (type.toLowerCase() === 'independent' && !nomination.greek_affiliated) ||
-        (parseInt(type) === new Date().getFullYear() && nomination.class_by_credit === 'Graduate') ||
-        nomination.class_by_credit === candidate.class_by_credit ||
-        nomination.entry_date === candidate.entry_date;
+    // Student status verification
+    if(nomination.user_type !== "Student")
+        return false;
+
+    // All students case
+    if(!type || type.toLowerCase() === 'all')
+        return true;
+
+    // All undergraduates case
+    if(type.toLowerCase() === 'undergraduate' && nomination.class_by_credit !== 'Graduate')
+        return true;
+
+    // Greek case
+    if(type.toLowerCase() === 'greek' && nomination.greek_affiliated)
+        return true;
+
+    // Independent (non-greek) case
+    if(type.toLowerCase() === 'independent' && !nomination.greek_affiliated)
+        return true;
+
+    // Coterm case: can nominate seniors
+    if((parseInt(type) === new Date().getFullYear() && nomination.class_by_credit === 'Graduate'))
+        return true;
+
+    // Standard case: either in the same entry cohort or credit cohort
+    // Includes graduate case
+    if(nomination.class_by_credit === candidate.class_by_credit || nomination.entry_date.substr(0,4) === candidate.entry_date.substr(0,4))
+        return true;
+
+    // If we've reached this far, the nomination cannot occur
+    return false;
 };
 
 router.get('/', function (req, res) {
