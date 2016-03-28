@@ -192,6 +192,11 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
             return 'url(\'' + (candidate.profile_url ? candidate.profile_url : 'silhouette.png') + '\')';
         };
 
+        $scope.wrappedName = function (rcsId, officeId) {
+            if(!document.getElementById("name" + rcsId + officeId)) return false;
+            return window.getComputedStyle(document.getElementById("name" + rcsId + officeId)).height > "28px";
+        }
+
         /**
          * Function that's called immediately to determine the filter selected
          */

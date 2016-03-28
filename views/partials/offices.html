@@ -56,9 +56,9 @@
                            ng-style="{'background-image': profileCSS(c)}"></a>
                         <div class="content">
                             <div class="main">
-                                <h3 class="name">{{c.name}}</h3>
+                                <h3 class="name" id="name{{c.rcsId}}{{o.id}}">{{c.name}}</h3>
 
-                                <p ng-if="!c.party_name && c.name.length <= 17" class="profession">&nbsp;</p>
+                                <p ng-if="!c.party_name && !wrappedName(c.rcsId, o.id)" class="profession">&nbsp;</p>
 
                                 <p ng-if="c.party_name" class="profession"
                                    ng-bind="c.party_name"></p>
