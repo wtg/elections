@@ -63,7 +63,7 @@ var verifyCohort = function (candidate, nomination, type) {
         return true;
 
     // Standard case: either in the same credit cohort
-    if(getCreditCohort(nomination) === parseInt(candidate.entry_date.substr(0,4)))
+    if(getCreditCohort(nomination) === parseInt(type))
         return true;
 
     // If we've reached this far, the nomination cannot occur
