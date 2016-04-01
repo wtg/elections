@@ -45,14 +45,14 @@ app.controller('MainController', ['$scope', '$location', '$http', function ($sco
      */
     $scope.nominationPercentage = function (obtained, required) {
         if (obtained > required) {
-            return 100;
+            return 100 + '%';
         } else if (obtained < 0) {
-            return 0;
+            return 0 + '%';
         } else if (required == 0) {
             if (obtained == 0) {
-                return 100;
+                return 100 + '%';
             } else {
-                return 0;
+                return 0 + '%';
             }
         }
 
