@@ -16,6 +16,22 @@ var queries = {
     post: "INSERT INTO " + functions.dbName() + ".`nominations` (`rcs_id`, `office_id`, `nomination_rin`, `election_id`) VALUES "
 };
 
+var getCreditCohort = function (person) {
+    var date = new Date();
+    var year = date.getFullYear();
+    var fall_offset = date.getMonth() > 6 ? 1 : 0;
+
+    var mappings = {
+        "Senior": year,
+        "Junior": year + 1,
+        "Sophomore": year + 2,
+        "Freshman": year + 3,
+        "Graduate": -1
+    };
+
+    return mappings[person.class_by_credit] + fall_offset;
+}
+
 var verifyCohort = function (candidate, nomination, type) {
     // Student status verification
     if(nomination.user_type !== "Student")
@@ -41,9 +57,13 @@ var verifyCohort = function (candidate, nomination, type) {
     if((parseInt(type) === new Date().getFullYear() && nomination.class_by_credit === 'Graduate'))
         return true;
 
-    // Standard case: either in the same entry cohort or credit cohort
+    // Standard case: either in the same entry cohort
     // Includes graduate case
-    if(nomination.class_by_credit === candidate.class_by_credit || nomination.entry_date.substr(0,4) === candidate.entry_date.substr(0,4))
+    if(nomination.entry_date.substr(0,4) === candidate.entry_date.substr(0,4))
+        return true;
+
+    // Standard case: either in the same credit cohort
+    if(getCreditCohort(nomination) === parseInt(type))
         return true;
 
     // If we've reached this far, the nomination cannot occur

@@ -74,14 +74,14 @@
                                     ng-if="o.nominationsRequired === undefined || o.nominationsRequired <= 0">No
                                     nominations required</h5>
 
-                                <div class="progress text-center" ng-if="o.nominationsRequired !== undefined">
+                                <div class="progress text-center" ng-if="o.nominationsRequired > 0">
                                     <span ng-if="c.nominations/o.nominationsRequired < .33"
                                           ng-bind="c.nominations + '/' + o.nominationsRequired"></span>
                                     <span ng-if="c.nominations === undefined && o.nominationsRequired !== undefined"
                                           ng-bind="'0/' + o.nominationsRequired"></span>
 
                                     <div class="progress-bar" role="progressbar" aria-valuenow="{{c.nominations}}"
-                                         aria-valuemin="0" aria-valuemax="{{o.nominationsRequired}}"
+                                         aria-valuemin="0" aria-valuemax="{{o.nominationsRequired}}" ng-if="o.nominationsRequired > 0"
                                          ng-style="{'width': nominationPercentage(c.nominations, o.nominationsRequired)}">
                                         <span ng-if="c.nominations/o.nominationsRequired >= .33"
                                               ng-bind="c.nominations + '/' + o.nominationsRequired"></span>
