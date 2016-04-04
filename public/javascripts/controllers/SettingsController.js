@@ -14,10 +14,12 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
             $scope.settings = [];
             $scope.elections = [];
             $scope.fieldHasError = [];
-            $scope.new = {
-                election_name: "", primary_date: null, final_date: null, runoff_date: null,
-                maintenance_message: ""
+            $scope.new_election = {
+                election_name: "", primary_date: null, final_date: null, runoff_date: null
             };
+            $scope.new_mm = {
+              maintenance_message: ""
+            }
             $scope.blankElectionChoice = SELECT_INIT;
             $scope.activeElectionID = 0;
             $scope.electionErrorText = '';
@@ -29,7 +31,7 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
                         $scope.activeElectionID = elem.value/1;
                     }
                     if (elem.key === "maintenance_message") {
-                        $scope.new.maintenance_message = elem.value;
+                        $scope.new_election.maintenance_message = elem.value;
                     }
                 });
             }).then($http.get('/api/elections/').then(function (response) {
@@ -128,10 +130,10 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
             else if (mode === "save") {
                 if ($scope.creatingElection) {
                     var preparedData = {
-                        election_name: $scope.new.election_name,
-                        primary_date: $scope.new.primary_date,
-                        final_date: $scope.new.final_date,
-                        runoff_date: $scope.new.runoff_date
+                        election_name: $scope.new_election.election_name,
+                        primary_date: $scope.new_election.primary_date,
+                        final_date: $scope.new_election.final_date,
+                        runoff_date: $scope.new_election.runoff_date
                     };
 
                     if (!$scope.validateForm(preparedData)) return;
@@ -161,7 +163,7 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
             }
             else if (mode === "off") {
                 if ($scope.creatingElection) {
-                    $scope.new = [];
+                    $scope.new_election = [];
                 }
                 else if ($scope.editingElection) {
                     angular.copy($scope.revertTo, e);
@@ -243,7 +245,7 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
             });
         }
         $scope.saveMaintenanceMessage = function() {
-            var preparedData = { value: $scope.new.maintenance_message };
+            var preparedData = { value: $scope.new_mm.maintenance_message };
             $http.put('/api/settings/update/maintenance_message', preparedData).then(function () {
                 //addNewAlert("success", "The setting, " + key + ", was updated successfully!", "create");
                 window.location.reload();
