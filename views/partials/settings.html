@@ -82,7 +82,7 @@
           <div class="el-field" ng-class="{'has-error': fieldHasError['election_name']}">
             <input class="form-control" type="text"
                     name="newElName" id="newElName" placeholder="Election Name"
-                    ng-model="new.election_name"/>
+                    ng-model="new_election.election_name"/>
           </div>
         </div>
         <div class="row el-mgmt-row">
@@ -91,21 +91,21 @@
             <br/>
             <input class="form-control input-sm" type="date"
                     name="newPrimary" id="newPrimary" placeholder="Primary Date"
-                    ng-model="new.primary_date"/>
+                    ng-model="new_election.primary_date"/>
           </div>
           <div class="col-md-4 el-field" ng-class="{'has-error': fieldHasError['final_date']}">
             <span class="dateInputLabel">Final Date</span>
             <br/>
             <input class="form-control input-sm" type="date"
                     name="newFinal" id="newFinal" placeholder="Final Date"
-                    ng-model="new.final_date"/>
+                    ng-model="new_election.final_date"/>
           </div>
           <div class="col-md-4 el-field" ng-class="{'has-error': fieldHasError['runoff_date']}">
             <span class="dateInputLabel">Runoff Date</span>
             <br/>
             <input class="form-control input-sm" type="date"
                     name="newRunoff" id="newRunoff" placeholder="Runoff Date"
-                    ng-model="new.runoff_date"/>
+                    ng-model="new_election.runoff_date"/>
           </div>
         </div>
       </div>
@@ -157,7 +157,7 @@
       </div>
       <label for="maintenanceModeMessage" class="col-md-3 control-label">Show a message to visitors:<br>(if blank, uses default)</label>
       <div class="col-md-6">
-        <input name="maintenanceModeMessage" placeholder="The site is under maintenance. Check back soon!" ng-model="new.maintenance_message" class="form-control"></input>
+        <input name="maintenanceModeMessage" placeholder="The site is under maintenance. Check back soon!" ng-model="new_mm.maintenance_message" class="form-control"></input>
       </div>
       <div class="col-md-1">
         <button type="button" class="btn btn-success" ng-click="saveMaintenanceMessage()">Save</button>
