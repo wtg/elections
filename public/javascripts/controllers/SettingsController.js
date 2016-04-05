@@ -31,7 +31,7 @@ app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location'
                         $scope.activeElectionID = elem.value/1;
                     }
                     if (elem.key === "maintenance_message") {
-                        $scope.new_election.maintenance_message = elem.value;
+                        $scope.new_mm.maintenance_message = elem.value;
                     }
                 });
             }).then($http.get('/api/elections/').then(function (response) {
