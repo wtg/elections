@@ -10,7 +10,7 @@ exports.write = function (connection, rcsid, type, description) {
     connection = functions.dbConnect();
   }
 
-  connection.query("INSERT INTO log (rcs_id, type, description, time) VALUES ('" + rcsid + "', '" + type + "', '" + description + "', NOW())");
+  connection.query("INSERT INTO log (rcs_id, type, description, time) VALUES ('" + rcsid + "', '" + type + "', " + mysql.escape(description) + ", NOW())");
 
   if(!providedConnection) {
     connection.end();
