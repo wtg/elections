@@ -38,6 +38,7 @@ router.get('/limit/:quantity', function (req, res) {
 router.post('/create', function (req, res) {
     if (!functions.verifyPermissions(req).admin) {
         res.status(401);
+        return;
     }
 
     var connection = functions.dbConnect(res);

@@ -11,7 +11,8 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                 $http.get('/api/offices/election/active'),
                 $http.get('/api/candidates'),
                 $http.get('/api/offices/types'),
-                $http.get('/api/nominations')
+                $http.get('/api/nominations'),
+                $http.get('/api/sanctions')
             ]).then(function (responses) {
                 responses[0].data.forEach(function (elem) {
                     $scope.offices.push({
@@ -37,6 +38,12 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                                 o_elem.candidates = [];
                             }
 
+                            var hasSanction = false;
+
+                            responses[4].data.forEach(function (s_elem) {
+                              if (c_elem.rcs_id === s_elem.rcs_id) hasSanction = true;
+                            })
+
                             o_elem.candidates.push({
                                 name: (c_elem.preferred_name ? c_elem.preferred_name : c_elem.first_name) + " " + c_elem.last_name,
                                 party_id: c_elem.party_id,
@@ -51,7 +58,8 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                                 twitter: c_elem.twitter,
                                 newType: "", // Don't ask. it's a long story.
                                 profile_url: c_elem.profile_url,
-                                cover_url: c_elem.cover_url
+                                cover_url: c_elem.cover_url,
+                                sanctioned: hasSanction
                             });
                         }
                     });

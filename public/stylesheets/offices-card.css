@@ -116,6 +116,16 @@
     height: 284px;
     overflow: scroll;
 }
+.card .sanction {
+    position: absolute;
+    width: 100%;
+    top: 15px;
+    padding: 2px 5px;
+    text-align: center;
+    color: white;
+    background-color: red;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.28);
+}
 .card .name {
     font-size: 22px;
     line-height: 28px;

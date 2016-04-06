@@ -51,6 +51,7 @@
             <div class="card-container manual-flip">
                 <div class="card">
                     <div class="front">
+                        <div class="sanction" ng-if="c.sanctioned"><i class="fa fa-exclamation-triangle"></i> Sanctions on record!</div>
                         <div class="cover" ng-if="!c.cover_url"></div>
                         <div class="cover" ng-if="c.cover_url" ng-style="{'background-image': 'url(' + c.cover_url + ')'}"></div>
                         <a class="user" ng-href="#/candidate/{{c.rcsId}}"
