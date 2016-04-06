@@ -141,6 +141,29 @@ connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`candidate_data` ("
     "PRIMARY KEY (`rcs_id`))" +
     "ENGINE = InnoDB", errorCallback);
 
+/**
+ * Execute the creation of the sanctions table. This table maintains Rules and
+ * Elections mandated sanctions imposed against candidates.
+ */
+connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`sanctions` (" +
+    "`sanction_id` INT NOT NULL AUTO_INCREMENT," +
+    "`rcs_id` VARCHAR(45) NOT NULL," +
+    "`election_id` INT NOT NULL," +
+    "`date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP," +
+    "`description` VARCHAR(1000) NOT NULL," +
+    "PRIMARY KEY (`sanction_id`) , " +
+    "CONSTRAINT `sanctions_fk1`" +
+    "  FOREIGN KEY (`rcs_id`)" +
+    "  REFERENCES " + db_name + ".`candidates` (`rcs_id`)" +
+    "  ON DELETE CASCADE" +
+    "  ON UPDATE CASCADE," +
+    "CONSTRAINT `sanctions_fk2`" +
+    "  FOREIGN KEY (`election_id`)" +
+    "  REFERENCES " + db_name + ".`elections` (`election_id`)" +
+    "  ON DELETE CASCADE" +
+    "  ON UPDATE CASCADE)" +
+    "ENGINE = InnoDB", errorCallback);
+
 
 /**
  * Execute the creation of the nominations table. This table maintains all nominations for all candidates (using
@@ -234,7 +257,7 @@ connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`log` (" +
 
 
 /**
- * Execute the creation of an adminsitrators table. This table tracks who has adminsitrative access, and what level of
+ * Execute the creation of an administrators table. This table tracks who has adminsitrative access, and what level of
  * access
  */
 connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`administrators` (" +
