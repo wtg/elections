@@ -38,7 +38,7 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                             }
 
                             o_elem.candidates.push({
-                                name: c_elem.first_name + " " + c_elem.last_name,
+                                name: (c_elem.preferred_name ? c_elem.preferred_name : c_elem.first_name) + " " + c_elem.last_name,
                                 party_id: c_elem.party_id,
                                 party_name: c_elem.party_name,
                                 rcsId: c_elem.rcs_id,
@@ -187,6 +187,15 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
             $scope.alerts.splice(index, 1);
             $cookies.putObject(ALERTS_COOKIE_LABEL, {array: $scope.alerts});
         };
+
+        $scope.profileCSS = function (candidate) {
+            return 'url(\'' + (candidate.profile_url ? candidate.profile_url : 'silhouette.png') + '\')';
+        };
+
+        $scope.wrappedName = function (rcsId, officeId) {
+            if(!document.getElementById("name" + rcsId + officeId)) return false;
+            return window.getComputedStyle(document.getElementById("name" + rcsId + officeId)).height > "28px";
+        }
 
         /**
          * Function that's called immediately to determine the filter selected
@@ -389,7 +398,8 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
             } else if (!preparedData.description) {
                 addNewAlert("error", "You didn't enter a description for the office!", "update");
                 return;
-            } else if (!preparedData.nominations_required) {
+            } else if (!preparedData.nominations_required && preparedData.nominations_required !== 0 &&
+                        preparedData.nominations_required !== "0") {
                 addNewAlert("error", "You didn't enter a required number of nominations for the office!", "update");
                 return;
             } else if (!preparedData.openings) {

@@ -16,13 +16,58 @@ var queries = {
     post: "INSERT INTO " + functions.dbName() + ".`nominations` (`rcs_id`, `office_id`, `nomination_rin`, `election_id`) VALUES "
 };
 
+var getCreditCohort = function (person) {
+    var date = new Date();
+    var year = date.getFullYear();
+    var fall_offset = date.getMonth() > 6 ? 1 : 0;
+
+    var mappings = {
+        "Senior": year,
+        "Junior": year + 1,
+        "Sophomore": year + 2,
+        "Freshman": year + 3,
+        "Graduate": -1
+    };
+
+    return mappings[person.class_by_credit] + fall_offset;
+}
+
 var verifyCohort = function (candidate, nomination, type) {
-    return !type || type.toLowerCase() === 'all' ||
-        (type.toLowerCase() === 'greek' && nomination.greek_affiliated) ||
-        (type.toLowerCase() === 'independent' && !nomination.greek_affiliated) ||
-        (parseInt(type) === new Date().getFullYear() && nomination.class_by_credit === 'Graduate') ||
-        nomination.class_by_credit === candidate.class_by_credit ||
-        nomination.entry_date === candidate.entry_date;
+    // Student status verification
+    if(nomination.user_type !== "Student")
+        return false;
+
+    // All students case
+    if(!type || type.toLowerCase() === 'all')
+        return true;
+
+    // All undergraduates case
+    if(type.toLowerCase() === 'undergraduate' && nomination.class_by_credit !== 'Graduate')
+        return true;
+
+    // Greek case
+    if(type.toLowerCase() === 'greek' && nomination.greek_affiliated)
+        return true;
+
+    // Independent (non-greek) case
+    if(type.toLowerCase() === 'independent' && !nomination.greek_affiliated)
+        return true;
+
+    // Coterm case: can nominate seniors
+    if((parseInt(type) === new Date().getFullYear() && nomination.class_by_credit === 'Graduate'))
+        return true;
+
+    // Standard case: either in the same entry cohort
+    // Includes graduate case
+    if(nomination.entry_date.substr(0,4) === candidate.entry_date.substr(0,4))
+        return true;
+
+    // Standard case: either in the same credit cohort
+    if(getCreditCohort(nomination) === parseInt(type))
+        return true;
+
+    // If we've reached this far, the nomination cannot occur
+    return false;
 };
 
 router.get('/', function (req, res) {
@@ -102,7 +147,7 @@ router.post('/:office_id/:rcs_id', function (req, res) {
                     var nomination_ids = [];
 
                     for (var x = 0; x < data.length; x++) {
-                        if (data[x].rin != '' && data[x].initials != '') {
+                        if (data[x].rin != '' && data[x].initials != '' && data[x].status !== "valid") {
                             promises.push(cms.getRIN(data[x].rin));
                             nomination_ids.push(x);
                         }

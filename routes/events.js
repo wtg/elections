@@ -7,6 +7,7 @@ var express = require('express'),
 
 var queries = {
     all: "SELECT * FROM " + functions.dbName() + ".`events` ORDER BY date, start, end",
+    future: "SELECT * FROM `events` WHERE date >= CURDATE() ORDER BY date, start, end LIMIT ",
     post: "INSERT INTO " + functions.dbName() + ".`events` (`title`, `location`, `date`, `start`, `end`, `description`) VALUES ",
     update: "UPDATE " + functions.dbName() + ".`events` SET <> WHERE event_id = ",
     remove: "DELETE FROM " + functions.dbName() + ".`events` WHERE event_id = "
@@ -29,7 +30,7 @@ router.get('/limit/:quantity', function (req, res) {
         res.status(400);
     }
 
-    connection.query(queries.all + " LIMIT " + quantity, functions.defaultJSONCallback(res));
+    connection.query(queries.future + mysql.escape(quantity), functions.defaultJSONCallback(res));
 
     connection.end();
 });

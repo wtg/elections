@@ -137,6 +137,10 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
             return 'url(\'' + ($scope.candidate.profile_url ? $scope.candidate.profile_url : 'silhouette.png') + '\')';
         };
 
+        $scope.coverCSS = function () {
+            return 'url(\'' + ($scope.candidate.cover_url ? $scope.candidate.cover_url : "") + '\')';
+        };
+
         $scope.newAssistant = {};
 
         $scope.addAssistantKeypressEvent = function (keyEvent) {

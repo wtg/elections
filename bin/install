@@ -182,10 +182,10 @@ connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`party_officers` ("
     "`rcs_id` VARCHAR(45) NOT NULL," +
     "`position` VARCHAR(45) NOT NULL," +
     "`is_highest` INT NOT NULL DEFAULT 0," +
-    "`first_name` VARCHAR(45) NOT NULL," +
-    "`middle_name` VARCHAR(45) NOT NULL," +
-    "`preferred_name` VARCHAR(45) NOT NULL," +
-    "`last_name` VARCHAR(45) NOT NULL," +
+    "`first_name` VARCHAR(45) NULL," +
+    "`middle_name` VARCHAR(45) NULL," +
+    "`preferred_name` VARCHAR(45) NULL," +
+    "`last_name` VARCHAR(45) NULL," +
     "PRIMARY KEY (`party_id`,`rcs_id`)," +
     "KEY `officer_fk1_idx` (`party_id`)," +
     "UNIQUE KEY `party_officer_id` (`rcs_id`, `party_id`)," +
@@ -205,7 +205,7 @@ connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`assistants` (" +
     "`rcs_id` VARCHAR(45) NOT NULL," +
     "`candidate_rcs_id` VARCHAR(45) NOT NULL," +
     "`first_name` VARCHAR(45) NOT NULL," +
-    "`middle_name` VARCHAR(45) NOT NULL," +
+    "`middle_name` VARCHAR(45) NULL," +
     "`last_name` VARCHAR(45) NOT NULL," +
     "`preferred_name` VARCHAR(45) NULL," +
     "`rin` VARCHAR(9) NOT NULL," +
@@ -273,6 +273,7 @@ connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`configurations` ("
  */
 connection.query("INSERT IGNORE INTO " + db_name + ".`configurations` (`key`, `value`) VALUES ('active_election_id','0');", errorCallback);
 connection.query("INSERT IGNORE INTO " + db_name + ".`configurations` (`key`, `value`) VALUES ('maintenance_mode','0');", errorCallback);
+connection.query("INSERT IGNORE INTO " + db_name + ".`configurations` (`key`, `value`) VALUES ('maintenance_message','');", errorCallback);
 
 /**
  * Execute the creation of an events table. This table holds event information.

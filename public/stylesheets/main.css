@@ -256,6 +256,17 @@ footer {
     margin-bottom: -200px;
     z-index: 10000;
 }
+.profile-cover-photo {
+		padding: 0;
+    height: 350px;
+    overflow: hidden;
+    margin-top: -20px;
+    background-size: cover;
+    background-position: center;
+}
+.with-cover {
+		margin-top: -100px;
+}
 #candidate {
     background-color: #EB5E66;
     border-radius: 3em;
@@ -333,6 +344,11 @@ footer {
 .el-mgmt-row {
     padding-left: 15px;
     padding-right: 15px;
+}
+
+.el-error {
+    float: left;
+    margin: 8px;
 }
 
 .el-field {

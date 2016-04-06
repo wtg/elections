@@ -9,11 +9,12 @@
                         ng-click="setFilter(f.slug)" ng-class="{'active': filter == f.slug}">
                     {{f.label}}
                 </button>
-                <button class="btn btn-primary" ng-if="editPermissions" ng-click="setFilter('edit')"
-                        ng-class="{'active': filter == 'edit'}">
-                    Edit Offices
-                </button>
             </div>
+            <div class="clearfix"></div>
+            <button class="btn btn-primary pull-right" ng-if="editPermissions" ng-click="setFilter('edit')"
+                    ng-class="{'active': filter == 'edit'}">
+                Edit Offices
+            </button>
         </div>
     </div>
     <div class="row" ng-if="!dataLoaded">
@@ -46,26 +47,23 @@
                 <span ng-bind="o.description"></span>
             </div>
         </div>
-        <div class="col-md-3 col-sm-6 col-xs-12" ng-repeat="c in o.candidates" ng-hide="o.showDesc">
+        <div class="col-md-3 col-sm-6 col-xs-12" ng-repeat="c in o.candidates">
             <div class="card-container manual-flip">
                 <div class="card">
                     <div class="front">
-                        <div class="cover">
-                            <img ng-src="{{c.cover_url}}" ng-if="c.cover_url">
-                        </div>
-                        <div class="user">
-                            <img class="img-circle" ng-src="{{c.profile_url}}" ng-if="c.profile_url">
-                            <img class="img-circle" ng-src="silhouette.png" ng-if="!c.profile_url">
-                        </div>
+                        <div class="cover" ng-if="!c.cover_url"></div>
+                        <div class="cover" ng-if="c.cover_url" ng-style="{'background-image': 'url(' + c.cover_url + ')'}"></div>
+                        <a class="user" ng-href="#/candidate/{{c.rcsId}}"
+                           ng-style="{'background-image': profileCSS(c)}"></a>
                         <div class="content">
                             <div class="main">
-                                <h3 class="name">{{c.name}}</h3>
+                                <h3 class="name" id="name{{c.rcsId}}{{o.id}}">{{c.name}}</h3>
 
-                                <p ng-if="!c.party_name" class="profession">&nbsp;</p>
+                                <p ng-if="!c.party_name && !wrappedName(c.rcsId, o.id)" class="profession">&nbsp;</p>
 
                                 <p ng-if="c.party_name" class="profession"
                                    ng-bind="c.party_name"></p>
-                                <h5 ng-hide="!c.major">
+                                <h5 ng-hide="!c.major" ng-class="{'major-height-adjust': c.major.length > 25}">
                                     <i class="fa fa-graduation-cap fa-fw text-muted"></i>
                                     <span ng-bind="c.major"></span>
                                 </h5>
@@ -76,14 +74,14 @@
                                     ng-if="o.nominationsRequired === undefined || o.nominationsRequired <= 0">No
                                     nominations required</h5>
 
-                                <div class="progress text-center" ng-if="o.nominationsRequired !== undefined">
+                                <div class="progress text-center" ng-if="o.nominationsRequired > 0">
                                     <span ng-if="c.nominations/o.nominationsRequired < .33"
                                           ng-bind="c.nominations + '/' + o.nominationsRequired"></span>
                                     <span ng-if="c.nominations === undefined && o.nominationsRequired !== undefined"
                                           ng-bind="'0/' + o.nominationsRequired"></span>
 
                                     <div class="progress-bar" role="progressbar" aria-valuenow="{{c.nominations}}"
-                                         aria-valuemin="0" aria-valuemax="{{o.nominationsRequired}}"
+                                         aria-valuemin="0" aria-valuemax="{{o.nominationsRequired}}" ng-if="o.nominationsRequired > 0"
                                          ng-style="{'width': nominationPercentage(c.nominations, o.nominationsRequired)}">
                                         <span ng-if="c.nominations/o.nominationsRequired >= .33"
                                               ng-bind="c.nominations + '/' + o.nominationsRequired"></span>
@@ -110,13 +108,13 @@
                                 <h4 class="text-center">Experience</h4>
                                 <p ng-bind="c.experience" ng-if="c.experience"></p>
                                 <p ng-if="!c.experience" class="text-muted">
-                                    {{c.name}} hasn't entered any details about his experience yet!
+                                    {{c.name}} hasn't entered any details about their experience yet!
                                 </p>
                                 <hr/>
                                 <h4 class="text-center">Activities</h4>
                                 <p ng-bind="c.activities" ng-if="c.activities"></p>
                                 <p ng-if="!c.activities" class="text-muted">
-                                    {{c.name}} hasn't entered any details about his other activities yet!
+                                    {{c.name}} hasn't entered any details about their other activities yet!
                                 </p>
                             </div>
                         </div>
