@@ -10,15 +10,6 @@ app.config(['$showdownProvider', function ($showdownProvider) {
 }]);
 
 app.config(['$routeProvider', function ($routeProvider) {
-    angular.element.get('/api/static/listallpages', function (response) {
-        response.forEach(function (view) {
-            $routeProvider.when('/' + view.slug, {
-                templateUrl: 'partials/static.html',
-                controller: 'StaticPageController'
-            });
-        });
-    });
-
     var views = [
         "Home", "Offices"
     ];
@@ -84,6 +75,19 @@ app.config(['$routeProvider', function ($routeProvider) {
     when('/settings', {
         templateUrl: 'partials/settings.html',
         controller: 'SettingsController'
+    }).
+    when('/:page', {
+        templateUrl: 'partials/static.html',
+        controller: 'StaticPageController'//,
+        // resolve: {
+        //     valid_statics: function() {
+        //         var pages;
+        //         angular.element.get('/api/static/listallpages', function (response) {
+        //             pages = response;
+        //         });
+        //         return pages;
+        //     }
+        // }
     }).
     otherwise({
         redirectTo: '/home'

@@ -9,9 +9,14 @@ app.controller('StaticPageController', ['$scope', '$http', '$cookies', '$showdow
 
         var loadData = function () {
             $http.get("/api/static/" + $scope.page).then(function (response) {
+                if(response.data.length === 0) {
+                    $location.path('/home');
+                }
                 $scope.title = response.data[0].title;
                 $scope.content = response.data[0].content;
                 $scope.htmlContent = $showdown.makeHtml(response.data[0].content);
+            }, function () {
+                $location.path('/home');
             }).finally(function () {
                 $scope.dataLoaded = true;
             });
