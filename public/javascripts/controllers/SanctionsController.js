@@ -5,15 +5,11 @@ app.controller('SanctionsController', ['$scope', '$http', '$cookies', '$location
             $scope.candidate = {};
             $scope.dataLoaded = false;
             $scope.sanctions = [];
-            $scope.new = { description: "" }
-            $scope.activeElectionID = "5";
+            $scope.new = { description: "" };
 
-            $http.get('/api/settings/active_election_id').then(function (response) {
-                $scope.activeElectionID = response.data[0].value;
-            });
             $q.all([
                 $http.get('/api/candidates/rcs/' + $routeParams.rcs),
-                $http.get('/api/sanctions/' + $scope.activeElectionID + '/' + $routeParams.rcs)
+                $http.get('/api/sanctions/active/' + $routeParams.rcs)
             ]).then(function (responses) {
                 var response = responses[0];
 
@@ -44,6 +40,7 @@ app.controller('SanctionsController', ['$scope', '$http', '$cookies', '$location
                 }
 
                 response = responses[1];
+                console.log(response);
 
                 response.data.forEach(function (elem) {
                     elem.date = new Date(elem.date);
@@ -63,7 +60,7 @@ app.controller('SanctionsController', ['$scope', '$http', '$cookies', '$location
           var preparedData = {
               description: $scope.new.description
           };
-          $http.post('/api/sanctions/create/' + $scope.activeElectionID + '/' + $routeParams.rcs, preparedData).then(function () {
+          $http.post('/api/sanctions/create/active/' + $routeParams.rcs, preparedData).then(function () {
               //addNewAlert("success", "The new sanction was created successfully!", "create");
               $route.reload();
           }, function (response) {
@@ -72,7 +69,6 @@ app.controller('SanctionsController', ['$scope', '$http', '$cookies', '$location
         }
 
         $scope.deleteSanction = function (sanctionId) {
-
             if (!confirm("Are you sure you want to permanently delete this sanction (id: " + sanctionId + ")?") ||
                 isNaN(sanctionId)) {
                 return;
