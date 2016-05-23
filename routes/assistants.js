@@ -1,34 +1,42 @@
-var express = require('express'),
-    router = express.Router(),
-    mysql = require('mysql'),
-    functions = require('../functions.js'),
-    cms = require('../cms.js'),
-    logger = require('../logger.js');
+var router = require('express').Router();
+var mysql = require('mysql');
+var functions = require('../functions.js');
+var cms = require('../cms.js');
 
 var queries = {
-    all: "SELECT * FROM `assistants`",
-    candidateRCS: " WHERE candidate_rcs_id = ",
     post: "INSERT INTO " + functions.dbName() + ".`assistants` (`rcs_id`, `candidate_rcs_id`, `first_name`, " +
-    "`middle_name`, `last_name`,  `preferred_name`, `rin`) VALUES ",
-    remove: "DELETE FROM " + functions.dbName() + ".`assistants`"
+    "`middle_name`, `last_name`,  `preferred_name`, `rin`) VALUES "
 };
 
-router.get('/', function (req, res) {
-    var connection = functions.dbConnect(res);
+functions.massProduceRoutes(router, [
+    {
+        method: 'get',
+        path: '/',
+        queryFunc: function (req, dbName) {
+            return "SELECT * FROM " + dbName + ".`assistants`"
+        }
+    },
+    {
+        method: 'get',
+        path: '/candidate/:candidate_rcs',
+        queryFunc: function (req, dbName) {
+            var rcs = mysql.escape(req.params.candidate_rcs);
+            return "SELECT * FROM " + dbName + ".`assistants` WHERE candidate_rcs_id = " + rcs;
+        }
+    },
+    {
+        method: 'delete',
+        path: '/delete/:candidate_rcs/:assistant_rcs',
+        needsAdmin: true,
+        logType: 'ASSISTANT_DELETE',
+        queryFunc: function (req, dbName) {
+            var candidate = mysql.escape(req.params.candidate_rcs),
+                assistant = mysql.escape(req.params.assistant_rcs);
 
-    connection.query(queries.all, functions.defaultJSONCallback(res));
-
-    connection.end();
-});
-
-router.get('/candidate/:candidate_rcs', function (req, res) {
-    var connection = functions.dbConnect(res),
-        candidate_rcs = req.params.candidate_rcs;
-
-    connection.query(queries.all + queries.candidateRCS + mysql.escape(candidate_rcs), functions.defaultJSONCallback(res));
-
-    connection.end();
-});
+            return "DELETE FROM " + dbName + ".`assistants`" + " WHERE rcs_id = " + assistant + " AND candidate_rcs_id = " + candidate;
+        }
+    }
+]);
 
 router.post('/create/:candidate_rcs/:assistant_rcs', function (req, res) {
     if (!functions.verifyPermissions(req).admin) {
@@ -94,28 +102,6 @@ router.post('/create/:candidate_rcs/:assistant_rcs', function (req, res) {
             res.status(400);
         });
     });
-});
-
-
-
-router.delete('/delete/:candidate_rcs/:assistant_rcs', function (req, res) {
-    if (!functions.verifyPermissions(req).admin) {
-        res.sendStatus(401);
-        return;
-    }
-
-    var connection = functions.dbConnect(res),
-        candidate_rcs = req.params.candidate_rcs,
-        assistant_rcs = req.params.assistant_rcs;
-
-    var query = queries.remove + " WHERE rcs_id = " + mysql.escape(assistant_rcs) + " AND candidate_rcs_id = " + mysql.escape(candidate_rcs);
-
-    connection.query(query, functions.defaultJSONCallback(res));
-
-    logger.write(connection, req.session.cas_user, "ASSISTANT_DELETE", "Removed " + assistant_rcs +
-        " as an assistant from " + candidate_rcs);
-
-    connection.end();
 });
 
 module.exports = router;

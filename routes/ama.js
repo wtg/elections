@@ -14,7 +14,7 @@ var queries = {
     update: "UPDATE ama_questions SET answer_text = "
 };
 
-var handleAnonymity = function (result) {
+function handleAnonymity(result) {
     result.forEach(function (elem) {
         elem.rcs_id = elem.is_anonymous ? "Anonymous" : elem.rcs_id;
     });
@@ -22,97 +22,55 @@ var handleAnonymity = function (result) {
     return result;
 };
 
-router.get('/', function (req, res) {
-    var connection = functions.dbConnect(res);
+functions.massProduceRoutes(router, [
+    {
+        method: 'get',
+        path: '/',
+        queryFunc: function (req, dbName) {
+            return "SELECT * FROM " + dbName + "`ama_questions`";
+        },
+        successResultFunc: handleAnonymity
+    },
+    {
+        method: 'get',
+        path: '/candidate/:rcs_id',
+        queryFunc: function (req, dbName) {
+            var rcs_id = mysql.escape(req.params.rcs_id);
+            return queries.all + queries.rcs + rcs_id
+        },
+        successResultFunc: handleAnonymity
+    },
+    {
+        method: 'post',
+        path: '/candidate/:rcs_id',
+        needsAdmin: true,
+        queryFunc: function (req, dbName) {
+            var data = req.body,
+                candidate_rcs_id = req.params.rcs_id;
 
-    connection.query(queries.all, function (err, result) {
-        if (err) {
-            console.log(err);
-            res.sendStatus(500);
-            return;
+            var values = functions.constructSQLArray([
+                candidate_rcs_id, req.session.cas_user.toLowerCase(), data.question_text,
+                data.is_anonymous
+            ]);
+
+            return queries.post + values.substr(0, values.length - 1) + ", " + queries.activeElection + ")";
         }
-
-        result = handleAnonymity(result);
-
-        res.json(result);
-    });
-
-    connection.end();
-});
-
-router.get('/candidate/:rcs_id', function (req, res) {
-    var connection = functions.dbConnect(res),
-        rcs_id = req.params.rcs_id;
-
-    if(!rcs_id) {
-        res.sendStatus(400);
-        return;
-    }
-
-    connection.query(queries.all + queries.rcs + mysql.escape(rcs_id), function (err, result) {
-        if (err) {
-            console.log(err);
-            res.sendStatus(500);
-            return;
+    },
+    {
+        method: 'put',
+        path: '/candidate/:rcs_id',
+        authorizedFunc: function (req) {
+            var permissions = !functions.verifyPermissions(req);
+            return (permissions.authenticated ||
+                req.session.cas_user.toLowerCase() !== req.params.rcs_id) &&
+                permissions.admin;
+        },
+        queryFunc: function (req, dbName) {
+            var data = req.body;
+            var candidate_rcs_id = req.params.rcs_id;
+            return queries.update + mysql.escape(data.answer_text) + " WHERE question_id = " + mysql.escape(data.question_id);
         }
-
-        result = handleAnonymity(result);
-
-        res.json(result);
-    });
-
-    connection.end();
-});
-
-router.post('/candidate/:rcs_id', function (req, res) {
-    if (!functions.verifyPermissions(req).authenticated) {
-        res.sendStatus(401);
-        return;
     }
-
-    var connection = functions.dbConnect(res),
-        data = req.body,
-        candidate_rcs_id = req.params.rcs_id;
-
-    if (!data) {
-        res.sendStatus(204);
-        return;
-    }
-
-    var values = functions.constructSQLArray([
-        candidate_rcs_id, req.session.cas_user.toLowerCase(), data.question_text,
-        data.is_anonymous
-    ]);
-
-    var query = queries.post + values.substr(0, values.length - 1) + ", " + queries.activeElection + ")";
-
-    connection.query(query, functions.defaultJSONCallback(res));
-
-    connection.end();
-});
-
-router.put('/candidate/:rcs_id', function (req, res) {
-    if ((!functions.verifyPermissions(req).authenticated ||
-        req.session.cas_user.toLowerCase() !== req.params.rcs_id) && 
-        !functions.verifyPermissions(req).admin) {
-        res.sendStatus(401);
-        return;
-    }
-
-    var connection = functions.dbConnect(res),
-        data = req.body,
-        candidate_rcs_id = req.params.rcs_id;
-
-    if (!data) {
-        res.sendStatus(204);
-        return;
-    }
-
-    var query = queries.update + mysql.escape(data.answer_text) + " WHERE question_id = " + mysql.escape(data.question_id);
-
-    connection.query(query, functions.defaultJSONCallback(res));
-
-    connection.end();
-});
+]);
 
 module.exports = router;
