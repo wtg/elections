@@ -1,7 +1,8 @@
 var express = require('express'),
     router = express.Router(),
     mysql = require('mysql'),
-    functions = require('../functions.js');
+    functions = require('../functions.js'),
+    logger = require('../logger.js');
 
 var queries = {
     all: "SELECT * FROM " + functions.dbName() + ".`configurations`",
