@@ -5,7 +5,6 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
 
         var initialize = function () {
             $scope.events = [];
-            $scope.pastEvents = [];
 
             $scope.new = {
                 title: "", location: "", date: null, start: null, end: null, description: ""
@@ -19,26 +18,20 @@ app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', 
 
         var loadData = function () {
             $scope.dataLoaded = false;
-            $scope.events = [];
-            $scope.pastEvents = [];
 
             $http.get('/api/events/').then(function (response) {
                 response.data.forEach(function (elem) {
                     elem.date = new Date(elem.date);
                     elem.start_string = elem.start;
-                    elem.start = new Date('Thu, 01 Jan 1970 ' + elem.start + ' GMT-0500');
+                    elem.start = new Date('Thu, 01 Jan 1970 ' + elem.start);
 
                     if (elem.end) {
                         elem.end_string = elem.end;
-                        elem.end = new Date('Thu, 01 Jan 1970 ' + elem.end + ' GMT-0500');
+                        elem.end = new Date('Thu, 01 Jan 1970 ' + elem.end);
                     }
 
-                    if(!$scope.isPastEvent(elem.date)) {
-                        $scope.events.push(elem);
-                    }
-                    else {
-                        $scope.pastEvents.push(elem);
-                    }
+                    $scope.events.push(elem);
+
                 });
 
                 $scope.currentEditId = $cookies.getObject(EDIT_ID_COOKIE_LABEL) ?
