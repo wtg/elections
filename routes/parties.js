@@ -7,10 +7,12 @@ var express = require('express'),
 
 var queries = {
     all: "SELECT * FROM `parties`",
+    election: " WHERE election_id = ",
+    activeElection: "(SELECT `value` FROM `configurations` WHERE `key` = 'active_election_id')",
     withLeader: "SELECT P.*, O.rcs_id, O.position FROM `parties` P LEFT JOIN `party_officers` O ON P.party_id = " +
     "O.party_id AND O.is_highest = 1",
     officers: "SELECT * FROM `party_officers`",
-    post: "INSERT INTO " + functions.dbName() + ".`parties` (`name`, `platform`) VALUES ",
+    post: "INSERT INTO " + functions.dbName() + ".`parties` (`name`, `platform`, `election_id`) VALUES ",
     update: "UPDATE parties SET <> WHERE party_id = ",
     remove: "DELETE FROM " + functions.dbName() + ".`parties` WHERE party_id = ",
     newOfficer: "INSERT INTO " + functions.dbName() + ".`party_officers` (`party_id`, `rcs_id`, `position`, `is_highest`, `first_name`, " +
@@ -24,7 +26,7 @@ var queries = {
 router.get('/', function (req, res) {
     var connection = functions.dbConnect(res);
 
-    connection.query(queries.all, functions.defaultJSONCallback(res));
+    connection.query(queries.all + queries.election + queries.activeElection, functions.defaultJSONCallback(res));
 
     connection.end();
 });
@@ -32,7 +34,7 @@ router.get('/', function (req, res) {
 router.get('/officers', function (req, res) {
     var connection = functions.dbConnect(res);
 
-    connection.query(queries.all, function (err, parties) {
+    connection.query(queries.all + queries.election + queries.activeElection, function (err, parties) {
         if (err) {
             console.log(err);
             res.status(500);
@@ -71,12 +73,13 @@ router.post('/create', function (req, res) {
 
     if (!data) { res.status(204); return; }
 
-    var query = queries.post + functions.constructSQLArray([data.name, data.platform]);
+    var query = queries.post + functions.constructSQLArray([data.name, data.platform, data.election_id]);
 
     connection.query(query, functions.defaultJSONCallback(res));
 
     logger.write(connection, req.session.cas_user, "PARTY_CREATE", "Entitled " + data.name +
-        ", platform: " + (data.platform.length === 100 ? data.platform.substr(0,100) + '...' : data.platform));
+        ", platform: " + (data.platform.length === 100 ? data.platform.substr(0,100) + '...' : data.platform) +
+        " for election with id " + data.election_id);
 
     connection.end();
 });
@@ -94,7 +97,8 @@ router.put('/update/:party_id', function (req, res) {
     if (!data) { res.status(204); return; }
 
     var assignments = "`name` = " + mysql.escape(data.name) + ", " +
-        "`platform` = " + mysql.escape(data.platform);
+        "`platform` = " + mysql.escape(data.platform) +
+        "`election_id` = " + mysql.escape(data.election_id);
 
     var query = queries.update.replace(/<>/g, assignments) + mysql.escape(party_id);
 

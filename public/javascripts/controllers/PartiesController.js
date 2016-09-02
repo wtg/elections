@@ -1,5 +1,5 @@
-app.controller('PartiesController', ['$scope', '$http', '$cookies', '$location', '$route', '$routeParams',
-    function ($scope, $http, $cookies, $location, $route, $routeParams) {
+app.controller('PartiesController', ['$scope', '$http', '$q', '$cookies', '$location', '$route', '$routeParams',
+    function ($scope, $http, $q, $cookies, $location, $route, $routeParams) {
         var EDIT_ID_COOKIE_LABEL = "partiesEditId",
             ALERTS_COOKIE_LABEL = "partiesAlerts";
 
@@ -15,6 +15,8 @@ app.controller('PartiesController', ['$scope', '$http', '$cookies', '$location',
                 platform: ""
             };
 
+            $scope.active_election = "";
+
             if ($location.path().split('/')[$location.path().split('/').length - 1] === 'edit' && !$scope.editPermissions) {
                 $location.url('/parties');
             }
@@ -22,8 +24,13 @@ app.controller('PartiesController', ['$scope', '$http', '$cookies', '$location',
         initialize();
 
         var loadData = function () {
-            $http.get('/api/parties/officers').then(function (response) {
-                $scope.parties = response.data;
+            $q.all([
+                $http.get('/api/settings/active_election_id'),
+                $http.get('/api/parties/officers')
+            ]).then(function (responses) {
+                $scope.active_election = responses[0].data[0].value;
+
+                $scope.parties = responses[1].data;
 
                 $scope.currentEditId = $cookies.getObject(EDIT_ID_COOKIE_LABEL) ?
                     $cookies.getObject(EDIT_ID_COOKIE_LABEL).val : ($scope.parties[0] ? $scope.parties[0].party_id : 0);
@@ -179,7 +186,8 @@ app.controller('PartiesController', ['$scope', '$http', '$cookies', '$location',
             var name = $scope.new.name;
             var preparedData = {
                 name: $scope.new.name,
-                platform: $scope.new.platform
+                platform: $scope.new.platform,
+                election_id: $scope.active_election
             };
 
             if (!preparedData.name) {

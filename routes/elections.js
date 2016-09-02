@@ -7,6 +7,7 @@ var express = require('express'),
 
 var queries = {
     all: "SELECT * FROM " + functions.dbName() + ".`elections`",
+    get: "SELECT * FROM " + functions.dbName() + ".`elections` WHERE election_id = ",
     create: "INSERT INTO " + functions.dbName() + ".`elections` (`election_name`, `primary_date`, `final_date`, `runoff_date`) VALUES ",
     update: "UPDATE " + functions.dbName() + ".`elections` SET <> WHERE election_id = ",
     delete: "DELETE FROM " + functions.dbName() + ".`elections` WHERE election_id = "
@@ -43,6 +44,22 @@ router.post('/create', function (req, res) {
 
     logger.write(connection, req.session.cas_user, "ELECTION_CREATE", "Entitled " + data.election_name +
         ", P | F | R: " + data.primary_date + " | " + data.final_date + " | " + data.runoff_date);
+
+    connection.end();
+});
+
+router.get('/:election_id', function (req, res) {
+    if (!functions.verifyPermissions(req).admin) {
+        res.sendStatus(401);
+        return;
+    }
+
+    var connection = functions.dbConnect(res),
+        election_id = req.params.election_id;
+
+    query = queries.get + election_id;
+
+    connection.query(query, functions.defaultJSONCallback(res));
 
     connection.end();
 });
