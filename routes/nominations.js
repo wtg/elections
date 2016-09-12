@@ -68,6 +68,10 @@ var verifyCohort = function (candidate, nomination, type) {
     // Standard case: either in the same credit cohort
     if(getCreditCohort(nomination) === parseInt(type))
         return true;
+    
+    // Standard case: either in the same graduation cohort
+    if(nomination.grad_date.substr(0,4) === candidate.grad_date.substr(0,4))
+        return true;
 
     // If we've reached this far, the nomination cannot occur
     return false;
