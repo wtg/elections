@@ -28,8 +28,7 @@ var queries = {
     random: "SELECT C.*, D.preferred_name, D.first_name, D.middle_name, D.last_name, " +
     "D.greek_affiliated, D.misc_info, D.entry_date, D.class_by_credit, D.grad_date, " +
     "D.rin, D.major, D.about, D.platform, D.video_url, D.misc_info, D.profile_url, " +
-    "D.cover_url FROM (SELECT O.*, R.rcs_id FROM (SELECT * FROM `candidates` WHERE " +
-    "RAND()<(SELECT ((1/COUNT(*))*10) FROM `candidates`) AND election_id = " +
+    "D.cover_url FROM (SELECT O.*, R.rcs_id FROM (SELECT * FROM `candidates` WHERE election_id = " +
     "(SELECT `value` FROM `configurations` WHERE `key` = 'active_election_id') " +
     "ORDER BY RAND() LIMIT 1) AS R INNER JOIN `offices` AS O WHERE O.office_id = " +
     "R.office_id) AS C LEFT JOIN `candidate_data` AS D ON C.rcs_id = D.rcs_id",

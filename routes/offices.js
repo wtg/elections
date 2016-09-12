@@ -10,7 +10,8 @@ var queries = {
     election: " WHERE election_id = ",
     office: " WHERE office_id = ",
     activeElection: "(SELECT `value` FROM `configurations` WHERE `key` = 'active_election_id')",
-    types: "SELECT DISTINCT type FROM `offices` WHERE NOT type = 'all'",
+    types: "SELECT DISTINCT type FROM `offices` WHERE election_id = (SELECT " +
+        "`value` FROM `configurations` WHERE `key` = 'active_election_id') AND NOT type = 'all'",
 
     post: "INSERT INTO " + functions.dbName() + ".`offices` (`election_id`, `name`, `description`, `openings`, " +
     "`nominations_required`, `type`, `disabled`) VALUES ",

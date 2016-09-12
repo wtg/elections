@@ -57,13 +57,20 @@ var verifyCohort = function (candidate, nomination, type) {
     if((parseInt(type) === new Date().getFullYear() && nomination.class_by_credit === 'Graduate'))
         return true;
 
+    // Graduate case
+    if(type.toLowerCase() === 'graduate' && nomination.class_by_credit === 'Graduate')
+        return true;
+
     // Standard case: either in the same entry cohort
-    // Includes graduate case
     if(nomination.entry_date.substr(0,4) === candidate.entry_date.substr(0,4))
         return true;
 
     // Standard case: either in the same credit cohort
     if(getCreditCohort(nomination) === parseInt(type))
+        return true;
+    
+    // Standard case: either in the same graduation cohort
+    if(nomination.grad_date.substr(0,4) === candidate.grad_date.substr(0,4))
         return true;
 
     // If we've reached this far, the nomination cannot occur
