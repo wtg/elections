@@ -18,6 +18,13 @@ var queries = {
     "D.entry_date, D.class_by_credit, D.grad_date, D.rin, D.major, D.about, D.platform, D.video_url, D.misc_info, " +
     "D.profile_url, D.cover_url, O.name AS office_name, O.description AS office_description, " +
     "O.openings AS office_openings, O.nominations_required AS office_nominations_required, O.type AS office_type, " +
+    "O.disabled AS office_disabled " +
+    "FROM `candidates` C LEFT JOIN `candidate_data` D ON C.rcs_id = D.rcs_id LEFT JOIN " +
+    "`offices` O ON C.office_id = O.office_id",
+    allWithDataAndParty: "SELECT C.*, D.preferred_name, D.first_name, D.middle_name, D.last_name, D.greek_affiliated, " +
+    "D.entry_date, D.class_by_credit, D.grad_date, D.rin, D.major, D.about, D.platform, D.video_url, D.misc_info, " +
+    "D.profile_url, D.cover_url, O.name AS office_name, O.description AS office_description, " +
+    "O.openings AS office_openings, O.nominations_required AS office_nominations_required, O.type AS office_type, " +
     "O.disabled AS office_disabled, P.name AS party_name, P.platform AS party_platform " +
     "FROM `candidates` C LEFT JOIN `candidate_data` D ON C.rcs_id = D.rcs_id LEFT JOIN " +
     "`offices` O ON C.office_id = O.office_id LEFT JOIN `parties` P ON C.party_id = P.party_id",
@@ -40,12 +47,8 @@ var queries = {
     update: "UPDATE " + functions.dbName() + ".`candidate_data` SET <> WHERE rcs_id = ",
     updateParty: "UPDATE " + functions.dbName() + ".`candidates` SET `party_id` = <> WHERE rcs_id = ",
 
-    duplicateRCS: " ON DUPLICATE KEY UPDATE rcs_id = "
-};
-
-var useData = function (req) {
-    var includeData = (req.body.includeData !== undefined ? req.body.includeData : true);
-    return (!includeData ? queries.allNoData : queries.allWithData);
+    duplicateRCS: " ON DUPLICATE KEY UPDATE rcs_id = ",
+    partiesEnabled: "SELECT `value` FROM `configurations` WHERE `key` = 'parties_enabled'"
 };
 
 var processMiscInfo = function (result) {
@@ -90,19 +93,46 @@ var processMiscInfo = function (result) {
     return result;
 };
 
-router.get('/', function (req, res) {
-    var connection = functions.dbConnect(res);
+var useDataQuery = function (req, res, callback) {
+    var connection = functions.dbConnect();
 
-    connection.query(useData(req), function (err, result) {
+    connection.query(queries.partiesEnabled, function (err, result) {
         if (err) {
             console.log(err);
             res.status(500);
         }
 
-        res.json(processMiscInfo(result));
+        var partiesEnabled = result[0].value/1;
+        var dataQuery;
+        if (partiesEnabled == 1) {
+            dataQuery = queries.allWithDataAndParty;
+        } else {
+            dataQuery = queries.allWithData;
+        }
+
+        var includeData = (req.body.includeData !== undefined ? req.body.includeData : true);
+        var query = !includeData ? queries.allNoData : dataQuery;
+
+        callback(query);
     });
 
     connection.end();
+};
+
+router.get('/', function (req, res) {
+    var connection = functions.dbConnect(res);
+
+    useDataQuery(req, res, function (query) {
+        connection.query(query, function (err, result) {
+            if (err) {
+                console.log(err);
+                res.status(500);
+            }
+
+            res.json(processMiscInfo(result));
+        });
+        connection.end();
+    });
 });
 
 router.get('/random', function (req, res) {
@@ -120,13 +150,15 @@ router.get('/rcs/:rcs_id', function (req, res) {
     var connection = functions.dbConnect(res),
         rcs_id = req.params.rcs_id;
 
-    connection.query(useData(req) + queries.rcs + mysql.escape(rcs_id), function (err, result) {
-        if (err) {
-            console.log(err);
-            res.status(500);
-        }
+    useDataQuery(req, res, function (query) {
+        connection.query(query + queries.rcs + mysql.escape(rcs_id), function (err, result) {
+            if (err) {
+                console.log(err);
+                res.status(500);
+            }
 
-        res.json(processMiscInfo(result));
+            res.json(processMiscInfo(result));
+        });
     });
 });
 
@@ -134,13 +166,15 @@ router.get('/office/:office_id', function (req, res) {
     var connection = functions.dbConnect(res),
         office_id = req.params.office_id;
 
-    connection.query(useData(req) + queries.office + mysql.escape(office_id), function (err, result) {
-        if (err) {
-            console.log(err);
-            res.status(500);
-        }
+    useDataQuery(req, res, function (query) {
+        connection.query(query + queries.office + mysql.escape(office_id), function (err, result) {
+            if (err) {
+                console.log(err);
+                res.status(500);
+            }
 
-        res.json(processMiscInfo(result));
+            res.json(processMiscInfo(result));
+        });
     });
 
     connection.end();

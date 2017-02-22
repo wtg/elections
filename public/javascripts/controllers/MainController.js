@@ -8,6 +8,7 @@ app.controller('MainController', ['$scope', '$location', '$http', function ($sco
     $scope.username = null;
     $scope.maintenanceMode = false;
     $scope.maintenanceMessage = "";
+    $scope.partiesEnabled = true;
 
     $http.get("/api/users/").then(function (response) {
         $scope.editPermissions = response.data.admin;
@@ -22,6 +23,9 @@ app.controller('MainController', ['$scope', '$location', '$http', function ($sco
         if (!$scope.maintenanceMessage) {
           $scope.maintenanceMessage = "The site is under maintenance. Check back soon!"
         }
+    });
+    $http.get("/api/settings/parties_enabled").then(function (response) {
+        $scope.partiesEnabled = response.data[0].value/1;
     });
 
     $scope.formatTime = function (time) {
