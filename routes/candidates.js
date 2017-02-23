@@ -20,17 +20,19 @@ var queries = {
     "O.openings AS office_openings, O.nominations_required AS office_nominations_required, O.type AS office_type, " +
     "O.disabled AS office_disabled " +
     "FROM `candidates` C LEFT JOIN `candidate_data` D ON C.rcs_id = D.rcs_id LEFT JOIN " +
-    "`offices` O ON C.office_id = O.office_id",
+    "`offices` O ON C.office_id = O.office_id " +
+    "WHERE C.election_id = (SELECT `value` FROM `configurations` WHERE `key` = 'active_election_id')",
     allWithDataAndParty: "SELECT C.*, D.preferred_name, D.first_name, D.middle_name, D.last_name, D.greek_affiliated, " +
     "D.entry_date, D.class_by_credit, D.grad_date, D.rin, D.major, D.about, D.platform, D.video_url, D.misc_info, " +
     "D.profile_url, D.cover_url, O.name AS office_name, O.description AS office_description, " +
     "O.openings AS office_openings, O.nominations_required AS office_nominations_required, O.type AS office_type, " +
     "O.disabled AS office_disabled, P.name AS party_name, P.platform AS party_platform " +
     "FROM `candidates` C LEFT JOIN `candidate_data` D ON C.rcs_id = D.rcs_id LEFT JOIN " +
-    "`offices` O ON C.office_id = O.office_id LEFT JOIN `parties` P ON C.party_id = P.party_id",
+    "`offices` O ON C.office_id = O.office_id LEFT JOIN `parties` P ON C.party_id = P.party_id " +
+    "WHERE C.election_id = (SELECT `value` FROM `configurations` WHERE `key` = 'active_election_id')",
     activeElection: "(SELECT `value` FROM `configurations` WHERE `key` = 'active_election_id')",
 
-    rcs: " WHERE C.rcs_id = ",
+    rcs: " AND C.rcs_id = ",
     office: " WHERE C.office_id = ",
     random: "SELECT C.*, D.preferred_name, D.first_name, D.middle_name, D.last_name, " +
     "D.greek_affiliated, D.misc_info, D.entry_date, D.class_by_credit, D.grad_date, " +
