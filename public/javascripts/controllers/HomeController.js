@@ -63,7 +63,7 @@ app.controller('HomeController', ['$scope', '$sce', '$showdown', '$http', functi
     $scope.infoBlocks = [
         {
             header: "Get out and vote",
-            body: "Primary elections will take place on Tuesday, April 12. Final elections will take place on Thursday, April 14. " +
+            body: "Primary elections will take place on Tuesday, April 4. Final elections will take place on Thursday, April 6. " +
             "Get to Commons, the Union, or the DCC and earn a free GM Week mug by voting!",
             icon: "fa-check-square"
         },
@@ -89,7 +89,7 @@ app.controller('HomeController', ['$scope', '$sce', '$showdown', '$http', functi
         header: "Election Rules and Tips",
         list: [
             "<b>Don't:</b> Tear down posters, even if they appear to be in violation of an RnE regulation.<br/>" +
-            "<b>Do:</b> Report violations to RnE so they can take appropriate action. Email reports to <a href=\"mailto:rne@union.rpi.edu\">rne@union.rpi.edu</a>.",
+            "<b>Do:</b> Report violations to RnE so they can take appropriate action. Email reports to <a href=\"mailto:rne@rpi.edu\">rne@rpi.edu</a>.",
 
             "<b>Don't:</b> Get only the exact amount of nominations required for an office.<br/>" +
             "<b>Do:</b> Get around 15% more than is required. Inevitably, some will be invalid.",
