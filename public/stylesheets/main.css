@@ -153,6 +153,7 @@ footer {
 	height: 400px; /*slider height*/
 	vertical-align: middle;
     background-position: center;
+    background-size: cover;
 }
 
 .item:first-child  { background-image: url('/images/union_slide.jpg') }
