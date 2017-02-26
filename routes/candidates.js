@@ -102,7 +102,7 @@ var makeEmailsFromRCSList = function (result) {
             if (i > 0 && i < result.length - 1 &&
                 result[i - 1].rcs_id == result[i].rcs_id) continue;
             string += result[i].rcs_id + '@rpi.edu';
-            if (i != result.length - 1) string += '<br\>';
+            if (i != result.length - 1) string += '\n';
         }
     return string;
 }
