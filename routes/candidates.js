@@ -387,6 +387,7 @@ router.get('/email', function (req, res) {
             console.log(err);
             res.status(500);
         }
+        res.set('Content-Type', 'text/plain');
         res.send(makeEmailsFromRCSList(rows));
     });
 });
