@@ -15,10 +15,7 @@ app.config(['$routeProvider', function ($routeProvider) {
     ];
 
     $routeProvider.
-    when('', {
-        redirectTo: '/home'
-    }).
-    when('/home', {
+    when('/', {
         templateUrl: 'partials/home.html',
         controller: 'HomeController'
     }).
@@ -90,7 +87,7 @@ app.config(['$routeProvider', function ($routeProvider) {
         // }
     }).
     otherwise({
-        redirectTo: '/home'
+        redirectTo: '/'
     });
 }]);
 
