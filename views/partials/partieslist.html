@@ -11,10 +11,10 @@
         </div>
         <div class="col-sm-12 col-md-8" ng-if="editPermissions">
             <div class="btn-group pull-right header-btns">
-                <a class="btn btn-default active" href="#/parties">
+                <a class="btn btn-default active" href="/parties">
                     View
                 </a>
-                <a class="btn btn-primary" href="#/parties/edit">
+                <a class="btn btn-primary" href="/parties/edit">
                     Edit
                 </a>
             </div>
@@ -31,7 +31,7 @@
         <div class="col-md-6" ng-repeat="i in [0,1]">
             <div class="panel panel-default" ng-repeat="p in parties track by $index" ng-if="$index % 2 == i">
                 <div class="panel-heading">
-                    <h2 class="panel-title"><a ng-href="#/party/{{p.party_id}}" ng-bind="p.name"></a></h2>
+                    <h2 class="panel-title"><a ng-href="/party/{{p.party_id}}" ng-bind="p.name"></a></h2>
                 </div>
                 <div class="panel-body" style="height: 150px">
                     <p>

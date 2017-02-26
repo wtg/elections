@@ -3,6 +3,7 @@
 <head>
     <title>RPI Elections</title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <base href="/">
     <!-- Latest compiled and minified CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.5/united/bootstrap.min.css" rel="stylesheet"
           integrity="sha256-nKQVXFJ5JtDJlI5p1UcSf0JOFudCj9RgjBDsJSZPsS4= sha512-dbadXecsBCgqQ5XGx6SG+bO4vsfzznX6/NfAG4CuzLi76wcdLGAw2KIcsLyv7H5XsEGq0zaznpxDCAEIX9pdYA=="
@@ -26,31 +27,31 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#/home">RPI Elections</a>
+            <a class="navbar-brand" href="/home">RPI Elections</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav" ng-if="!maintenanceMode || editPermissions">
                 <li ng-class="{'active':isCurrentPage('offices') || isCurrentPage('candidate')}">
-                    <a href="#/offices">Offices <span class="sr-only">(current)</span></a>
+                    <a href="/offices">Offices <span class="sr-only">(current)</span></a>
                 </li>
                 <li ng-if="partiesEnabled" ng-class="{'active':isCurrentPage('parties') || isCurrentPage('party')}">
-                    <a href="#/parties">Parties</a>
+                    <a href="/parties">Parties</a>
                 </li>
                 <li ng-class="{'active':isCurrentPage('events')}">
-                    <a href="#/events">Events</a>
+                    <a href="/events">Events</a>
                 </li>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Run for Office <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="https://rpi.app.box.com/s/c157gg3a6j4rvzxyd87yf1cb94w7om9m/1/19793688783">Necessary Forms</a></li>
-                        <li><a href="#/handbook">Election Handbook</a></li>
-                        <!-- <li><a href="#/">Election Do's and Dont's</a></li> -->
+                        <li><a href="/handbook">Election Handbook</a></li>
+                        <!-- <li><a href="/">Election Do's and Dont's</a></li> -->
                         <li role="separator" class="divider"></li>
                         <li><a href="https://rpi.app.box.com/s/c157gg3a6j4rvzxyd87yf1cb94w7om9m">Updates, Violations, &amp; Decisions</a></li>
-                        <li><a href="#/about">About RnE &amp; WTG</a></li>
+                        <li><a href="/about">About RnE &amp; WTG</a></li>
                     </ul>
                 </li>
             </ul>
@@ -68,9 +69,9 @@
                         Signed in as <i ng-bind="username"></i> <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <!--<li><a href="#/">Edit Content</a></li>-->
-                        <!--<li><a href="#/">Moderate Submissions</a></li>-->
-                        <li ng-if="editPermissions"><a href="#/settings">Admin Settings</a></li>
+                        <!--<li><a href="/">Edit Content</a></li>-->
+                        <!--<li><a href="/">Moderate Submissions</a></li>-->
+                        <li ng-if="editPermissions"><a href="/settings">Admin Settings</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="/logout">Sign out</a></li>
                     </ul>

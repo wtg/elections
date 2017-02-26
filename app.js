@@ -113,6 +113,10 @@ app.get('/login', cas.bounce, function (req, res) {
 
 app.get('/logout', cas.logout);
 
+app.get('/:anyreq', function(req, res){
+    res.sendFile(__dirname + '/views/index.html');
+});
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
@@ -137,6 +141,5 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500).send("<!DOCTYPE html><html><body><h1>There's an error (" + err.status + ")!</h1>" +
         "<p>" + err.message + "</p></body></html>");
 });
-
 
 module.exports = app;
