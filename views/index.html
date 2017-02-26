@@ -57,7 +57,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li ng-if="!authenticated">
-                    <a href="/login">
+                    <a href="/login" target="_self">
                         <span ng-if="!maintenanceMode">Candidate</span>
                         <span ng-if="maintenanceMode">Admin</span>
                         Login
@@ -73,7 +73,7 @@
                         <!--<li><a href="/">Moderate Submissions</a></li>-->
                         <li ng-if="editPermissions"><a href="/settings">Admin Settings</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="/logout">Sign out</a></li>
+                        <li><a href="/logout" target="_self">Sign out</a></li>
                     </ul>
                 </li>
             </ul>
