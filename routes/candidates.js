@@ -50,7 +50,8 @@ var queries = {
     updateParty: "UPDATE " + functions.dbName() + ".`candidates` SET `party_id` = <> WHERE rcs_id = ",
 
     duplicateRCS: " ON DUPLICATE KEY UPDATE rcs_id = ",
-    partiesEnabled: "SELECT `value` FROM `configurations` WHERE `key` = 'parties_enabled'"
+    partiesEnabled: "SELECT `value` FROM `configurations` WHERE `key` = 'parties_enabled'",
+    listRCS: "SELECT `rcs_id` FROM `candidates`;"
 };
 
 var processMiscInfo = function (result) {
@@ -94,6 +95,17 @@ var processMiscInfo = function (result) {
 
     return result;
 };
+
+var makeEmailsFromRCSList = function (result) {
+    var string = ''
+        for (var i = 0; i < result.length; i++) {
+            if (i > 0 && i < result.length - 1 &&
+                result[i - 1].rcs_id == result[i].rcs_id) continue;
+            string += result[i].rcs_id + '@rpi.edu';
+            if (i != result.length - 1) string += '<br\>';
+        }
+    return string;
+}
 
 var useDataQuery = function (req, res, callback) {
     var connection = functions.dbConnect();
@@ -364,6 +376,18 @@ router.get('/upload', function (req, res) {
                 extension: extension
             });
         });
+    });
+});
+
+router.get('/email', function (req, res) {
+    var connection = functions.dbConnect(res);
+
+    connection.query(queries.listRCS, function(err, rows, fields) {
+        if (err) {
+            console.log(err);
+            res.status(500);
+        }
+        res.send(makeEmailsFromRCSList(rows));
     });
 });
 
