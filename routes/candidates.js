@@ -51,7 +51,7 @@ var queries = {
 
     duplicateRCS: " ON DUPLICATE KEY UPDATE rcs_id = ",
     partiesEnabled: "SELECT `value` FROM `configurations` WHERE `key` = 'parties_enabled'",
-    listRCS: "SELECT `rcs_id` FROM `candidates`;"
+    listRCS: "SELECT `rcs_id` FROM `candidates` WHERE election_id = (SELECT `value` FROM `configurations` WHERE `key` = 'active_election_id');"
 };
 
 var processMiscInfo = function (result) {
