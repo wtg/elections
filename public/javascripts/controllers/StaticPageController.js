@@ -16,7 +16,7 @@ app.controller('StaticPageController', ['$scope', '$http', '$cookies', '$showdow
                 $scope.content = response.data[0].content;
                 $scope.htmlContent = $showdown.makeHtml(response.data[0].content);
             }, function () {
-                $location.path('/home');
+                $location.path('/');
             }).finally(function () {
                 $scope.dataLoaded = true;
             });
