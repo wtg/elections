@@ -95,3 +95,17 @@ app.config(['$locationProvider', function ($locationProvider) {
     $locationProvider.html5Mode(true);
     $locationProvider.hashPrefix('#');
 }]);
+
+app.run(['$http', '$window', '$rootScope', '$location', function ($http, $window, $rootScope, $location) {
+    // Google Analytics
+    $http.get("/api/settings/ga_id").then(function (response) {
+        // if GA not configured, do nothing
+        if (response.data.length < 1) {
+            return;
+        }
+        $window.ga('create', response.data[0].value, 'auto');
+        $rootScope.$on('$routeChangeSuccess', function (event) {
+            $window.ga('send', 'pageview', {page: $location.path()});
+        });
+    });
+}]);
