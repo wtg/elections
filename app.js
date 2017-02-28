@@ -113,7 +113,7 @@ app.get('/login', cas.bounce, function (req, res) {
 
 app.get('/logout', cas.logout);
 
-app.get('/:anyreq', function(req, res){
+app.get('/*', function(req, res){
     res.sendFile(__dirname + '/views/index.html');
 });
 
