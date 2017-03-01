@@ -1,9 +1,42 @@
 app.controller('HomeController', ['$scope', '$sce', '$showdown', '$http', function ($scope, $sce, $showdown, $http) {
     $scope.reloadRandom = function () {
-        $http.get('/api/candidates/random').then(function (response) {
-            if (response.data[0] != undefined) {
+
+        if ($scope.randomCandidateList.length === 0) {
+            return
+        }
+
+        if ($scope.randomCandidateIndex + 1 === $scope.randomCandidateList.length) {
+            $scope.randomCandidateIndex = 0;
+        } else {
+            $scope.randomCandidateIndex += 1;
+        }
+
+        var rcs_id = $scope.randomCandidateList[$scope.randomCandidateIndex];
+
+        $http.get('/api/candidates/rcs/' + rcs_id).then(function (response) {
+
+            if (response.data !== undefined) {
                 $scope.randomCandidate.name = (response.data[0].preferred_name ? response.data[0].preferred_name : response.data[0].first_name) + " " + response.data[0].last_name;
-                $scope.randomCandidate.position = response.data[0].name + " Candidate";
+
+                // collect all offices for which the candidate is running
+                var offices = [];
+                $scope.randomCandidate.position = '';
+                response.data.forEach(function (elem) {
+                    offices.push(elem.office_name);
+                });
+                // turn it into a single string
+                for (var i = 0; i < offices.length; i++) {
+                    $scope.randomCandidate.position += offices[i];
+                    if (i === 0 && offices.length === 2) {
+                        $scope.randomCandidate.position += ' and ';
+                    } else if (i === offices.length - 2 && offices.length > 2) {
+                        $scope.randomCandidate.position += ', and ';
+                    } else if (i !== offices.length - 1) {
+                        $scope.randomCandidate.position += ', ';
+                    }
+                }
+                $scope.randomCandidate.position += " candidate";
+
                 $scope.randomCandidate.rcsId = response.data[0].rcs_id;
                 $scope.randomCandidate.bio = response.data[0].about;
 
@@ -36,7 +69,14 @@ app.controller('HomeController', ['$scope', '$sce', '$showdown', '$http', functi
             });
         });
 
-        $scope.reloadRandom();
+        $scope.randomCandidateList = [];
+        $scope.randomCandidateIndex = null;
+        $http.get('/api/candidates/random_list').then(function (response) {
+            response.data.forEach(function (elem) {
+                $scope.randomCandidateList.push(elem.rcs_id);
+            });
+            $scope.reloadRandom();
+        });
     };
     loadData();
 

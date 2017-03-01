@@ -41,6 +41,9 @@ var queries = {
     "(SELECT `value` FROM `configurations` WHERE `key` = 'active_election_id') " +
     "ORDER BY RAND() LIMIT 1) AS R INNER JOIN `offices` AS O WHERE O.office_id = " +
     "R.office_id) AS C LEFT JOIN `candidate_data` AS D ON C.rcs_id = D.rcs_id",
+    random_list: "SELECT DISTINCT C.rcs_id FROM (SELECT * FROM `candidates` WHERE election_id = " +
+    "(SELECT `value` FROM `configurations` WHERE `key` = 'active_election_id')) AS C " +
+    "ORDER BY RAND()",
 
     post: "INSERT INTO " + functions.dbName() + ".`candidates` (`rcs_id`, `office_id`, `election_id`) VALUES ",
     postCMSData: "INSERT INTO " + functions.dbName() + ".`candidate_data` (`rcs_id`, `preferred_name`, `first_name`, " +
@@ -156,6 +159,17 @@ router.get('/random', function (req, res) {
     res.set("Cache-Control", "no-cache, no-store, must-revalidate");
 
     connection.query(queries.random, functions.defaultJSONCallback(res));
+
+    connection.end();
+});
+
+router.get('/random_list', function (req, res) {
+    var connection = functions.dbConnect(res);
+
+    // forces the client to re-pull every time the random route is called
+    res.set("Cache-Control", "no-cache, no-store, must-revalidate");
+
+    connection.query(queries.random_list, functions.defaultJSONCallback(res));
 
     connection.end();
 });
