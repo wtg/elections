@@ -237,6 +237,19 @@ footer {
     }
 }
 
+/* Home Meet a Candidate candidate pictures */
+.home .profile {
+    border-radius: 50%;
+    display: block;
+    height: 120px;
+    margin: -60px auto 60px;
+    overflow: hidden;
+    width: 120px;
+    background-size: cover;
+    border: 4px solid white;
+    top: 60px;
+}
+
 /* Candidate Page */
 .cover-photo img{
     width: 100%;
