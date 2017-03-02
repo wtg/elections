@@ -31,7 +31,10 @@
     </div>
     <div class="row" ng-repeat-start="o in offices" ng-hide="(filter != 'all' && filter != o.type) || o.disabled">
         <div class="col-xs-10">
-            <h2 ng-bind="o.title"></h2>
+            <h2>
+                <span ng-bind="o.title"></span>
+                <span ng-if="o.numberOpenings > 1" class="small text-muted"> ({{o.numberOpenings}} positions)</span>
+            </h2>
         </div>
         <div class="col-xs-2">
             <button class="btn btn-simple btn-lg pull-right" ng-click="o.showDesc = !o.showDesc">
