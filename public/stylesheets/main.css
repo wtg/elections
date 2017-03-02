@@ -13,7 +13,7 @@ body {
     margin: 0;
     padding: 0;
 	background-color: #757575;
-	background-image: url(http://www.transparenttextures.com/patterns/bright-squares.png);
+	background-image: url('/images/bright-squares.png');
 }
 
 body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, p, .p {
