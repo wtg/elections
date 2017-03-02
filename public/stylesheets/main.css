@@ -248,6 +248,7 @@ footer {
     background-size: cover;
     border: 4px solid white;
     top: 50px;
+    object-fit: cover;
 }
 
 /* Candidate Page */
