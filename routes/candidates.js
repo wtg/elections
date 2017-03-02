@@ -7,7 +7,8 @@ var express = require('express'),
     uid = require('uid2'),
     mime = require('mime'),
     fs = require('fs'),
-    path = require('path');
+    path = require('path')
+    striptags = require('striptags');
 
 var IMAGE_TYPES = ['image/jpeg', 'image/png'];
 var TARGET_PATH = path.resolve(__dirname, '../public/usr_content');
@@ -184,6 +185,11 @@ router.get('/rcs/:rcs_id', function (req, res) {
                 console.log(err);
                 res.status(500);
             }
+
+            // add an additional field with HTML-stripped "about" text for Meet a Candidate
+            result.forEach(function (elem) {
+                elem.about_stripped = striptags(elem.about);
+            });
 
             res.json(processMiscInfo(result));
         });

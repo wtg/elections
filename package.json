@@ -29,6 +29,7 @@
     "mysql": "^2.10.0",
     "q": "^1.4.1",
     "serve-favicon": "~2.3.0",
+    "striptags": "^3.0.1",
     "uid2": "0.0.3"
   },
   "devDependencies": {

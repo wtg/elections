@@ -38,7 +38,7 @@ app.controller('HomeController', ['$scope', '$sce', '$showdown', '$http', functi
                 $scope.randomCandidate.position += " candidate";
 
                 $scope.randomCandidate.rcsId = response.data[0].rcs_id;
-                $scope.randomCandidate.bio = response.data[0].about;
+                $scope.randomCandidate.bio = response.data[0].about_stripped;
 
                 if ($scope.randomCandidate.bio && $scope.randomCandidate.bio.length > 250) {
                     $scope.randomCandidate.bio = $scope.randomCandidate.bio.substr(0, 250) + "...";
