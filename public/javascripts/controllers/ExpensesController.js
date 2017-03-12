@@ -99,8 +99,8 @@ app.controller('ExpensesController', ['$scope', '$routeParams', '$http', '$q', '
         };
 
         $scope.backToCandidate = function () {
-            if(!$scope.nominationsPending
-                || confirm("You're pressing done, but you have nominations pending! Are you sure you want to leave this page?")) {
+            if(!$scope.editingRow
+                || confirm("You're pressing done, but you have unsaved edits! Are you sure you want to leave this page?")) {
                 $location.url('/candidate/' + $scope.candidate.rcs_id);
             }
         };
@@ -129,6 +129,30 @@ app.controller('ExpensesController', ['$scope', '$routeParams', '$http', '$q', '
         $scope.calculateRemainingBudget = function () {
             return $scope.totalBudget - $scope.calculateTotalSpent();
         };
+
+        $scope.editExpense = function (expense) {
+            if(!$scope.editingRow) {
+                expense.editing = true;
+                $scope.editingRow = true;
+            }
+
+            return expense;
+        };
+
+        $scope.saveEdits = function (expense) {
+            var title = expense.item_name;
+
+            if(!$scope.editingRow || !expense.editing) {
+                return;
+            }
+
+            $http.put('/api/expenses/update/' + expense.expense_id, expense).then(function () {
+                addNewAlert("success", "The expense entitled " + title + " was successfully updated!", "update");
+                $route.reload();
+            }, function (response) {
+                addNewAlert("error", response.statusText + " (code: " + response.status + ")", "update");
+            })
+        }
 
         $scope.deleteExpense = function (expenseId) {
             var position = findExpense(expenseId);

@@ -17,16 +17,6 @@
         </div>
     </div>
     <hr/>
-    <div class="row" ng-if="candidate.offices.length > 1">
-        <div class="col-xs-12">
-            <ul class="nav nav-tabs">
-                <li ng-repeat="o in candidate.offices" role="presentation" ng-class="{'active': o.office_id === selectedOfficeId}">
-                    <a ng-click="changeSelectedOffice(o.office_id)" ng-bind="o.office_name"></a>
-                </li>
-            </ul>
-            <br/>
-        </div>
-    </div>
     <div class="row">
         <div class="col-xs-12" ng-show="showAlerts" ng-repeat="a in alerts track by $index">
             <div class="alert" ng-class="{'alert-danger': a.type == 'error', 'alert-success': a.type == 'success',
@@ -56,16 +46,42 @@
                 <tbody>
                     <tr ng-repeat="e in expenses">
                         <td>
-                            <div class="btn-group">
-                                <button class="btn btn-default btn-xs"><i class="fa fa-lg fa-pencil-square-o"></i></button>
-                                <button ng-click="deleteExpense(e.expense_id)" class="btn btn-danger btn-xs"><i class="fa fa-lg fa-trash"></i></button>
+                            <div class="btn-group" ng-if="!e.editing">
+                                <button ng-click="e = editExpense(e)" class="btn btn-default btn-xs" ng-disabled="editingRow"><i class="fa fa-lg fa-pencil-square-o"></i></button>
+                                <button ng-click="deleteExpense(e.expense_id)" class="btn btn-danger btn-xs" ng-disabled="editingRow"><i class="fa fa-lg fa-trash"></i></button>
+                            </div>
+                            <button ng-click="saveEdits(e)" class="btn btn-success" ng-if="e.editing">Save</button>
+                        </td>
+                        <td>
+                            <span ng-if="!e.editing" ng-bind="e.item_name"></span>
+                            <div ng-if="e.editing" class="form-group">
+                                <input class="form-control" type="text" ng-model="e.item_name" />
                             </div>
                         </td>
-                        <td ng-bind="e.item_name"></td>
-                        <td ng-bind="e.store"></td>
-                        <td ng-bind="e.item_price | currency:undefined:2"></td>
-                        <td ng-bind="e.quantity"></td>
-                        <td ng-bind="e.total_price | currency:undefined:2"></td>
+                        <td>
+                            <span ng-if="!e.editing" ng-bind="e.store"></span>
+                            <div ng-if="e.editing" class="form-group">
+                                <input class="form-control" type="text" ng-model="e.store" />
+                            </div>
+                        </td>
+                        <td>
+                            <span ng-if="!e.editing" ng-bind="e.item_price | currency:undefined:2"></span>
+                            <div ng-if="e.editing" class="form-group">
+                                <input class="form-control" type="number" ng-model="e.item_price" />
+                            </div>
+                        </td>
+                        <td>
+                            <span ng-if="!e.editing" ng-bind="e.quantity"></span>
+                            <div ng-if="e.editing" class="form-group">
+                                <input class="form-control" type="number" ng-model="e.quantity" />
+                            </div>
+                        </td>
+                        <td>
+                            <span ng-if="!e.editing" ng-bind="e.total_price | currency:undefined:2"></span>
+                            <div ng-if="e.editing" class="form-group">
+                                <input class="form-control" type="number" ng-model="e.total_price" />
+                            </div>
+                        </td>
                     </tr>
                     <tr ng-if="expenses.length == 0">
                         <td></td>
