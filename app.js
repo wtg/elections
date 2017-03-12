@@ -24,6 +24,7 @@ var nominations = require('./routes/nominations');
 var parties = require('./routes/parties');
 var events = require('./routes/events');
 var expenses = require('./routes/expenses');
+var feeds = require('./routes/feeds');
 var users = require('./routes/users');
 var static_routes = require('./routes/static');
 var settings = require('./routes/settings');
@@ -81,6 +82,8 @@ app.use('/api/users', users);
 app.use('/api/static', static_routes);
 app.use('/api/settings', settings);
 app.use('/api/elections', elections);
+
+app.use('/feeds', feeds);
 
 app.get('/login', cas.bounce, function (req, res) {
     if (!req.session || !req.session.cas_user) {
