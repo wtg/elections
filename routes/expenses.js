@@ -8,6 +8,8 @@ var express = require('express'),
 var queries = {
     all: "SELECT *, quantity * item_price as `total_price` FROM `expenses`",
     candidateRCS: " WHERE rcs_id = ",
+    activeElection: "(SELECT `value` FROM `configurations` WHERE `key` = 'active_election_id')",
+    insert: "INSERT INTO `expenses` (`rcs_id`, `item_name`, `store`, `item_price`, `quantity`, `election_id`) VALUES ",
     update: "UPDATE " + functions.dbName() + ".`expenses` SET <> WHERE expense_id = ",
     remove: "DELETE FROM " + functions.dbName() + ".`expenses` WHERE expense_id = "
 };
@@ -24,7 +26,28 @@ router.get('/candidate/:candidate_rcs', function (req, res) {
     var connection = functions.dbConnect(res),
         candidate_rcs = req.params.candidate_rcs;
 
-    connection.query(queries.all + queries.candidateRCS + mysql.escape(candidate_rcs), functions.defaultJSONCallback(res));
+    connection.query(queries.all + queries.candidateRCS + mysql.escape(candidate_rcs) + " AND election_id = " + queries.activeElection, functions.defaultJSONCallback(res));
+
+    connection.end();
+});
+
+router.post('/create', function (req, res) {
+    var connection = functions.dbConnect(res),
+        data = req.body;
+
+    if (!data) { res.status(204); return; }
+
+    var query = queries.insert + functions.constructSQLArray([
+        data.rcs_id, data.item_name, data.store, data.item_price, data.quantity
+    ]);
+
+    query = query.substr(0, query.length - 1) + ", " + queries.activeElection + ")";
+
+    console.log(query);
+
+    connection.query(query, functions.defaultJSONCallback(res));
+
+    logger.write(connection, req.session.cas_user, "EXPENSE_CREATE", data.rcs_id + ", " + data.item_name + ", " + data.store + ", " + data.quantity + "*$" + data.item_price);
 
     connection.end();
 });

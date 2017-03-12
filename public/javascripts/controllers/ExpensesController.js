@@ -143,8 +143,31 @@ app.controller('ExpensesController', ['$scope', '$routeParams', '$http', '$q', '
             return expense;
         };
 
-        $scope.addExpense = function () {
+        $scope.submitExpense = function () {
+            if (!$scope.newExpense.item_name) {
+                addNewAlert("error", "You didn't enter an item name for the expense!", "create");
+                return;
+            } else if (!$scope.newExpense.store) {
+                addNewAlert("error", "You didn't enter a store for the expense!", "create");
+                return;
+            } else if (!$scope.newExpense.item_price) {
+                addNewAlert("error", "You didn't enter an item price for the expense!", "create");
+                return;
+            } else if (!$scope.newExpense.quantity) {
+                addNewAlert("error", "You didn't enter a quantity for the expense!", "create");
+                return;
+            }
 
+            var title = $scope.newExpense.item_name;
+
+            $scope.newExpense.rcs_id = $scope.candidate.rcs_id;
+
+            $http.post('/api/expenses/create', $scope.newExpense).then(function () {
+                addNewAlert("success", "The new office, entitled " + title + ", was created successfully!", "create");
+                $route.reload();
+            }, function (response) {
+                addNewAlert("error", response.statusText + " (code: " + response.status + ")", "create");
+            });
         };
 
         $scope.saveEdits = function (expense) {
