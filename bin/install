@@ -62,6 +62,7 @@ connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`offices` (" +
     "`description` VARCHAR(1000) NOT NULL," +
     "`openings` INT NOT NULL," +
     "`nominations_required` INT NOT NULL," +
+    "`expense_limit` DOUBLE NOT NULL DEFAULT 0,"
     "`type` VARCHAR(45) NOT NULL," +
     "`disabled` TINYINT(1) NOT NULL DEFAULT 0," +
     "PRIMARY KEY (`office_id`) ," +
@@ -71,7 +72,6 @@ connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`offices` (" +
     "  REFERENCES " + db_name + ".`elections` (`election_id`)" +
     "  ON DELETE NO ACTION" +
     "  ON UPDATE NO ACTION)", errorCallback);
-
 
 /**
  * Execute the creation of the parties table. This table maintains the parties active in an election
@@ -300,21 +300,27 @@ connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`events` (" +
  * Execute the creation of an expenses table. This table holds expense information.
  */
 connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`expenses` (" +
-    "`expense_id` INT NOT NULL AUTO_INCREMENT," +
-    "`rcs_id` VARCHAR(45) NOT NULL," +
-    "`office_id` int(11) NOT NULL," +
-    "`item_name` varchar(255) NOT NULL," +
-    "`store` varchar(255) NOT NULL," +
-    "`item_price` double NOT NULL," +
-    "`quantity` int(11) NOT NULL," +
-    "PRIMARY KEY (`expense_id`)," +
-    "KEY `expenses_fk1_idx` (`rcs_id`,`office_id`)," +
-    "CONSTRAINT `expenses_fk1`" +
-    "  FOREIGN KEY (`rcs_id`, `office_id`)" +
-    "  REFERENCES `candidates` (`rcs_id`, `office_id`)" +
-    "  ON DELETE NO ACTION" +
-    "  ON UPDATE NO ACTION)" +
-    "ENGINE=InnoDB", errorCallback);
+  "`expense_id` int(11) NOT NULL AUTO_INCREMENT," +
+  "`rcs_id` varchar(45) NOT NULL," +
+  "`election_id` int(11) NOT NULL," +
+  "`item_name` varchar(255) NOT NULL," +
+  "`store` varchar(255) NOT NULL," +
+  "`item_price` double NOT NULL," +
+  "`quantity` int(11) NOT NULL," +
+  "PRIMARY KEY (`expense_id`)," +
+  "INDEX `expenses_fk1_idx` (`rcs_id` ASC)," +
+  "INDEX `expenses_fk2_idx` (`election_id` ASC)," +
+  "CONSTRAINT `expenses_fk1`" +
+  "  FOREIGN KEY (`rcs_id`)" +
+  "  REFERENCES " + db_name + ".`candidates` (`rcs_id`)" +
+  "  ON DELETE NO ACTION" +
+  "  ON UPDATE NO ACTION," +
+  "CONSTRAINT `expenses_fk2`" +
+  "  FOREIGN KEY (`election_id`)" +
+  "  REFERENCES " + db_name + ".`elections` (`election_id`)" +
+  "  ON DELETE NO ACTION" +
+  "  ON UPDATE NO ACTION)" +
+"ENGINE=InnoDB", errorCallback);
 
 /**
  * Execute the creation of an AMA questions table. This table holds questions
