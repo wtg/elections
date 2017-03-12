@@ -28,32 +28,60 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-xs-12" ng-show="showAlerts" ng-repeat="a in alerts track by $index">
+            <div class="alert" ng-class="{'alert-danger': a.type == 'error', 'alert-success': a.type == 'success',
+                 'alert-info': a.type == 'info'}">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="removeAlert($index)">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <strong ng-if="a.type === 'success'">Success!</strong>
+                <strong ng-if="a.type === 'error'">Error!</strong>
+                <span ng-bind="a.message"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-xs-12">
             <table class="table table-condensed table-striped table-hover">
                 <thead>
                     <tr>
-                        <th>Item</th>
-                        <th>Store</th>
+                        <th width="10%"></th>
+                        <th width="30%">Item</th>
+                        <th width="25%">Store</th>
                         <th>Item Price</th>
                         <th>Quantity</th>
-                        <th>Total Price</th>
+                        <th width="12%">Total Price</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="e in expenses">
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-default btn-xs"><i class="fa fa-lg fa-pencil-square-o"></i></button>
+                                <button ng-click="deleteExpense(e.expense_id)" class="btn btn-danger btn-xs"><i class="fa fa-lg fa-trash"></i></button>
+                            </div>
+                        </td>
                         <td ng-bind="e.item_name"></td>
                         <td ng-bind="e.store"></td>
                         <td ng-bind="e.item_price | currency:undefined:2"></td>
                         <td ng-bind="e.quantity"></td>
                         <td ng-bind="e.total_price | currency:undefined:2"></td>
                     </tr>
+                    <tr ng-if="expenses.length == 0">
+                        <td></td>
+                        <td colspan="5">
+                            No expenses have been recorded!
+                        </td>
+                    </tr>
                 </tbody>
                 <tfoot>
                     <tr>
+                        <td></td>
                         <td colspan="4">Total Expenses</td>
                         <td ng-bind="calculateTotalSpent() | currency:undefined:2"></td>
                     </tr>
                     <tr class="secondary">
+                        <td></td>
                         <td colspan="4">Budget Remaining</td>
                         <td>
                             <span ng-bind="calculateRemainingBudget() | currency:undefined:2"></span>
@@ -62,8 +90,9 @@
                         </td>
                     </tr>
                     <tr class="secondary">
-                        <td colspan="4">Percent Remaining</td>
-                        <td><span ng-bind="(calculateRemainingBudget()/totalBudget)*100 | number:2"></span>%</td>
+                        <td></td>
+                        <td colspan="4">Percent Spent</td>
+                        <td><span ng-bind="(calculateTotalSpent()/totalBudget)*100 | number:2"></span>%</td>
                     </tr>
                 </tfoot>
             </table>
@@ -71,7 +100,7 @@
     </div>
     <hr />
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-md-6">
             <h3>Add Expense</h3>
             <div class="form-group">
                 <label for="expenseItemName" class="col-sm-3 control-label">Item Name</label>
@@ -118,6 +147,8 @@
                     <p id="expenseTotalPrice" class="form-control-static" ng-bind="calculateNewExpenseTotalPrice() | currency:undefined:2"></p>
                 </div>
             </div>
+
+            <button class="btn btn-primary pull-right">Submit Expense</button>
         </div>
     </div>
     <ng-include src="'partials/footer.html'"></ng-include>
