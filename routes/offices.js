@@ -14,7 +14,7 @@ var queries = {
         "`value` FROM `configurations` WHERE `key` = 'active_election_id') AND NOT type = 'all'",
 
     post: "INSERT INTO " + functions.dbName() + ".`offices` (`election_id`, `name`, `description`, `openings`, " +
-    "`nominations_required`, `type`, `disabled`) VALUES ",
+    "`nominations_required`, `expense_limit`, `type`, `disabled`) VALUES ",
     update: "UPDATE offices SET <> WHERE office_id = ",
     toggle: "UPDATE offices SET disabled = IF((SELECT disabled WHERE office_id = @), 0, 1) WHERE office_id = @",
     remove: "DELETE FROM " + functions.dbName() + ".`offices` "
@@ -65,14 +65,14 @@ router.post('/create', function (req, res) {
     if (!data) res.status(204);
 
     var post_array = functions.constructSQLArray([data.name, data.description, data.openings, data.nominations_required,
-        data.type, data.disabled]);
+        data.expense_limit, data.type, data.disabled]);
 
     var query = queries.post + "(" + queries.activeElection + ", " + post_array.substr(1);
 
     connection.query(query, functions.defaultJSONCallback(res));
 
     logger.write(connection, req.session.cas_user, "OFFICE_CREATE", "Entitled " + data.name +
-        ", req. nominations: " + data.nominations_required);
+        ", req. nominations: " + data.nominations_required + ", expense limit: " + data.expense_limit);
 
     connection.end();
 });
@@ -93,6 +93,7 @@ router.put('/update/:office_id', function (req, res) {
         "`description` = " + mysql.escape(data.description) + ", " +
         "`openings` = " + mysql.escape(data.openings) + ", " +
         "`nominations_required` = " + mysql.escape(data.nominations_required) + ", " +
+        "`expense_limit` = " + mysql.escape(data.expense_limit) + ", " +
         "`type` = " + mysql.escape(data.type);
 
     var query = queries.update.replace(/<>/g, assignments) + mysql.escape(office_id);
@@ -100,7 +101,7 @@ router.put('/update/:office_id', function (req, res) {
     connection.query(query, functions.defaultJSONCallback(res));
 
     logger.write(connection, req.session.cas_user, "OFFICE_MODIFY", "Modified " + office_id + ", NEW: " + data.name +
-        ", req. nominations: " + data.nominations_required + ", openings: " + data.openings);
+        ", req. nominations: " + data.nominations_required + ", expense limit: " + data.expense_limit + ", openings: " + data.openings);
 
     connection.end();
 });
