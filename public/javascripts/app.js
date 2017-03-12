@@ -38,6 +38,10 @@ app.config(['$routeProvider', function ($routeProvider) {
         templateUrl: 'partials/editcandidate.html',
         controller: 'CandidateController'
     }).
+    when('/candidate/:rcs/expenses', {
+        templateUrl: 'partials/expenses.html',
+        controller: 'ExpensesController'
+    }).
     when('/candidate/:rcs/nominations', {
         templateUrl: 'partials/nominations.html',
         controller: 'NominationsController'
