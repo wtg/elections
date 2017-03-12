@@ -4,7 +4,6 @@ app.controller('ExpensesController', ['$scope', '$routeParams', '$http', '$q', '
 
         $scope.expenses = [];
         $scope.newExpense = {};
-        $scope.totalBudget = 300;
 
         var loadData = function () {
             $scope.candidate = {};
@@ -23,17 +22,22 @@ app.controller('ExpensesController', ['$scope', '$routeParams', '$http', '$q', '
 
                 $scope.candidate = responses[0].data[0];
                 $scope.candidate.offices = [
-                    {office_id: $scope.candidate.office_id, office_name: $scope.candidate.office_name}
+                    {office_id: $scope.candidate.office_id, office_name: $scope.candidate.office_name, office_expense_limit: $scope.candidate.office_expense_limit }
                 ];
-                $scope.selectedOfficeId = $scope.candidate.office_id;
+                $scope.totalBudget = $scope.candidate.office_expense_limit;
 
                 for (var i = 1; i < responses[0].data.length; i++) {
                     $scope.candidate.office_name += (i === responses[0].data.length - 1 ? ((i > 1 ? "," : "") + " and ") : ", ") +
                         " " + responses[0].data[i].office_name;
                     $scope.candidate.offices.push({
                         office_id: responses[0].data[i].office_id,
-                        office_name: responses[0].data[i].office_name
+                        office_name: responses[0].data[i].office_name,
+                        office_expense_limit: responses[0].data[i].office_expense_limit
                     });
+
+                    if(responses[0].data[i].office_expense_limit > $scope.totalBudget) {
+                        $scope.totalBudget = responses[0].data[i].office_expense_limit;
+                    }
                 }
 
                 if (!$scope.editPermissions && $scope.candidate != $scope.username) {
@@ -139,6 +143,10 @@ app.controller('ExpensesController', ['$scope', '$routeParams', '$http', '$q', '
             return expense;
         };
 
+        $scope.addExpense = function () {
+
+        };
+
         $scope.saveEdits = function (expense) {
             var title = expense.item_name;
 
@@ -152,7 +160,7 @@ app.controller('ExpensesController', ['$scope', '$routeParams', '$http', '$q', '
             }, function (response) {
                 addNewAlert("error", response.statusText + " (code: " + response.status + ")", "update");
             })
-        }
+        };
 
         $scope.deleteExpense = function (expenseId) {
             var position = findExpense(expenseId);
