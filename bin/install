@@ -62,7 +62,7 @@ connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`offices` (" +
     "`description` VARCHAR(1000) NOT NULL," +
     "`openings` INT NOT NULL," +
     "`nominations_required` INT NOT NULL," +
-    "`expense_limit` DOUBLE NOT NULL DEFAULT 0,"
+    "`expense_limit` DOUBLE NOT NULL DEFAULT 0," +
     "`type` VARCHAR(45) NOT NULL," +
     "`disabled` TINYINT(1) NOT NULL DEFAULT 0," +
     "PRIMARY KEY (`office_id`) ," +
