@@ -5,30 +5,50 @@ app.controller('NominationsController', ['$scope', '$routeParams', '$http', '$q'
             $scope.dataLoaded = false;
             $scope.nominationsPending = false;
             $scope.nominationsSubmitted = false;
+            $scope.showSubmitNominations = true;
 
-            $http.get('/api/candidates/rcs/' + $routeParams.rcs).then(function (response) {
-                if (!response.data[0]) {
+            $q.all([
+                $http.get('/api/candidates/rcs/' + $routeParams.rcs),
+                $http.get('/api/nominations/' + $routeParams.rcs + '/all')
+            ]).then(function (responses) {
+                // candidate info
+                if (!responses[0].data[0]) {
                     $location.url("/offices");
                     return;
                 }
 
-                $scope.candidate = response.data[0];
-                $scope.candidate.offices = [
-                    {office_id: $scope.candidate.office_id, office_name: $scope.candidate.office_name}
-                ];
+                $scope.candidate = responses[0].data[0];
+                $scope.candidate.offices = [{
+                    office_id: $scope.candidate.office_id,
+                    office_name: $scope.candidate.office_name,
+                    nominations: []
+                }];
                 $scope.selectedOfficeId = $scope.candidate.office_id;
 
-                for (var i = 1; i < response.data.length; i++) {
-                    $scope.candidate.office_name += (i === response.data.length - 1 ? ((i > 1 ? "," : "") + " and ") : ", ") +
-                        " " + response.data[i].office_name;
+                for (var i = 1; i < responses[0].data.length; i++) {
+                    $scope.candidate.office_name += (i === responses[0].data.length - 1 ? ((i > 1 ? "," : "") + " and ") : ", ") +
+                        " " + responses[0].data[i].office_name;
                     $scope.candidate.offices.push({
-                        office_id: response.data[i].office_id,
-                        office_name: response.data[i].office_name
+                        office_id: responses[0].data[i].office_id,
+                        office_name: responses[0].data[i].office_name,
+                        nominations: []
                     });
                 }
 
+                // add in existing nominations
+                for (const nom of responses[1].data) {
+                    for (const office of $scope.candidate.offices) {
+                        if (nom.office_id == office.office_id) {
+                            office.nominations.push({
+                                nomination_rin: nom.nomination_rin,
+                                date: nom.date
+                            });
+                        }
+                    }
+                }
+
                 if (!$scope.editPermissions) {
-                    $location.url('/offices');
+                    $scope.showSubmitNominations = false;
                 }
             }, function () {
                 alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
@@ -66,6 +86,10 @@ app.controller('NominationsController', ['$scope', '$routeParams', '$http', '$q'
                 $location.url('/candidate/' + $scope.candidate.rcs_id);
             }
         };
+
+        $scope.toggleShowSubmitNominations = function () {
+            $scope.showSubmitNominations = !$scope.showSubmitNominations;
+        }
 
         $scope.formName = function () {
             return ($scope.candidate.preferred_name ? $scope.candidate.preferred_name : $scope.candidate.first_name) +

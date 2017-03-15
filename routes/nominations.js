@@ -9,6 +9,7 @@ var express = require('express'),
 var queries = {
     allCounts: "SELECT rcs_id, office_id, COUNT(*) as nominations FROM " + functions.dbName() + ".`nominations` GROUP BY rcs_id, office_id ORDER BY nominations DESC",
     rcs: "SELECT nomination_rin FROM " + functions.dbName() + ".`nominations` WHERE rcs_id = ",
+    rcsAll: "SELECT rcs_id, office_id, nomination_rin, date FROM " + functions.dbName() + ".`nominations` WHERE rcs_id = % ORDER BY date DESC",
     rcsCounts: "SELECT rcs_id, office_id, COUNT(*) as nominations FROM " + functions.dbName() + ".`nominations` WHERE rcs_id = % GROUP BY rcs_id, office_id ORDER BY nominations DESC",
     selectCandidate: "SELECT * FROM " + functions.dbName() + ".`candidates` WHERE rcs_id = ",
     selectOfficeType: "SELECT type FROM " + functions.dbName() + ".`offices` WHERE office_id = ",
@@ -96,6 +97,20 @@ router.get('/:rcs_id', function (req, res) {
 
     connection.query(queries.rcsCounts.replace(/%/g, mysql.escape(rcs_id)), functions.defaultJSONCallback(res));
 
+    connection.end();
+});
+
+router.get('/:rcs_id/all', function (req, res) {
+    var rcs_id = req.params.rcs_id;
+    var userData = functions.verifyPermissions(req);
+    if (!userData.admin && userData.username !== req.params.rcs_id) {
+        console.log(userData);
+        res.sendStatus(401);
+        return;
+    }
+
+    var connection = functions.dbConnect(res);
+    connection.query(queries.rcsAll.replace(/%/g, mysql.escape(rcs_id)), functions.defaultJSONCallback(res));
     connection.end();
 });
 

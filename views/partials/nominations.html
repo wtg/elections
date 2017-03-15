@@ -10,7 +10,11 @@
         </div>
         <div class="col-sm-12 col-md-4">
             <div class="btn-group pull-right header-btns">
-                <button class="btn btn-default" ng-click="backToCandidate()">
+                <button class="btn btn-default" ng-if="editPermissions" ng-click="toggleShowSubmitNominations()">
+                    <span ng-if="showSubmitNominations">View Nominations</span>
+                    <span ng-if="!showSubmitNominations">Submit Nominations</span>
+                </button>
+                <button class="btn btn-default btn-primary" ng-click="backToCandidate()">
                     Back to Candidate
                 </button>
             </div>
@@ -27,7 +31,7 @@
             <br/>
         </div>
     </div>
-    <div class="row">
+    <div class="row" ng-if="showSubmitNominations">
         <div class="col-xs-12">
             <div class="row" ng-repeat-start="n in nominations">
                 <div class="col-sm-5" ng-class="{'col-sm-offset-1':!nominationsSubmitted}">
@@ -64,6 +68,15 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row" ng-if="!showSubmitNominations">
+        <ul class="list-group" ng-repeat="o in candidate.offices" ng-if="o.office_id === selectedOfficeId">
+            <div class="col-md-4" ng-repeat="i in [0,1,2]">
+                <div class="list-group-item" ng-repeat="nom in o.nominations track by $index" ng-if="$index % 3 == i">
+                    <span ng-bind="nom.nomination_rin"></span> <span class="text-muted" ng-bind="nom.date | date:'medium'"></span>
+                </div>
+            </div>
+        </ul>
     </div>
     <ng-include src="'partials/footer.html'"></ng-include>
 </div>
