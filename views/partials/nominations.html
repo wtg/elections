@@ -70,13 +70,18 @@
         </div>
     </div>
     <div class="row" ng-if="!showSubmitNominations">
-        <ul class="list-group" ng-repeat="o in candidate.offices" ng-if="o.office_id === selectedOfficeId">
-            <div class="col-md-4" ng-repeat="i in [0,1,2]">
-                <div class="list-group-item" ng-repeat="nom in o.nominations track by $index" ng-if="$index % 3 == i">
-                    <span ng-bind="nom.nomination_rin"></span> <span class="text-muted" ng-bind="nom.date | date:'medium'"></span>
+        <div class="col-xs-12" ng-repeat="o in candidate.offices" ng-if="o.office_id === selectedOfficeId">
+            <h3 ng-if="o.nominations.length === 0">No nominations for {{o.office_name}} were found!</h3>
+        </div>
+        <div ng-repeat="o in candidate.offices" ng-if="o.office_id === selectedOfficeId">
+            <ul class="list-group">
+                <div class="col-md-4" ng-repeat="i in [0,1,2]">
+                    <div class="list-group-item" ng-repeat="nom in o.nominations track by $index" ng-if="$index % 3 == i">
+                        <span ng-bind="nom.nomination_rin"></span> <span class="text-muted" ng-bind="nom.date | date:'medium'"></span>
+                    </div>
                 </div>
-            </div>
-        </ul>
+            </ul>
+        </div>
     </div>
     <ng-include src="'partials/footer.html'"></ng-include>
 </div>
