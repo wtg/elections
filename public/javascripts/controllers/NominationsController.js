@@ -50,8 +50,13 @@ app.controller('NominationsController', ['$scope', '$routeParams', '$http', '$q'
                 if (!$scope.editPermissions) {
                     $scope.showSubmitNominations = false;
                 }
-            }, function () {
-                alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
+            }, function (response) {
+                if (response.status === 401) {
+                    // this user isn't authorized to view nominations
+                    $location.url('/offices');
+                } else {
+                    alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
+                }
             }).finally(function () {
                 $scope.dataLoaded = true;
             });
