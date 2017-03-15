@@ -77,9 +77,9 @@ var processMiscInfo = function (result) {
                 } else if (item[0].trim() === "Activities") {
                     result[r].activities = (item[1] ? item[1].trim() : "");
                 } else if (item[0].trim() === "Facebook") {
-                    result[r].facebook = (item[1].trim().length > 0 ? "http://" + item[1].trim() : "");
+                    result[r].facebook = (item[1].trim().length > 0 ? "https://" + item[1].trim() : "");
                 } else if (item[0].trim() === "Twitter") {
-                    result[r].twitter = (item[1].trim().length > 0 ? "http://" + item[1].trim() : "");
+                    result[r].twitter = (item[1].trim().length > 0 ? "https://" + item[1].trim() : "");
                 } else {
                     result[r].misc_info += misc_info[i];
                     result[r].misc_info_obj.push({

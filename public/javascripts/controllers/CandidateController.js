@@ -107,8 +107,8 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
 
             $scope.candidate.misc_info += "\nExperience: " + $scope.candidate.experience +
                 "\nActivities: " + $scope.candidate.activities +
-                "\nFacebook: " + $scope.candidate.facebook.replace("http://", "") +
-                "\nTwitter: " + $scope.candidate.twitter.replace("http://", "");
+                "\nFacebook: " + $scope.candidate.facebook.replace("https://", "") +
+                "\nTwitter: " + $scope.candidate.twitter.replace("https://", "");
 
             $http.put('/api/candidates/update/' + $routeParams.rcs, $scope.candidate).then(function () {
                 $location.url('/candidate/' + $routeParams.rcs);
