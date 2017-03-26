@@ -191,9 +191,10 @@
                             <span ng-if="a.is_anonymous">Asked anonymously</span>
                             <span class="pull-right" ng-bind="a.timestamp | timeAgo"></span>
                         </p>
-                        <p ng-bind="a.answer_text"></p>
+                        <p ng-bind-html="convertMarkdown(a.answer_text)"></p>
                         <div class="form-group" ng-if="showAnswer[$index]">
                             <textarea class="form-control" ng-model="a.new_answer_text"></textarea>
+                            <p class="help-block">Markdown is supported! Find a list of rules <a href="https://daringfireball.net/projects/markdown/basics">here</a>!</p>
                         </div>
                         <button class="btn btn-primary btn-sm pull-right"
                                 ng-if="showAnswer[$index]"
