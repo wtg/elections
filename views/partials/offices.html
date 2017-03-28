@@ -208,6 +208,14 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="postExpenseLimit" class="col-sm-3 control-label">Expense Limit</label>
+
+                    <div class="col-sm-9">
+                        <input class="form-control" type="number" name="newExpenseLimit" id="newExpenseLimit"
+                               ng-model="new.expenseLimit"/>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="posNomReq" class="col-sm-3 control-label">Number of Openings</label>
 
                     <div class="col-sm-9">
@@ -270,6 +278,14 @@
                                ng-model="o.nominationsRequired" ng-change="o.changesPending = true"/>
                         <span id="helpBlock"
                               class="help-block">For a position with no required nominations, enter 0.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="posExpenseLimit" class="col-sm-3 control-label">Expense Limit</label>
+
+                    <div class="col-sm-9">
+                        <input class="form-control" type="number" name="posExpenseLimit" id="posExpenseLimit"
+                               ng-model="o.expenseLimit" ng-change="o.changesPending = true"/>
                     </div>
                 </div>
                 <div class="form-group">

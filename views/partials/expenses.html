@@ -1,0 +1,171 @@
+<div class="container page shadow" ng-if="!dataLoaded">
+    <div class="row">
+        <div class="loader">Loading...</div>
+    </div>
+</div>
+<div class="container page shadow" ng-if="dataLoaded">
+    <div class="row">
+        <div class="col-sm-12 col-md-8">
+            <h1 ng-bind="'Expenses for ' + formName()"></h1>
+        </div>
+        <div class="col-sm-12 col-md-4">
+            <div class="btn-group pull-right header-btns">
+                <button class="btn btn-default" ng-click="backToCandidate()">
+                    Back to Candidate
+                </button>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-xs-12" ng-show="showAlerts" ng-repeat="a in alerts track by $index">
+            <div class="alert" ng-class="{'alert-danger': a.type == 'error', 'alert-success': a.type == 'success',
+                 'alert-info': a.type == 'info'}">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="removeAlert($index)">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <strong ng-if="a.type === 'success'">Success!</strong>
+                <strong ng-if="a.type === 'error'">Error!</strong>
+                <span ng-bind="a.message"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <table class="table table-condensed table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th width="10%"></th>
+                        <th width="30%">Item</th>
+                        <th width="25%">Store</th>
+                        <th>Item Price</th>
+                        <th>Quantity</th>
+                        <th width="12%">Total Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="e in expenses">
+                        <td>
+                            <div class="btn-group" ng-if="!e.editing">
+                                <button ng-click="e = editExpense(e)" class="btn btn-default btn-xs" ng-disabled="editingRow"><i class="fa fa-lg fa-pencil-square-o"></i></button>
+                                <button ng-click="deleteExpense(e.expense_id)" class="btn btn-danger btn-xs" ng-disabled="editingRow"><i class="fa fa-lg fa-trash"></i></button>
+                            </div>
+                            <button ng-click="saveEdits(e)" class="btn btn-success" ng-if="e.editing">Save</button>
+                        </td>
+                        <td>
+                            <span ng-if="!e.editing" ng-bind="e.item_name"></span>
+                            <div ng-if="e.editing" class="form-group">
+                                <input class="form-control" type="text" ng-model="e.item_name" />
+                            </div>
+                        </td>
+                        <td>
+                            <span ng-if="!e.editing" ng-bind="e.store"></span>
+                            <div ng-if="e.editing" class="form-group">
+                                <input class="form-control" type="text" ng-model="e.store" />
+                            </div>
+                        </td>
+                        <td>
+                            <span ng-if="!e.editing" ng-bind="e.item_price | currency:undefined:2"></span>
+                            <div ng-if="e.editing" class="form-group">
+                                <input class="form-control" type="number" ng-model="e.item_price" />
+                            </div>
+                        </td>
+                        <td>
+                            <span ng-if="!e.editing" ng-bind="e.quantity"></span>
+                            <div ng-if="e.editing" class="form-group">
+                                <input class="form-control" type="number" ng-model="e.quantity" />
+                            </div>
+                        </td>
+                        <td>
+                            <span ng-if="!e.editing" ng-bind="e.total_price | currency:undefined:2"></span>
+                            <div ng-if="e.editing" class="form-group">
+                                <input class="form-control" type="number" ng-model="e.total_price" />
+                            </div>
+                        </td>
+                    </tr>
+                    <tr ng-if="expenses.length == 0">
+                        <td></td>
+                        <td colspan="5">
+                            No expenses have been recorded!
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td colspan="4">Total Expenses</td>
+                        <td ng-bind="calculateTotalSpent() | currency:undefined:2"></td>
+                    </tr>
+                    <tr class="secondary">
+                        <td></td>
+                        <td colspan="4">Budget Remaining</td>
+                        <td>
+                            <span ng-bind="calculateRemainingBudget() | currency:undefined:2"></span>
+                            of
+                            <span ng-bind="totalBudget | currency:undefined:2"></span>
+                        </td>
+                    </tr>
+                    <tr class="secondary">
+                        <td></td>
+                        <td colspan="4">Percent Spent</td>
+                        <td><span ng-bind="(calculateTotalSpent()/totalBudget)*100 | number:2"></span>%</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Add Expense</h3>
+            <div class="form-group">
+                <label for="expenseItemName" class="col-sm-3 control-label">Item Name</label>
+                <div class="col-sm-9">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="expenseItemName"
+                               id="expenseItemName" ng-model="newExpense.item_name"/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="expenseStore" class="col-sm-3 control-label">Store</label>
+                <div class="col-sm-9">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="expenseStore"
+                               id="expenseStore" ng-model="newExpense.store"/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="expenseItemPrice" class="col-sm-3 control-label">Item Price</label>
+                <div class="col-sm-9">
+                    <div class="input-group form-group">
+                        <span class="input-group-addon" id="expenseItemPriceAddon">$</span>
+                        <input type="number" class="form-control" name="expenseItemPrice"
+                               aria-describedby="expenseItemPriceAddon" id="expenseItemPrice"
+                               step="0.01" ng-model="newExpense.item_price">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="expenseQuantity" class="col-sm-3 control-label">Quantity</label>
+                <div class="col-sm-9">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="expenseQuantity"
+                               step="1" min="1" id="expenseQuantity" min="0" ng-model="newExpense.quantity"/>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="expenseTotalPrice" class="col-sm-3 control-label">Total Price</label>
+
+                <div class="col-sm-9">
+                    <p id="expenseTotalPrice" class="form-control-static" ng-bind="calculateNewExpenseTotalPrice() | currency:undefined:2"></p>
+                </div>
+            </div>
+
+            <button class="btn btn-primary pull-right" ng-click="submitExpense()">Submit Expense</button>
+        </div>
+    </div>
+    <ng-include src="'partials/footer.html'"></ng-include>
+</div>

@@ -23,6 +23,7 @@ var candidates = require('./routes/candidates');
 var nominations = require('./routes/nominations');
 var parties = require('./routes/parties');
 var events = require('./routes/events');
+var expenses = require('./routes/expenses');
 var users = require('./routes/users');
 var static_routes = require('./routes/static');
 var settings = require('./routes/settings');
@@ -73,6 +74,7 @@ app.use('/api/assistants', assistants);
 app.use('/api/offices', offices);
 app.use('/api/candidates', candidates);
 app.use('/api/nominations', nominations);
+app.use('/api/expenses', expenses);
 app.use('/api/parties', parties);
 app.use('/api/events', events);
 app.use('/api/users', users);
@@ -91,6 +93,8 @@ app.get('/login', cas.bounce, function (req, res) {
         cms.getWTG(rcs_id),
         cms.getRNE(rcs_id)
     ]).then(function (responses) {
+        console.log("\n\n\nhello\n\n\n");
+        console.log(responses);
         var wtg_status = JSON.parse(responses[0]).result,
             rne_status = JSON.parse(responses[1]).result;
 
@@ -101,10 +105,15 @@ app.get('/login', cas.bounce, function (req, res) {
             if(rne_status) logger_desc += "RNE ";
             logger_desc += "membership";
 
+            console.log(logger_desc);
+
             custom_logger.write(null, req.session.cas_user, 'CMS_ADMIN', logger_desc);
+        } else if(config.override_admin) {
+            custom_logger.write(null, req.session.cas_user, 'CMS_ADMIN',
+                'Granted admin access by CMS, overrided by devconfig setting');
         }
 
-        req.session.admin_rights = wtg_status || rne_status;
+        req.session.admin_rights = config.override_admin || wtg_status || rne_status;
         req.session.is_authenticated = true;
 
         res.redirect('/');

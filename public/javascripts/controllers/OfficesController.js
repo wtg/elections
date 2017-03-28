@@ -23,6 +23,7 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                         type: elem.type,
                         numberOpenings: elem.openings,
                         nominationsRequired: elem.nominations_required,
+                        expenseLimit: elem.expense_limit,
                         changesPending: false
                     });
                 });
@@ -112,7 +113,7 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
             };
 
             $scope.new = {
-                title: '', description: '', nominationsRequired: '', numberOpenings: '', type: '', disabled: false
+                title: '', description: '', nominationsRequired: '', expenseLimit: '', numberOpenings: '', type: '', disabled: false
             };
 
             $scope.dataLoaded = false;
@@ -325,6 +326,7 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                 name: $scope.new.title,
                 description: $scope.new.description,
                 nominations_required: $scope.new.nominationsRequired,
+                expense_limit: $scope.new.expenseLimit,
                 openings: $scope.new.numberOpenings,
                 type: $scope.new.type,
                 disabled: $scope.new.disabled
@@ -338,6 +340,9 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                 return;
             } else if (!preparedData.nominations_required) {
                 addNewAlert("error", "You didn't enter a required number of nominations for the office!", "create");
+                return;
+            } else if (!preparedData.expense_limit) {
+                addNewAlert("error", "You didn't enter an expense limit for the office!", "create");
                 return;
             } else if (!preparedData.openings) {
                 addNewAlert("error", "You didn't enter a number of openings for the office!", "create");
@@ -387,6 +392,7 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                 name: $scope.offices[position].title,
                 description: $scope.offices[position].description,
                 nominations_required: $scope.offices[position].nominationsRequired,
+                expense_limit: $scope.offices[position].expenseLimit,
                 openings: $scope.offices[position].numberOpenings,
                 type: $scope.offices[position].type === 'new' ? $scope.offices[position].newType
                     : $scope.offices[position].type
@@ -401,6 +407,10 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
             } else if (!preparedData.nominations_required && preparedData.nominations_required !== 0 &&
                         preparedData.nominations_required !== "0") {
                 addNewAlert("error", "You didn't enter a required number of nominations for the office!", "update");
+                return;
+            } else if (!preparedData.expense_limit && preparedData.expense_limit !== 0 &&
+                        preparedData.expense_limit !== "0") {
+                addNewAlert("error", "You didn't enter an expense limit for the office!", "update");
                 return;
             } else if (!preparedData.openings) {
                 addNewAlert("error", "You didn't enter a number of openings for the office!", "update");

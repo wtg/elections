@@ -57,6 +57,8 @@
             <div class="btn-group pull-right">
                 <a class="btn btn-primary" href="/candidate/{{candidate.rcs_id}}/edit"
                    ng-if="editPermissions || (candidate.rcs_id === username)">Edit</a>
+                <a class="btn btn-default" href="/candidate/{{candidate.rcs_id}}/expenses"
+                   ng-if="editPermissions || (candidate.rcs_id === username)">Expenses</a>
                 <a class="btn btn-default" href="/candidate/{{candidate.rcs_id}}/nominations"
                    ng-if="editPermissions || (candidate.rcs_id === username)">Nominations</a>
             </div>
