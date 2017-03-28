@@ -79,6 +79,7 @@
             <div class="progress" ng-if="candidate.offices.length === 1">
                 <div class="progress-bar" role="progressbar" aria-valuenow="{{candidate.offices[0].nominations}}" aria-valuemin="0"
                      aria-valuemax="{{candidate.office_nominations_required}}"
+                     ng-class="{'progress-bar-success': candidate.offices[0].nominations >= candidate.office_nominations_required}"
                      ng-style="{'width': nominationPercentage(candidate.offices[0].nominations, candidate.office_nominations_required)}">
                 </div>
             </div>
@@ -92,6 +93,7 @@
             <div class="progress" ng-if="candidate.offices.length > 1" ng-repeat-end>
                 <div class="progress-bar" role="progressbar" aria-valuenow="{{o.nominations}}" aria-valuemin="0"
                      aria-valuemax="{{o.office_nominations_required}}"
+                     ng-class="{'progress-bar-success': o.nominations >= o.office_nominations_required}"
                      ng-style="{'width': nominationPercentage(o.nominations, o.office_nominations_required)}">
                 </div>
             </div>

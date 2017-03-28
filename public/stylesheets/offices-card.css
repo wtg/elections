@@ -250,6 +250,10 @@
 	background-color: #EB5E66;
 }
 
+.progress-bar.progress-bar-success {
+	background-color: #38b44a;
+}
+
 .baby-blue {
     background-color: #C5E0DC;
 }
