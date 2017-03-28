@@ -85,7 +85,8 @@
 
                                     <div class="progress-bar" role="progressbar" aria-valuenow="{{c.nominations}}"
                                          aria-valuemin="0" aria-valuemax="{{o.nominationsRequired}}" ng-if="o.nominationsRequired > 0"
-                                         ng-style="{'width': nominationPercentage(c.nominations, o.nominationsRequired)}">
+                                         ng-class="{'progress-bar-success': c.nominations >= o.nominationsRequired}"
+					 ng-style="{'width': nominationPercentage(c.nominations, o.nominationsRequired)}">
                                         <span ng-if="c.nominations/o.nominationsRequired >= .33"
                                               ng-bind="c.nominations + '/' + o.nominationsRequired"></span>
                                     </div>
