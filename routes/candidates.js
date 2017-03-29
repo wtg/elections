@@ -81,7 +81,7 @@ var processMiscInfo = function (result) {
                 } else if (item[0].trim() === "Twitter") {
                     result[r].twitter = (item[1].trim().length > 0 ? "https://" + item[1].trim() : "");
                 } else {
-                    result[r].misc_info += misc_info[i];
+                    result[r].misc_info += misc_info[i] + "\n";
                     result[r].misc_info_obj.push({
                         label: item[0].trim(),
                         entry: item[1].trim()
