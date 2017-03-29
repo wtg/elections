@@ -38,7 +38,8 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
                         office_name: responses[0].data[i].office_name,
                         nominations: responses[0].data[i].nominations,
                         overridden: responses[0].data[i].nominations > 0,
-                        office_nominations_required: responses[0].data[i].office_nominations_required
+                        office_nominations_required: responses[0].data[i].office_nominations_required,
+                        nominations_capped: 0
                     });
                 }
 
@@ -66,6 +67,15 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
                     $scope.candidate.offices.forEach(function (o_elem) {
                         if(n_elem.office_id === o_elem.office_id && !o_elem.overridden) {
                             o_elem.nominations = n_elem.nominations;
+
+                            // cap displayed nominations count at the nomination threshold
+                            if (n_elem.nominations > o_elem.office_nominations_required) {
+                                console.log('first');
+                                o_elem.nominations_capped = o_elem.office_nominations_required;
+                                console.log(o_elem.nominations_capped);
+                            } else {
+                                o_elem.nominations_capped = n_elem.nominations;
+                            }
                         }
                     });
                 });

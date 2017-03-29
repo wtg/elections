@@ -86,6 +86,13 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                                 console.log(n_elem.rcs_id + ", " + c_elem.rcsId + ", " + c_elem.overridden);
                                 if(n_elem.rcs_id === c_elem.rcsId && !c_elem.overridden) {
                                     c_elem.nominations = n_elem.nominations;
+
+                                    // cap displayed nominations count at the nomination threshold
+                                    if (c_elem.nominations > o_elem.nominationsRequired) {
+                                        c_elem.nominations_capped = o_elem.nominationsRequired;
+                                    } else {
+                                        c_elem.nominations_capped = c_elem.nominations;
+                                    }
                                 }
                             });
                         }

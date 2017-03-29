@@ -78,17 +78,17 @@
                                     nominations required</h5>
 
                                 <div class="progress text-center" ng-if="o.nominationsRequired > 0">
-                                    <span ng-if="c.nominations/o.nominationsRequired < .33"
-                                          ng-bind="c.nominations + '/' + o.nominationsRequired"></span>
-                                    <span ng-if="c.nominations === undefined && o.nominationsRequired !== undefined"
+                                    <span ng-if="c.nominations_capped/o.nominationsRequired < .33"
+                                          ng-bind="c.nominations_capped + '/' + o.nominationsRequired"></span>
+                                    <span ng-if="c.nominations_capped === undefined && o.nominationsRequired !== undefined"
                                           ng-bind="'0/' + o.nominationsRequired"></span>
 
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="{{c.nominations}}"
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="{{c.nominations_capped}}"
                                          aria-valuemin="0" aria-valuemax="{{o.nominationsRequired}}" ng-if="o.nominationsRequired > 0"
-                                         ng-class="{'progress-bar-success': c.nominations >= o.nominationsRequired}"
-					 ng-style="{'width': nominationPercentage(c.nominations, o.nominationsRequired)}">
-                                        <span ng-if="c.nominations/o.nominationsRequired >= .33"
-                                              ng-bind="c.nominations + '/' + o.nominationsRequired"></span>
+                                         ng-class="{'progress-bar-success': c.nominations_capped >= o.nominationsRequired}"
+					 ng-style="{'width': nominationPercentage(c.nominations_capped, o.nominationsRequired)}">
+                                        <span ng-if="c.nominations_capped/o.nominationsRequired >= .33"
+                                              ng-bind="c.nominations_capped + '/' + o.nominationsRequired"></span>
                                     </div>
                                 </div>
                             </div>

@@ -73,28 +73,28 @@
             <h3>
                 Nominations
                 <span class="text-muted pull-right" ng-if="candidate.offices.length === 1">
-                    {{candidate.offices[0].nominations}}/{{candidate.office_nominations_required}}
+                    {{candidate.offices[0].nominations_capped}}/{{candidate.office_nominations_required}}
                 </span>
             </h3>
             <div class="progress" ng-if="candidate.offices.length === 1">
-                <div class="progress-bar" role="progressbar" aria-valuenow="{{candidate.offices[0].nominations}}" aria-valuemin="0"
+                <div class="progress-bar" role="progressbar" aria-valuenow="{{candidate.offices[0].nominations_capped}}" aria-valuemin="0"
                      aria-valuemax="{{candidate.office_nominations_required}}"
-                     ng-class="{'progress-bar-success': candidate.offices[0].nominations >= candidate.office_nominations_required}"
-                     ng-style="{'width': nominationPercentage(candidate.offices[0].nominations, candidate.office_nominations_required)}">
+                     ng-class="{'progress-bar-success': candidate.offices[0].nominations_capped >= candidate.office_nominations_required}"
+                     ng-style="{'width': nominationPercentage(candidate.offices[0].nominations_capped, candidate.office_nominations_required)}">
                 </div>
             </div>
 
             <h4 ng-if="candidate.offices.length > 1" ng-repeat-start="o in candidate.offices">
                 {{o.office_name}}
                 <span class="text-muted pull-right">
-                    {{o.nominations}}/{{o.office_nominations_required}}
+                    {{o.nominations_capped}}/{{o.office_nominations_required}}
                 </span>
             </h4>
             <div class="progress" ng-if="candidate.offices.length > 1" ng-repeat-end>
-                <div class="progress-bar" role="progressbar" aria-valuenow="{{o.nominations}}" aria-valuemin="0"
+                <div class="progress-bar" role="progressbar" aria-valuenow="{{o.nominations_capped}}" aria-valuemin="0"
                      aria-valuemax="{{o.office_nominations_required}}"
                      ng-class="{'progress-bar-success': o.nominations >= o.office_nominations_required}"
-                     ng-style="{'width': nominationPercentage(o.nominations, o.office_nominations_required)}">
+                     ng-style="{'width': nominationPercentage(o.nominations_capped, o.office_nominations_required)}">
                 </div>
             </div>
 
