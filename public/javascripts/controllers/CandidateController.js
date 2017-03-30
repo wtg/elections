@@ -25,6 +25,7 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
                         office_id: $scope.candidate.office_id,
                         office_name: $scope.candidate.office_name,
                         nominations: $scope.candidate.nominations,
+                        nominations_capped: 0,
                         overridden: $scope.candidate.nominations > 0,
                         office_nominations_required: $scope.candidate.office_nominations_required
                     }
@@ -70,9 +71,7 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
 
                             // cap displayed nominations count at the nomination threshold
                             if (n_elem.nominations > o_elem.office_nominations_required) {
-                                console.log('first');
                                 o_elem.nominations_capped = o_elem.office_nominations_required;
-                                console.log(o_elem.nominations_capped);
                             } else {
                                 o_elem.nominations_capped = n_elem.nominations;
                             }
