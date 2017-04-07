@@ -100,6 +100,7 @@ connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`candidates` (" +
     "`election_id` INT NOT NULL," +
     "`party_id` INT NULL," +
     "`nominations` INT NOT NULL DEFAULT 0," +
+    "`winner` TINYINT(1) NOT NULL DEFAULT 0," +
     "PRIMARY KEY (`rcs_id`, `office_id`) ," +
     "INDEX `candidates_fk2_idx` (`election_id` ASC) ," +
     "CONSTRAINT `candidates_fk1`" +

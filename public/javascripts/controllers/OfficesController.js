@@ -51,7 +51,8 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                                 twitter: c_elem.twitter,
                                 newType: "", // Don't ask. it's a long story.
                                 profile_url: c_elem.profile_url,
-                                cover_url: c_elem.cover_url
+                                cover_url: c_elem.cover_url,
+                                winner: c_elem.winner
                             });
                         }
                     });
