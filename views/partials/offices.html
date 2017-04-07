@@ -307,6 +307,10 @@
                 <li class="list-group-item" ng-repeat="c in o.candidates | orderBy:'-nominations'"
                     ng-class="{'list-group-item-success': c.nominations >= o.nominationsRequired,
 							   'list-group-item-warning': c.nominations > 0 && c.nominations < o.nominationsRequired}">
+                    <button class="btn btn-default btn-xs pull-right" ng-click="toggleWon(c.rcsId, o.id)">
+                        <span class="fa fa-trophy"></span>
+                    </button>
+
                     <button class="btn btn-default btn-xs pull-right" ng-click="removeCandidate(c.rcsId, o.id)">
                         <span class="fa fa-times"></span>
                     </button>

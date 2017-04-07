@@ -297,6 +297,40 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
             }
         };
 
+         /**
+         * Removes a candidate from a given office
+         * @param rcsId
+         * @param officeId
+         */
+        $scope.toggleWon = function (rcsId, officeId) {
+            var confirmation = confirm("Are you sure you want to toggle win status for " + rcsId + "?");
+
+            if (confirmation) {
+                $scope.offices.forEach(function (o) {
+                    var title;
+                    var indexToToggle = -1;
+                    if (o.id === officeId) {
+                        title = o.title;
+                        o.candidates.forEach(function (c, index) {
+                            if (c.rcsId === rcsId) {
+                                indexToToggle = index;
+                            }
+                        });
+                    }
+                    if (indexToToggle > -1) {
+                        var status;
+                        if (o.candidates[indexToToggle].winner) status = '0';
+                        else status = '1';
+                        $http.put('/api/candidates/update/' + rcsId + '/' + officeId + '/' + status).then(function () {
+                            addNewAlert("success", rcsId + " had win status toggled", "toggle_candidate_win");
+                        }, function (response) {
+                            addNewAlert("error", response.statusText + " (code: " + response.status + ")", "toggle_candidate_win");
+                        });
+                    }
+                });
+            }
+        };
+
         $scope.addCandidateKeypressEvent = function (keyEvent) {
             if (keyEvent.which === 13 && $scope.newCandidate.rcs) {
                 $scope.addCandidate();

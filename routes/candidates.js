@@ -51,6 +51,7 @@ var queries = {
     "`middle_name`, `last_name`, `greek_affiliated`, `entry_date`, `class_by_credit`, `grad_date`, `rin`) VALUES ",
     remove: "DELETE FROM " + functions.dbName() + ".`candidates` ",
     update: "UPDATE " + functions.dbName() + ".`candidate_data` SET <> WHERE rcs_id = ",
+    updateWinner: "UPDATE " + functions.dbName() + ".`candidates` SET `winner` = <> WHERE rcs_id = ",
     updateParty: "UPDATE " + functions.dbName() + ".`candidates` SET `party_id` = <> WHERE rcs_id = ",
 
     duplicateRCS: " ON DUPLICATE KEY UPDATE rcs_id = ",
@@ -328,6 +329,32 @@ router.put('/update/:rcs_id', function (req, res) {
 
         connection.end();
     });
+});
+
+router.put('/update/:rcs_id/:office_id/:status', function (req, res) {
+    var userData = functions.verifyPermissions(req);
+    if (!userData.admin && userData.username != req.params.rcs_id) {
+        res.sendStatus(401);
+        return;
+    }
+
+    var connection = functions.dbConnect(res);
+
+    var rcs_id = req.params.rcs_id,
+        office_id = req.params.office_id,
+        status = req.params.status,
+        data = req.body;
+
+    if (!data) res.status(204);
+
+    query = queries.updateWinner.replace(/<>/g, mysql.escape(status)) + mysql.escape(rcs_id) + 
+        ' AND office_id = ' + mysql.escape(office_id);
+
+    connection.query(query, functions.defaultJSONCallback(res));
+
+    logger.write(connection, req.session.cas_user, "CANDIDATE_MODIFY", "Modified " + rcs_id);
+
+    connection.end();
 });
 
 router.delete('/delete/:rcs_id/:office_id', function (req, res) {
