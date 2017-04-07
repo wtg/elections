@@ -302,11 +302,13 @@
                 nominations.
                 <span class="text-warning">Yellow</span> rows denote candidates that have collected less than the
                 necessary nominations, but have already earned nominations.
+                <span class="text-danger">Red</span> rows denote candidates that have been designated as winners of this office.
             </p>
             <ul class="list-group">
                 <li class="list-group-item" ng-repeat="c in o.candidates | orderBy:'-nominations'"
                     ng-class="{'list-group-item-success': c.nominations >= o.nominationsRequired,
-							   'list-group-item-warning': c.nominations > 0 && c.nominations < o.nominationsRequired}">
+							   'list-group-item-warning': c.nominations > 0 && c.nominations < o.nominationsRequired,
+                               'list-group-item-danger': c.winner}">
                     <button class="btn btn-default btn-xs pull-right" ng-click="toggleWon(c.rcsId, o.id)">
                         <span class="fa fa-trophy"></span>
                     </button>
