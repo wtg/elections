@@ -64,8 +64,9 @@ var queries = {
 var server = emailjs.server.connect({
     user: email.user,
     password: email.password,
-    host: 'mail.rpi.edu',
-    ssl: email.ssl
+    host: email.host,
+    tls: email.ssl,
+    domain: email.domain
 });
 
 var processMiscInfo = function (result) {
@@ -280,10 +281,11 @@ router.post('/create/:rcs_id/:office_id', function (req, res) {
                 " as a candidate for office #" + office_id);
 
             server.send({
-                text: "Your profile on the Elections website has been activated.\n" +
-                "You can sign into the Elections website with your RCS ID and edit your page here: https://elections.union.rpi.edu/raabd \n" +
+                text: "Hello " + cms_data.first_name + ",\n" +
+                "Your profile on the Elections website has been activated.\n" +
+                "You can sign into the Elections website with your RCS ID and edit your page here: https://elections.union.rpi.edu/" + cms_data.username + " \n" +
                 "If you are running for more than one office, you will get this email every time a new office is added to your profile. \n" +
-                "This was an automated email sent by the Elections Website at elections.union.rpi.edu",
+                "This was an automated email sent by the Elections Website at https://elections.union.rpi.edu",
                 from: email.from,
                 to: cms_data.username + "@rpi.edu",
                 subject: "Elections Profile Created"

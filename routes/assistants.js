@@ -3,7 +3,9 @@ var express = require('express'),
     mysql = require('mysql'),
     functions = require('../functions.js'),
     cms = require('../cms.js'),
-    logger = require('../logger.js');
+    logger = require('../logger.js'),
+    email = require('../config.js').email,
+    emailjs = require('emailjs');
 
 var queries = {
     all: "SELECT * FROM `assistants`",
@@ -12,6 +14,14 @@ var queries = {
     "`middle_name`, `last_name`,  `preferred_name`, `rin`) VALUES ",
     remove: "DELETE FROM " + functions.dbName() + ".`assistants`"
 };
+
+var server = emailjs.server.connect({
+    user: email.user,
+    password: email.password,
+    host: email.host,
+    tls: email.ssl,
+    domain: email.domain
+});
 
 router.get('/', function (req, res) {
     var connection = functions.dbConnect(res);
@@ -81,6 +91,15 @@ router.post('/create/:candidate_rcs/:assistant_rcs', function (req, res) {
 
                 logger.write(connection, req.session.cas_user, "ASSISTANT_CREATE", "Added " + cms_data.username +
                     " as an assistant for " + candidate_rcs);
+                
+                server.send({
+                    text: cms_data.first_name + " " + cms_data.last_name + "has been added as your candidate assistant.\n" +
+                    "You will recieve this email every time a candidate assistant is added to your profile. \n" +
+                    "This was an automated email sent by the Elections Website at https://elections.union.rpi.edu",
+                    from: email.from,
+                    to: candidate_rcs + "@rpi.edu",
+                    subject: "Candidate Assistant Added"
+                }, function(err, message) { console.log(err || message); });
 
                 connection.end();
             } catch (e) {
