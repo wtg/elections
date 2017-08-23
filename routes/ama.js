@@ -3,7 +3,9 @@ var express = require('express'),
     mysql = require('mysql'),
     functions = require('../functions.js'),
     cms = require('../cms.js'),
-    logger = require('../logger.js');
+    logger = require('../logger.js'),
+    email = require('../config.js').email,
+    emailjs = require('emailjs');
 
 var queries = {
     all: "SELECT * FROM `ama_questions`",
@@ -13,6 +15,14 @@ var queries = {
     activeElection: "(SELECT `value` FROM `configurations` WHERE `key` = 'active_election_id')",
     update: "UPDATE ama_questions SET answer_text = "
 };
+
+var server = emailjs.server.connect({
+    user: email.user,
+    password: email.password,
+    host: email.host,
+    tls: email.ssl,
+    domain: email.domain
+});
 
 var handleAnonymity = function (result) {
     result.forEach(function (elem) {
@@ -87,6 +97,17 @@ router.post('/candidate/:rcs_id', function (req, res) {
     var query = queries.post + values.substr(0, values.length - 1) + ", " + queries.activeElection + ")";
 
     connection.query(query, functions.defaultJSONCallback(res));
+
+    server.send({
+        text: "The following question has been asked on your profile: \n" +
+        data.question_test + "\n" +
+        "You will recieve this email every time a new AMA question has been added to your profile. \n" +
+        "If you believe this question is a spam submission, please report it to the Rules and Elections Committee by emailing rne@rpi.edu \n" +
+        "This was an automated email sent by the Elections Website at https://elections.union.rpi.edu",
+        from: email.from,
+        to: candidate_rcs_id + "@rpi.edu",
+        subject: "New AMA Question"
+    }, function(err, message) { console.log(err || message); });
 
     connection.end();
 });
