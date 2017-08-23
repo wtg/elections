@@ -8,7 +8,9 @@ var express = require('express'),
     mime = require('mime'),
     fs = require('fs'),
     path = require('path')
-    striptags = require('striptags');
+    striptags = require('striptags'),
+    email = require('../config.js').email,
+    emailjs = require('emailjs');
 
 var IMAGE_TYPES = ['image/jpeg', 'image/png'];
 var TARGET_PATH = path.resolve(__dirname, '../public/usr_content');
@@ -58,6 +60,13 @@ var queries = {
     partiesEnabled: "SELECT `value` FROM `configurations` WHERE `key` = 'parties_enabled'",
     listRCS: "SELECT `rcs_id` FROM `candidates` WHERE election_id = (SELECT `value` FROM `configurations` WHERE `key` = 'active_election_id');"
 };
+
+var server = emailjs.server.connect({
+    user: email.user,
+    password: email.password,
+    host: 'mail.rpi.edu',
+    ssl: email.ssl
+});
 
 var processMiscInfo = function (result) {
     for(var r=0; r < result.length; r++) {
@@ -269,6 +278,16 @@ router.post('/create/:rcs_id/:office_id', function (req, res) {
 
             logger.write(connection, req.session.cas_user, "CANDIDATE_CREATE", "Added " + cms_data.username +
                 " as a candidate for office #" + office_id);
+
+            server.send({
+                text: "Your profile on the Elections website has been activated.\n" +
+                "You can sign into the Elections website with your RCS ID and edit your page here: https://elections.union.rpi.edu/raabd \n" +
+                "If you are running for more than one office, you will get this email every time a new office is added to your profile. \n" +
+                "This was an automated email sent by the Elections Website at elections.union.rpi.edu",
+                from: email.from,
+                to: cms_data.username + "@rpi.edu",
+                subject: "Elections Profile Created"
+            }, function(err, message) { console.log(err || message); });
 
             connection.end();
         } catch (e) {
