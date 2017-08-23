@@ -5,7 +5,7 @@ var express = require('express'),
     cms = require('../cms.js'),
     logger = require('../logger.js'),
     email = require('../config.js').email,
-    emailjs = require('emailjs');
+    nodemailer = require('nodemailer');
 
 var queries = {
     all: "SELECT * FROM `assistants`",
@@ -15,12 +15,14 @@ var queries = {
     remove: "DELETE FROM " + functions.dbName() + ".`assistants`"
 };
 
-var server = emailjs.server.connect({
-    user: email.user,
-    password: email.password,
+let transporter = nodemailer.createTransport({
     host: email.host,
-    tls: email.ssl,
-    domain: email.domain
+    port: email.port,
+    secure: email.secure,
+    auth: {
+        user: email.username,
+        pass: email.password
+    }
 });
 
 router.get('/', function (req, res) {
@@ -92,14 +94,21 @@ router.post('/create/:candidate_rcs/:assistant_rcs', function (req, res) {
                 logger.write(connection, req.session.cas_user, "ASSISTANT_CREATE", "Added " + cms_data.username +
                     " as an assistant for " + candidate_rcs);
                 
-                server.send({
+                let mailoptions = {
                     text: cms_data.first_name + " " + cms_data.last_name + "has been added as your candidate assistant.\n" +
                     "You will recieve this email every time a candidate assistant is added to your profile. \n" +
                     "This was an automated email sent by the Elections Website at https://elections.union.rpi.edu",
                     from: email.from,
                     to: candidate_rcs + "@rpi.edu",
                     subject: "Candidate Assistant Added"
-                }, function(err, message) { console.log(err || message); });
+                };
+
+                transporter.sendMail(mailOptions, (error, info) => {
+                    if (error) {
+                        return console.log(error);
+                    }
+                    console.log('Message %s sent: %s', info.messageId, info.response);
+                });
 
                 connection.end();
             } catch (e) {

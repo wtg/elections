@@ -30,6 +30,7 @@ module.exports = {
         password: '',
         from: 'Rules and Elections Committee <rne@rpi.edu>',
         host: '',
-        domain: ''
+        secure: true,
+        port: 465
     }
 };
