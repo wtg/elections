@@ -284,14 +284,14 @@ router.post('/create/:rcs_id/:office_id', function (req, res) {
                 " as a candidate for office #" + office_id);
 
             let mailoptions = {
-                text: "Hello " + cms_data.first_name + ",\n \n" +
-                "Your profile on the Elections website has been activated.\n" +
-                "You can sign into the Elections website with your RCS ID and edit your page here: https://elections.union.rpi.edu/candidate/" + cms_data.username + " \n" +
-                "If you are running for more than one office, you will get this email every time a new office is added to your profile. \n" +
+                text: "Hello " + cms_data.first_name + ",\n\n" +
+                "Your have been added to a new office on the Elections website.\n" +
+                "You can sign into the Elections website with your RCS ID and edit your page here: https://elections.union.rpi.edu/candidate/" + cms_data.username + "\n" +
+                "If you are running for more than one office, you will get this email every time a new office is added to your profile.\n" +
                 "This was an automated email sent by the Elections Website at https://elections.union.rpi.edu",
                 from: email.from,
                 to: cms_data.username + "@rpi.edu",
-                subject: "Elections Profile Created"
+                subject: "Added to Office"
             };
 
             transporter.sendMail(mailOptions, (error, info) => {

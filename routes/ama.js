@@ -101,10 +101,10 @@ router.post('/candidate/:rcs_id', function (req, res) {
     connection.query(query, functions.defaultJSONCallback(res));
 
     let mailoptions = {
-        text: "The following question has been asked on your profile: \n" +
-        data.question_text + "\n \n" +
-        "You will recieve this email every time a new AMA question has been added to your profile. \n" +
-        "If you believe this question is a spam submission, please report it to the Rules and Elections Committee by emailing rne@rpi.edu \n" +
+        text: "The following question has been asked on your profile:\n" +
+        data.question_text + "\n\n" +
+        "You will recieve this email every time a new AMA question has been added to your profile.\n" +
+        "If you believe this question is a spam submission, please report it to the Rules and Elections Committee by emailing rne@rpi.edu\n" +
         "This was an automated email sent by the Elections Website at https://elections.union.rpi.edu",
         from: email.from,
         to: candidate_rcs_id + "@rpi.edu",
