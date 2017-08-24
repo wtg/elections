@@ -103,7 +103,7 @@ router.post('/create/:candidate_rcs/:assistant_rcs', function (req, res) {
                     subject: "Candidate Assistant Added"
                 };
 
-                transporter.sendMail(mailOptions, (error, info) => {
+                transporter.sendMail(mailoptions, (error, info) => {
                     if (error) {
                         return console.log(error);
                     }

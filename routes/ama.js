@@ -111,7 +111,7 @@ router.post('/candidate/:rcs_id', function (req, res) {
         subject: "New AMA Question"
     };
 
-    transporter.sendMail(mailOptions, (error, info) => {
+    transporter.sendMail(mailoptions, (error, info) => {
         if (error) {
             return console.log(error);
         }

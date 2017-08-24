@@ -294,7 +294,7 @@ router.post('/create/:rcs_id/:office_id', function (req, res) {
                 subject: "Added to Office"
             };
 
-            transporter.sendMail(mailOptions, (error, info) => {
+            transporter.sendMail(mailoptions, (error, info) => {
                 if (error) {
                     return console.log(error);
                 }
