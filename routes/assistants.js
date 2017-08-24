@@ -95,7 +95,7 @@ router.post('/create/:candidate_rcs/:assistant_rcs', function (req, res) {
                     " as an assistant for " + candidate_rcs);
                 
                 let mailoptions = {
-                    text: cms_data.first_name + " " + cms_data.last_name + "has been added as your candidate assistant.\n" +
+                    text: cms_data.first_name + " " + cms_data.last_name + " has been added as your candidate assistant.\n" +
                     "You will recieve this email every time a candidate assistant is added to your profile.\n" +
                     "This was an automated email sent by the Elections Website at https://elections.union.rpi.edu",
                     from: email.from,

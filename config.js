@@ -14,6 +14,14 @@ try {
 		cms: process.env.CMS_API_TOKEN,
 		service_url: process.env.SERVICE_URL,
 		cas_dev_mode: false,
-		cas_dev_mode_user: ''
+		cas_dev_mode_user: '',
+		email: {
+			username: process.env.EMAIL_USER,
+			password: process.env.EMAIL_PASSWORD,
+			from: process.env.EMAIL_FROM,
+			host: process.env.EMAIL_HOST,
+			secure: true,
+			port: 465
+		}
 	};
 }
