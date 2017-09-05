@@ -3,7 +3,9 @@ var express = require('express'),
     mysql = require('mysql'),
     functions = require('../functions.js'),
     cms = require('../cms.js'),
-    logger = require('../logger.js');
+    logger = require('../logger.js'),
+    config = require('../config.js'),
+    mailer = functions.mailer;
 
 var queries = {
     all: "SELECT * FROM `ama_questions`",
@@ -88,12 +90,30 @@ router.post('/candidate/:rcs_id', function (req, res) {
 
     connection.query(query, functions.defaultJSONCallback(res));
 
+    let mailoptions = {
+        text: "The following question has been asked on your profile:\n\n" +
+        data.question_text + "\n\n" +
+        "You will recieve this email every time a new AMA question has been added to your profile. " +
+        "If you believe this question is a spam submission, please report it to the Rules and Elections Committee by emailing rne@rpi.edu.\n\n" +
+        "This is an automated email sent by the Elections website at https://elections.union.rpi.edu",
+        from: config.email.from,
+        to: candidate_rcs_id + "@rpi.edu",
+        subject: "New AMA question"
+    };
+
+    mailer.sendMail(mailoptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+        }
+        console.log('Message %s sent to %s@rpi.edu: %s', info.messageId, candidate_rcs_id, info.response);
+    });
+
     connection.end();
 });
 
 router.put('/candidate/:rcs_id', function (req, res) {
     if ((!functions.verifyPermissions(req).authenticated ||
-        req.session.cas_user.toLowerCase() !== req.params.rcs_id) && 
+        req.session.cas_user.toLowerCase() !== req.params.rcs_id) &&
         !functions.verifyPermissions(req).admin) {
         res.sendStatus(401);
         return;

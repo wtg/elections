@@ -3,7 +3,9 @@ var express = require('express'),
     mysql = require('mysql'),
     functions = require('../functions.js'),
     cms = require('../cms.js'),
-    logger = require('../logger.js');
+    logger = require('../logger.js'),
+    config = require('../config.js'),
+    mailer = functions.mailer;
 
 var queries = {
     all: "SELECT * FROM `assistants`",
@@ -81,6 +83,22 @@ router.post('/create/:candidate_rcs/:assistant_rcs', function (req, res) {
 
                 logger.write(connection, req.session.cas_user, "ASSISTANT_CREATE", "Added " + cms_data.username +
                     " as an assistant for " + candidate_rcs);
+
+                let mailoptions = {
+                    text: cms_data.first_name + " " + cms_data.last_name + " has been added as your candidate assistant. " +
+                    "You will receive this email every time a candidate assistant is added to your profile.\n\n" +
+                    "This is an automated email sent by the Elections website at https://elections.union.rpi.edu",
+                    from: config.email.from,
+                    to: candidate_rcs + "@rpi.edu",
+                    subject: "Candidate assistant added"
+                };
+
+                mailer.sendMail(mailoptions, (error, info) => {
+                    if (error) {
+                        return console.log(error);
+                    }
+                    console.log('Message %s sent: %s', info.messageId, info.response);
+                });
 
                 connection.end();
             } catch (e) {

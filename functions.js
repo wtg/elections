@@ -1,7 +1,9 @@
 var db = require('./config.js').db,
     mysql = require('mysql'),
     cms = require('./cms.js'),
-    db_name = mysql.escapeId(require('./config.js').db_name);
+    db_name = mysql.escapeId(require('./config.js').db_name),
+    email = require('./config.js').email,
+    nodemailer = require('nodemailer');
 
 module.exports = {
     dbConnect: function (res) {
@@ -75,5 +77,14 @@ module.exports = {
     determineCMSPromise: function(rcs_id) {
         console.log(rcs_id);
         return isNaN(parseInt(rcs_id)) ? cms.getRCS(rcs_id) : cms.getRIN(rcs_id);
-    }
+    },
+    mailer: nodemailer.createTransport({
+        host: email.host,
+        port: email.port,
+        secure: email.secure,
+        auth: {
+            user: email.username,
+            pass: email.password
+        }
+    })
 };

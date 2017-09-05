@@ -7,8 +7,10 @@ var express = require('express'),
     uid = require('uid2'),
     mime = require('mime'),
     fs = require('fs'),
-    path = require('path')
-    striptags = require('striptags');
+    path = require('path'),
+    striptags = require('striptags'),
+    config = require('../config.js'),
+    mailer = functions.mailer;
 
 var IMAGE_TYPES = ['image/jpeg', 'image/png'];
 var TARGET_PATH = path.resolve(__dirname, '../public/usr_content');
@@ -270,6 +272,26 @@ router.post('/create/:rcs_id/:office_id', function (req, res) {
             logger.write(connection, req.session.cas_user, "CANDIDATE_CREATE", "Added " + cms_data.username +
                 " as a candidate for office #" + office_id);
 
+            try {
+                let mailoptions = {
+                    text: "Hello " + cms_data.first_name + ",\n\n" +
+                    "You have been added to a new office on the Elections website. " +
+                    "You can sign into the Elections website with your RCS ID and edit your page here: https://elections.union.rpi.edu/candidate/" + cms_data.username + "\n\n" +
+                    "If you are running for more than one office, you will get this email every time a new office is added to your profile.\n\n" +
+                    "This is an automated email sent by the Elections website at https://elections.union.rpi.edu",
+                    from: config.email.from,
+                    to: cms_data.username + "@rpi.edu",
+                    subject: "You have been added to an office"
+                };
+                mailer.sendMail(mailoptions, (error, info) => {
+                    if (error) {
+                        return console.log(error);
+                    }
+                    console.log('Message %s sent: %s', info.messageId, info.response);
+                });
+            } catch (e) {
+                console.log("Unable to send email:", e)
+            }
             connection.end();
         } catch (e) {
             console.log("Invalid RCS entered (" + rcs_id + "). The client was notified.");
@@ -347,7 +369,7 @@ router.put('/update/:rcs_id/:office_id/:status', function (req, res) {
 
     if (!data) res.status(204);
 
-    query = queries.updateWinner.replace(/<>/g, mysql.escape(status)) + mysql.escape(rcs_id) + 
+    query = queries.updateWinner.replace(/<>/g, mysql.escape(status)) + mysql.escape(rcs_id) +
         ' AND office_id = ' + mysql.escape(office_id);
 
     connection.query(query, functions.defaultJSONCallback(res));

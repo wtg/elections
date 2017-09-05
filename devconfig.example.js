@@ -11,6 +11,7 @@
  *  https://cms.union.rpi.edu or contact the Rensselaer Union Systems Administrators.
  *  - service_url: the url (and port, if not 80) that the user is accessing your app from; used by the RPI Central
  *  Authentication System
+ *  - email: settings required to connect to an SMTP relay
  */
 
 module.exports = {
@@ -23,5 +24,13 @@ module.exports = {
     cms: '',
     service_url: 'http://localhost:3000',
     cas_dev_mode: false,
-    cas_dev_mode_user: ''
+    cas_dev_mode_user: '',
+    email: {
+        username: '',
+        password: '',
+        from: 'RPI Elections <rne@rpi.edu>',
+        host: '',
+        secure: true,
+        port: 465
+    }
 };
