@@ -28,7 +28,7 @@ module.exports = {
     email: {
         username: '',
         password: '',
-        from: 'Elections Website <rne@rpi.edu>',
+        from: 'RPI Elections <rne@rpi.edu>',
         host: '',
         secure: true,
         port: 465

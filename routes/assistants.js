@@ -4,8 +4,8 @@ var express = require('express'),
     functions = require('../functions.js'),
     cms = require('../cms.js'),
     logger = require('../logger.js'),
-    email = require('../config.js').email,
-    nodemailer = require('nodemailer');
+    config = require('../config.js'),
+    mailer = functions.mailer;
 
 var queries = {
     all: "SELECT * FROM `assistants`",
@@ -14,16 +14,6 @@ var queries = {
     "`middle_name`, `last_name`,  `preferred_name`, `rin`) VALUES ",
     remove: "DELETE FROM " + functions.dbName() + ".`assistants`"
 };
-
-let transporter = nodemailer.createTransport({
-    host: email.host,
-    port: email.port,
-    secure: email.secure,
-    auth: {
-        user: email.username,
-        pass: email.password
-    }
-});
 
 router.get('/', function (req, res) {
     var connection = functions.dbConnect(res);
@@ -93,17 +83,17 @@ router.post('/create/:candidate_rcs/:assistant_rcs', function (req, res) {
 
                 logger.write(connection, req.session.cas_user, "ASSISTANT_CREATE", "Added " + cms_data.username +
                     " as an assistant for " + candidate_rcs);
-                
+
                 let mailoptions = {
-                    text: cms_data.first_name + " " + cms_data.last_name + " has been added as your candidate assistant.\n" +
-                    "You will recieve this email every time a candidate assistant is added to your profile.\n" +
-                    "This was an automated email sent by the Elections Website at https://elections.union.rpi.edu",
-                    from: email.from,
+                    text: cms_data.first_name + " " + cms_data.last_name + " has been added as your candidate assistant. " +
+                    "You will receive this email every time a candidate assistant is added to your profile.\n\n" +
+                    "This is an automated email sent by the Elections website at https://elections.union.rpi.edu",
+                    from: config.email.from,
                     to: candidate_rcs + "@rpi.edu",
-                    subject: "Candidate Assistant Added"
+                    subject: "Candidate assistant added"
                 };
 
-                transporter.sendMail(mailoptions, (error, info) => {
+                mailer.sendMail(mailoptions, (error, info) => {
                     if (error) {
                         return console.log(error);
                     }

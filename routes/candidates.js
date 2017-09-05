@@ -7,10 +7,10 @@ var express = require('express'),
     uid = require('uid2'),
     mime = require('mime'),
     fs = require('fs'),
-    path = require('path')
+    path = require('path'),
     striptags = require('striptags'),
-    email = require('../config.js').email,
-    nodemailer = require('nodemailer');
+    config = require('../config.js'),
+    mailer = functions.mailer;
 
 var IMAGE_TYPES = ['image/jpeg', 'image/png'];
 var TARGET_PATH = path.resolve(__dirname, '../public/usr_content');
@@ -60,17 +60,6 @@ var queries = {
     partiesEnabled: "SELECT `value` FROM `configurations` WHERE `key` = 'parties_enabled'",
     listRCS: "SELECT `rcs_id` FROM `candidates` WHERE election_id = (SELECT `value` FROM `configurations` WHERE `key` = 'active_election_id');"
 };
-
-let transporter = nodemailer.createTransport({
-    host: email.host,
-    port: email.port,
-    secure: email.secure,
-    auth: {
-        user: email.username,
-        pass: email.password
-    }
-});
-
 
 var processMiscInfo = function (result) {
     for(var r=0; r < result.length; r++) {
@@ -283,24 +272,26 @@ router.post('/create/:rcs_id/:office_id', function (req, res) {
             logger.write(connection, req.session.cas_user, "CANDIDATE_CREATE", "Added " + cms_data.username +
                 " as a candidate for office #" + office_id);
 
-            let mailoptions = {
-                text: "Hello " + cms_data.first_name + ",\n\n" +
-                "Your have been added to a new office on the Elections website.\n" +
-                "You can sign into the Elections website with your RCS ID and edit your page here: https://elections.union.rpi.edu/candidate/" + cms_data.username + "\n" +
-                "If you are running for more than one office, you will get this email every time a new office is added to your profile.\n" +
-                "This was an automated email sent by the Elections Website at https://elections.union.rpi.edu",
-                from: email.from,
-                to: cms_data.username + "@rpi.edu",
-                subject: "Added to Office"
-            };
-
-            transporter.sendMail(mailoptions, (error, info) => {
-                if (error) {
-                    return console.log(error);
-                }
-                console.log('Message %s sent: %s', info.messageId, info.response);
-            });
-
+            try {
+                let mailoptions = {
+                    text: "Hello " + cms_data.first_name + ",\n\n" +
+                    "You have been added to a new office on the Elections website. " +
+                    "You can sign into the Elections website with your RCS ID and edit your page here: https://elections.union.rpi.edu/candidate/" + cms_data.username + "\n\n" +
+                    "If you are running for more than one office, you will get this email every time a new office is added to your profile.\n\n" +
+                    "This is an automated email sent by the Elections website at https://elections.union.rpi.edu",
+                    from: config.email.from,
+                    to: cms_data.username + "@rpi.edu",
+                    subject: "You have been added to an office"
+                };
+                mailer.sendMail(mailoptions, (error, info) => {
+                    if (error) {
+                        return console.log(error);
+                    }
+                    console.log('Message %s sent: %s', info.messageId, info.response);
+                });
+            } catch (e) {
+                console.log("Unable to send email:", e)
+            }
             connection.end();
         } catch (e) {
             console.log("Invalid RCS entered (" + rcs_id + "). The client was notified.");
@@ -378,7 +369,7 @@ router.put('/update/:rcs_id/:office_id/:status', function (req, res) {
 
     if (!data) res.status(204);
 
-    query = queries.updateWinner.replace(/<>/g, mysql.escape(status)) + mysql.escape(rcs_id) + 
+    query = queries.updateWinner.replace(/<>/g, mysql.escape(status)) + mysql.escape(rcs_id) +
         ' AND office_id = ' + mysql.escape(office_id);
 
     connection.query(query, functions.defaultJSONCallback(res));

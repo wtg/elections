@@ -4,8 +4,8 @@ var express = require('express'),
     functions = require('../functions.js'),
     cms = require('../cms.js'),
     logger = require('../logger.js'),
-    email = require('../config.js').email,
-    nodemailer = require('nodemailer');
+    config = require('../config.js'),
+    mailer = functions.mailer;
 
 var queries = {
     all: "SELECT * FROM `ama_questions`",
@@ -15,16 +15,6 @@ var queries = {
     activeElection: "(SELECT `value` FROM `configurations` WHERE `key` = 'active_election_id')",
     update: "UPDATE ama_questions SET answer_text = "
 };
-
-let transporter = nodemailer.createTransport({
-    host: email.host,
-    port: email.port,
-    secure: email.secure,
-    auth: {
-        user: email.username,
-        pass: email.password
-    }
-});
 
 var handleAnonymity = function (result) {
     result.forEach(function (elem) {
@@ -101,17 +91,17 @@ router.post('/candidate/:rcs_id', function (req, res) {
     connection.query(query, functions.defaultJSONCallback(res));
 
     let mailoptions = {
-        text: "The following question has been asked on your profile:\n" +
+        text: "The following question has been asked on your profile:\n\n" +
         data.question_text + "\n\n" +
-        "You will recieve this email every time a new AMA question has been added to your profile.\n" +
-        "If you believe this question is a spam submission, please report it to the Rules and Elections Committee by emailing rne@rpi.edu\n" +
-        "This was an automated email sent by the Elections Website at https://elections.union.rpi.edu",
-        from: email.from,
+        "You will recieve this email every time a new AMA question has been added to your profile. " +
+        "If you believe this question is a spam submission, please report it to the Rules and Elections Committee by emailing rne@rpi.edu.\n\n" +
+        "This is an automated email sent by the Elections website at https://elections.union.rpi.edu",
+        from: config.email.from,
         to: candidate_rcs_id + "@rpi.edu",
-        subject: "New AMA Question"
+        subject: "New AMA question"
     };
 
-    transporter.sendMail(mailoptions, (error, info) => {
+    mailer.sendMail(mailoptions, (error, info) => {
         if (error) {
             return console.log(error);
         }
@@ -123,7 +113,7 @@ router.post('/candidate/:rcs_id', function (req, res) {
 
 router.put('/candidate/:rcs_id', function (req, res) {
     if ((!functions.verifyPermissions(req).authenticated ||
-        req.session.cas_user.toLowerCase() !== req.params.rcs_id) && 
+        req.session.cas_user.toLowerCase() !== req.params.rcs_id) &&
         !functions.verifyPermissions(req).admin) {
         res.sendStatus(401);
         return;
