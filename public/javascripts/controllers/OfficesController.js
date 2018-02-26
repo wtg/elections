@@ -11,7 +11,7 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                 $http.get('/api/offices/election/active'),
                 $http.get('/api/candidates'),
                 $http.get('/api/offices/types'),
-                $http.get('/api/nominations')
+                $http.get('/api/nominations/counts')
             ]).then(function (responses) {
                 responses[0].data.forEach(function (elem) {
                     $scope.offices.push({
@@ -84,7 +84,6 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                     $scope.offices.forEach(function (o_elem) {
                         if(n_elem.office_id === o_elem.id) {
                             o_elem.candidates.forEach(function (c_elem) {
-                                console.log(n_elem.rcs_id + ", " + c_elem.rcsId + ", " + c_elem.overridden);
                                 if(n_elem.rcs_id === c_elem.rcsId && !c_elem.overridden) {
                                     c_elem.nominations = n_elem.nominations;
 

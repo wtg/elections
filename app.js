@@ -54,7 +54,8 @@ var cas = new CASAuthentication({
     service_url: config.service_url,
     cas_version: '2.0',
     is_dev_mode: config.cas_dev_mode,
-    dev_mode_user: config.cas_dev_mode_user
+    dev_mode_user: config.cas_dev_mode_user,
+    destroy_session: true,
 });
 
 // uncomment after placing your favicon in /public

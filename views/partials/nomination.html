@@ -1,0 +1,102 @@
+<div ng-if="!dataLoaded">
+    <div class="row">
+        <div class="loader">Loading...</div>
+    </div>
+</div>
+<div ng-if="dataLoaded">
+    <!-- <button class="btn btn-default btn-xs pull-right" ng-click="">
+        <span class="fa fa-times"></span>
+    </button> -->
+    <dl class="list-group-item-text dl-horizontal">
+        <dt>Number</dt>
+        <dd>{{ nomination.number }}</dd>
+        <dt>RIN</dt>
+        <dd>{{ nomination.rin }}</dd>
+        <dt>Initials</dt>
+        <dd>{{ nomination.initials }}</dd>
+        <dt>Status</dt>
+        <dd>
+            <span class="label" ng-class="{'label-success': isValid(), 'label-danger': isInvalid(), 'label-default': isPending()}">
+                {{ statusText() }}
+            </span>
+        </dd>
+    </dl>
+    <div class="list-group-item-text" ng-if="error">
+        <br>
+        <div class="alert alert-warning">{{ error }}</div>
+    </div>
+    <div ng-if="editPermissions && !error">
+        <br>
+        <div class="row">
+            <div class="col-xs-12 col-lg-4">
+                <div class="panel panel-default" ng-class="{'panel-danger': validation.valid === false, 'panel-success': validation.valid === true}">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            Recommendation:
+                            <span class="text-success" ng-if="validation.valid === true">Valid</span>
+                            <span class="text-danger" ng-if="validation.valid === false">Invalid</span>
+                        </h4>
+                    </div>
+                    <div class="panel-body">
+                        <ul ng-if="validation.problems" class="list-unstyled">
+                            <li ng-repeat="problem in validation.problems">
+                                {{ problem }}
+                            </li>
+                        </ul>
+                        <div class="btn-group btn-group-justified" role="group">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-success" ng-class="{active: isValid()}" ng-click="toggleValid()">
+                                    <span class="fa fa-check"></span>
+                                    Valid
+                                </button>
+                            </div>
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-danger" ng-class="{active: isInvalid()}" ng-click="toggleInvalid()">
+                                    <span class="fa fa-times"></span>
+                                    Invalid
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-lg-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Nominator</div>
+                    <div class="panel-body">
+                        <dl class="dl-horizontal" ng-if="nominator">
+                            <dt>First name</dt>
+                            <dd>{{ nominator.first_name }}</dd>
+                            <dt>Middle name</dt>
+                            <dd>{{ nominator.middle_name }}</dd>
+                            <dt>Last name</dt>
+                            <dd>{{ nominator.last_name }}</dd>
+                            <dt>Credit cohort</dt>
+                            <dd>{{ nominator.credit_cohort }}</dd>
+                            <dt>Entry cohort</dt>
+                            <dd>{{ nominator.entry_cohort }}</dd>
+                            <dt>Greek</dt>
+                            <dd>
+                                <span ng-if="nominator.greek">Affiliated</span>
+                                <span ng-if="!nominator.greek">Not affiliated</span>
+                            </dd>
+                            <dt>Type</dt>
+                            <dd>{{ nominator.type }}</dd>
+                        </dl>
+                        <p ng-if="!nominator">No information available.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-lg-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Eligible cohorts</div>
+                    <div class="panel-body">
+                        <span ng-repeat="cohort in office.cohorts">
+                            {{ cohort }}<span ng-if="$index != office.cohorts.length - 1">,</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

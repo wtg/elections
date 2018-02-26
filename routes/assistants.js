@@ -9,10 +9,12 @@ var express = require('express'),
 
 var queries = {
     all: "SELECT * FROM `assistants`",
-    candidateRCS: " WHERE candidate_rcs_id = ",
+    candidateRCS: "WHERE election_id = (SELECT `value` FROM `configurations` WHERE `key` = 'active_election_id')" +
+      " AND candidate_rcs_id = ",
     post: "INSERT INTO " + functions.dbName() + ".`assistants` (`rcs_id`, `candidate_rcs_id`, `first_name`, " +
-    "`middle_name`, `last_name`,  `preferred_name`, `rin`) VALUES ",
-    remove: "DELETE FROM " + functions.dbName() + ".`assistants`"
+    "`middle_name`, `last_name`,  `preferred_name`, `rin`, `election_id`) VALUES ",
+    remove: "DELETE FROM " + functions.dbName() + ".`assistants`",
+    activeElection: "(SELECT `value` FROM `configurations` WHERE `key` = 'active_election_id')",
 };
 
 router.get('/', function (req, res) {
@@ -74,10 +76,12 @@ router.post('/create/:candidate_rcs/:assistant_rcs', function (req, res) {
                     return;
                 }
 
-                var query = queries.post + functions.constructSQLArray([
-                        cms_data.username, candidate_rcs, cms_data.first_name, cms_data.middle_name, cms_data.last_name,
-                        cms_data.preferred_name, cms_data.student_id
-                    ]);
+                let values = functions.constructSQLArray([
+                  cms_data.username, candidate_rcs, cms_data.first_name, cms_data.middle_name, cms_data.last_name,
+                  cms_data.preferred_name, cms_data.student_id
+                ]);
+
+                let query = queries.post + values.substr(0, values.length - 1) + ", " + queries.activeElection + ")";
 
                 connection.query(query, functions.defaultJSONCallback(res));
 

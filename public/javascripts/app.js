@@ -42,6 +42,18 @@ app.config(['$routeProvider', function ($routeProvider) {
         templateUrl: 'partials/nominations.html',
         controller: 'NominationsController'
     }).
+    when('/candidate/:rcs/nominations/:office', {
+        templateUrl: 'partials/nominations.html',
+        controller: 'NominationsController'
+    }).
+    when('/candidate/:rcs/nominations/:office/add', {
+        templateUrl: 'partials/addnominations.html',
+        controller: 'AddNominationsController'
+    }).
+    when('/candidate/:rcs/nominations/:office/:page', {
+        templateUrl: 'partials/nominationpage.html',
+        controller: 'NominationPageController'
+    }).
     when('/candidate/:rcs/:section', {
         templateUrl: 'partials/candidate.html',
         controller: 'CandidateController'

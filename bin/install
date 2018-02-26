@@ -159,7 +159,11 @@ connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`nominations` (" +
     "`rcs_id` VARCHAR(45) NOT NULL," +
     "`office_id` INT NOT NULL," +
     "`nomination_rin` VARCHAR(9) NOT NULL," +
-    "`date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP," +
+    "`nomination_initials` VARCHAR(3) NOT NULL," +
+    "`valid` TINYINT(1) NULL DEFAULT NULL," +
+    "`page` INT NOT NULL," +
+    "`number` INT NOT NULL," +
+    "`date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP," +
     "INDEX `nominations_fk2_idx` (`office_id` ASC) ," +
     "PRIMARY KEY (`nomination_id`) ," +
     "INDEX `nominations_fk3_idx` (`election_id` ASC) ," +
@@ -216,6 +220,7 @@ connection.query("CREATE TABLE IF NOT EXISTS " + db_name + ".`assistants` (" +
     "`last_name` VARCHAR(45) NOT NULL," +
     "`preferred_name` VARCHAR(45) NULL," +
     "`rin` VARCHAR(9) NOT NULL," +
+    "`election_id` INT NOT NULL," +
     "PRIMARY KEY (`assistant_id`)," +
     "INDEX `assistant_fk1_idx` (`candidate_rcs_id` ASC)," +
     "CONSTRAINT `assistant_fk1`" +

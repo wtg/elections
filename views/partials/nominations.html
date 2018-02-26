@@ -10,10 +10,6 @@
         </div>
         <div class="col-sm-12 col-md-4">
             <div class="btn-group pull-right header-btns">
-                <button class="btn btn-default" ng-if="editPermissions" ng-click="toggleShowSubmitNominations()">
-                    <span ng-if="showSubmitNominations">View Nominations</span>
-                    <span ng-if="!showSubmitNominations">Submit Nominations</span>
-                </button>
                 <button class="btn btn-default btn-primary" ng-click="backToCandidate()">
                     Back to Candidate
                 </button>
@@ -24,63 +20,57 @@
     <div class="row" ng-if="candidate.offices.length > 1">
         <div class="col-xs-12">
             <ul class="nav nav-tabs">
-                <li ng-repeat="o in candidate.offices" role="presentation" ng-class="{'active': o.office_id === selectedOfficeId}">
-                    <a ng-click="changeSelectedOffice(o.office_id)" ng-bind="o.office_name"></a>
+                <li ng-repeat="o in candidate.offices" role="presentation" ng-class="{'active': o.office_id == selectedOfficeId}">
+                    <a ng-click="changeSelectedOffice(o.office_id)">
+                        {{ o.office_name }}
+                        <!-- <span class="badge" ng-if="statusCounts().valid > 0">{{ statusCounts().valid }}</span> -->
+                    </a>
                 </li>
             </ul>
             <br/>
         </div>
     </div>
-    <div class="row" ng-if="showSubmitNominations">
+    <div class="row" ng-if="showNominationPages">
         <div class="col-xs-12">
-            <div class="row" ng-repeat-start="n in nominations">
-                <div class="col-sm-5" ng-class="{'col-sm-offset-1':!nominationsSubmitted}">
-                    <div class="form-group" ng-class="colorInputs(n)">
-                        <input class="form-control" placeholder="RIN" ng-model="n.rin" ng-change="enableNominationsPending()">
-                    </div>
-                </div>
-                <div class="col-sm-5" ng-class="colorInputs(n)">
-                    <input class="form-control" placeholder="Initials" ng-model="n.initials" ng-change="enableNominationsPending()">
-                </div>
-                <div class="col-sm-2">
-                    <p class="form-control-static text-success" ng-if="n.status === 'success'">
-                        <i class="fa fa-check"></i> Valid
-                    </p>
-                    <p class="form-control-static text-danger" ng-if="n.status === 'invalid'">
-                        <i class="fa fa-exclamation-circle"></i> Invalid RIN
-                    </p>
-                    <p class="form-control-static text-danger" ng-if="n.status === 'initials'">
-                        <i class="fa fa-exclamation-circle"></i> Invalid Initials for RIN
-                    </p>
-                    <p class="form-control-static text-warning" ng-if="n.status === 'already'">
-                        <i class="fa fa-exclamation-triangle"></i> Already nominated
-                    </p>
-                    <p class="form-control-static text-warning" ng-if="n.status === 'wrongclass'">
-                        <i class="fa fa-exclamation-triangle"></i> Invalid cohort
-                    </p>
-
-                </div>
+            <div ng-show="!nominationPages.length">
+                <h3>No nominations added.</h3>
             </div>
-            <br ng-repeat-end />
+            <p ng-show="nominationPages.length">{{ statusCounts().valid }} valid, {{ statusCounts().invalid }} invalid, and {{ statusCounts().pending }} pending nominations</p>
+            <div class="list-group">
+                <a class="list-group-item" ng-repeat="np in nominationPages" ng-click="showPage(np.page_number)">
+                    <h4 class="list-group-item-heading">Page {{ np.page_number }}
+                        <!-- <button class="btn btn-default btn-xs pull-right" ng-click="console.log('hi')">
+                            <span class="fa fa-times"></span>
+                        </button> -->
+                    </h4>
+                    <p class="list-group-item-text">
+                        Submitted on {{ np.submitted | date:'MMMM d, y' }} at {{ np.submitted | date:'shortTime'}}
+                    </p>
+                    <p class="list-group-item-text">{{ numValid(np.nominations) }} out of {{ np.nominations.length }} nominations validated</p>
+                </a>
+            </div>
             <div class="row">
                 <div class="col-md-4 col-md-offset-4 text-center">
-                    <button class="btn btn-primary" ng-click="submit()">Submit Nominations</button>
+                    <button class="btn btn-primary" ng-click="addNominations()">Add Nominations</button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row" ng-if="!showSubmitNominations">
-        <div class="col-xs-12" ng-repeat="o in candidate.offices" ng-if="o.office_id === selectedOfficeId">
-            <h3 ng-if="o.nominations.length === 0">No nominations for {{o.office_name}} were found!</h3>
-        </div>
-        <div ng-repeat="o in candidate.offices" ng-if="o.office_id === selectedOfficeId">
-            <ul class="list-group">
-                <div class="col-md-4" ng-repeat="i in [0,1,2]">
-                    <div class="list-group-item" ng-repeat="nom in o.nominations track by $index" ng-if="$index % 3 == i">
-                        <span ng-bind="nom.nomination_rin"></span> <span class="text-muted" ng-bind="nom.date | date:'medium'"></span>
+    <div class="row" ng-if="showAddNominations">
+        <div class="col-xs-12">
+            <form class="form-horizontal" ng-repeat="n in range(25) track by $index">
+                <div class="form-group">
+                    <label class="col-sm-1 control-label">{{ $index + 1 }}</label>
+                    <div class="form-inline">
+                        <input class="form-control" type="text" placeholder="Name">
+                        <input class="form-control" type="text" placeholder="RIN">
+                        <input class="form-control" type="text" placeholder="Initials">
                     </div>
                 </div>
-            </ul>
+            </form>
+        </div>
+        <div class="col-xs-12 text-center">
+            <button class="btn btn-primary" ng-click="addNominations()">Submit Nominations</button>
         </div>
     </div>
     <ng-include src="'partials/footer.html'"></ng-include>

@@ -10,7 +10,7 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
             $q.all([
                 $http.get('/api/candidates/rcs/' + $routeParams.rcs),
                 $http.get('/api/parties/'),
-                $http.get('/api/nominations/' + $routeParams.rcs),
+                $http.get('/api/nominations/counts', {params: {rcs: $routeParams.rcs}}),
                 $http.get('/api/assistants/candidate/' + $routeParams.rcs),
                 $http.get('/api/ama/candidate/' + $routeParams.rcs)
             ]).then(function (responses) {
@@ -217,4 +217,11 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
                 alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
             })
         };
+
+        $scope.isCandidateAssistant = function (rcs) {
+          for (const asst of $scope.assistants) {
+            if (asst.rcs_id === rcs) return true;
+          }
+          return false;
+        }
     }]);

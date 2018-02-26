@@ -1,0 +1,61 @@
+<div class="container page shadow" ng-if="!dataLoaded">
+    <div class="row">
+        <div class="loader">Loading...</div>
+    </div>
+</div>
+<div class="container page shadow" ng-if="dataLoaded">
+    <div class="row">
+        <div class="col-sm-12 col-md-8">
+            <h1>
+                Add Nominations for {{ formName() }}
+                <small class="text-nowrap">{{ office.office_name }}</small>
+            </h1>
+        </div>
+        <div class="col-sm-12 col-md-4">
+            <div class="btn-group pull-right header-btns">
+                <button class="btn btn-primary" ng-click="backToNominations()">
+                    Back to Nominations
+                </button>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-xs-12">
+            <p>Copy nominations exactly as nominators wrote them on the nomination form. Names should not be entered.</p>
+            <div class="col-xs-12">
+                <div class="row form-group" ng-repeat="n in nominations">
+                    <div class="col-sm-1">
+                        <p class="form-control-static">{{ n.num }}</p>
+                    </div>
+                    <div class="col-sm-4" ng-class="colorNomination(n).initials">
+                        <input class="form-control" placeholder="Initials" ng-model="n.initials" ng-change="changeNomination(n)" ng-model-options="{debounce: 750}">
+                    </div>
+                    <div class="col-sm-7" ng-class="colorNomination(n).rin">
+                        <input class="form-control" placeholder="RIN" ng-model="n.rin" ng-change="changeNomination(n)" ng-model-options="{debounce: 750}">
+                    </div>
+                    <div class="col-sm-12" ng-if="n.issues.length > 0">
+                        <ul class="form-control-static text-center list-unstyled" ng-if="n.issues.length > 0">
+                            <li ng-repeat="issue in n.issues">
+                                {{ issue }}
+                            </li>
+                        </ul>
+                        <hr>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="alert alert-info">
+                        <p>
+                            <span class="fa fa-exclamation-circle"></span>
+                            Ensure that this form matches the nomination form exactly. Nominations cannot be changed after they are submitted.
+                        </p>
+                    </div>
+                    <div class="col-md-4 col-md-offset-4 text-center">
+                        <button class="btn btn-primary" ng-disabled="!canSubmit()" ng-click="submit()">Submit Nominations</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-include src="'partials/footer.html'"></ng-include>
+</div>
