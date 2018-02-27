@@ -104,8 +104,8 @@
                 <dt>Class year</dt>
                 <dd ng-bind="candidate.grad_date.substr(0,4)"></dd>
 
-                <dt ng-if="!candidate.majors">Major</dt>
-                <dd ng-if="!candidate.majors" ng-bind="candidate.major"></dd>
+                <dt ng-if="!candidate.majors && candidate.major">Major</dt>
+                <dd ng-if="!candidate.majors && candidate.major" ng-bind="candidate.major"></dd>
 
                 <dt ng-if="candidate.majors">Majors</dt>
                 <dd ng-if="candidate.majors">
