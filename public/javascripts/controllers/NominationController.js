@@ -9,7 +9,8 @@ function ($scope, $routeParams, $http, $q, $location) {
         candidate_rcs: $routeParams.rcs,
         office: $routeParams.office,
         initials: $scope.nomination.initials,
-        rin: $scope.nomination.rin
+        rin: $scope.nomination.rin,
+        id: $scope.nomination.id,
       }}).then(function (response) {
         $scope.validation = response.data.validation;
         $scope.nominator = response.data.nominator;
