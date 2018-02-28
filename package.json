@@ -9,6 +9,9 @@
     "coverage": "istanbul cover _mocha -- -R spec"
   },
   "main": "bin/www",
+  "engines": {
+    "node": "^8.0.0"
+  },
   "dependencies": {
     "angular": "^1.6.9",
     "body-parser": "^1.18.2",
