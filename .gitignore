@@ -41,3 +41,5 @@ node_modules
 
 # User-uploaded image directory
 public/usr_content/
+
+dist/

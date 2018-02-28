@@ -6,7 +6,8 @@
     "start": "sh bin/start.sh",
     "prestart": "node ./bin/install",
     "test": "mocha",
-    "coverage": "istanbul cover _mocha -- -R spec"
+    "coverage": "istanbul cover _mocha -- -R spec",
+    "build": "webpack"
   },
   "main": "bin/www",
   "engines": {
@@ -14,6 +15,10 @@
   },
   "dependencies": {
     "angular": "^1.6.9",
+    "angular-cookies": "^1.6.9",
+    "angular-route": "^1.6.9",
+    "angular-sanitize": "^1.6.9",
+    "angular-timeago": "^0.4.6",
     "body-parser": "^1.18.2",
     "bootstrap": "^3.3.7",
     "cas-authentication": "~0.0.8",
@@ -30,16 +35,22 @@
     "mime": "^1.6.0",
     "morgan": "~1.6.1",
     "mysql": "^2.15.0",
+    "ng-showdown": "^1.1.0",
     "nodemailer": "^4.6.0",
     "q": "^1.5.1",
     "serve-favicon": "^2.4.5",
+    "showdown": "^1.8.6",
     "striptags": "^3.1.1",
     "uid2": "0.0.3"
   },
   "devDependencies": {
+    "babel-loader": "^7.1.3",
+    "babel-preset-env": "^1.6.1",
     "chai": "^3.5.0",
     "istanbul": "^0.4.5",
     "mocha": "^2.5.3",
-    "supertest": "^1.2.0"
+    "supertest": "^1.2.0",
+    "webpack": "^4.0.1",
+    "webpack-cli": "^2.0.9"
   }
 }

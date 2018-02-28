@@ -1,3 +1,5 @@
+import app from '../module';
+
 app.controller('StaticPageController', ['$scope', '$http', '$cookies', '$showdown', '$location', '$route',
     function ($scope, $http, $cookies, $showdown, $location, $route) {
         $scope.title = '';

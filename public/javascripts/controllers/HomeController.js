@@ -1,3 +1,5 @@
+import app from '../module';
+
 app.controller('HomeController', ['$scope', '$sce', '$showdown', '$http', function ($scope, $sce, $showdown, $http) {
     $scope.reloadRandom = function () {
 

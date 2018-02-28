@@ -1,3 +1,5 @@
+import app from '../module';
+
 app.controller('EventsController', ['$scope', '$http', '$cookies', '$location', '$route', '$routeParams',
     function ($scope, $http, $cookies, $location, $route, $routeParams) {
         var EDIT_ID_COOKIE_LABEL = "eventsEditId",

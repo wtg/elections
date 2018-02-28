@@ -1,3 +1,5 @@
+import app from '../module';
+
 app.controller('SettingsController', ['$scope', '$http', '$cookies', '$location', '$route', '$routeParams',
     function ($scope, $http, $cookies, $location, $route, $routeParams) {
 

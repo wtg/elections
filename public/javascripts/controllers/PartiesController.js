@@ -1,3 +1,5 @@
+import app from '../module';
+
 app.controller('PartiesController', ['$scope', '$http', '$q', '$cookies', '$location', '$route', '$routeParams',
     function ($scope, $http, $q, $cookies, $location, $route, $routeParams) {
         var EDIT_ID_COOKIE_LABEL = "partiesEditId",

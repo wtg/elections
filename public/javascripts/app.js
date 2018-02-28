@@ -1,8 +1,18 @@
-var dependencies = [
-    'ngRoute', 'ng-showdown', 'ngCookies', 'yaru22.angular-timeago'
-];
+import app from './module';
 
-var app = angular.module('Elections', dependencies);
+import './controllers/NominationsController';
+import './controllers/MainController';
+import './controllers/HomeController';
+import './controllers/OfficesController';
+import './controllers/CandidateController';
+import './controllers/EventsController';
+import './controllers/PartiesController';
+import './controllers/NominationController';
+import './controllers/NominationsController';
+import './controllers/AddNominationsController';
+import './controllers/NominationPageController';
+import './controllers/StaticPageController';
+import './controllers/SettingsController';
 
 app.config(['$showdownProvider', function ($showdownProvider) {
     $showdownProvider.setOption('headerLevelStart', 3);

@@ -1,3 +1,5 @@
+import app from '../module';
+
 app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$showdown', '$sce', '$http', '$q', '$location', '$filter',
     function ($scope, $route, $routeParams, $showdown, $sce, $http, $q, $location, $filter) {
         var loadData = function () {

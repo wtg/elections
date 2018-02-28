@@ -1,3 +1,5 @@
+import app from '../module';
+
 app.controller('MainController', ['$scope', '$location', '$http', function ($scope, $location, $http) {
     $scope.isCurrentPage = function (path) {
         return $location.path().split('/')[1] == path;

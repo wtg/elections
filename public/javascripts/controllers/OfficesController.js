@@ -1,3 +1,5 @@
+import app from '../module';
+
 app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$location', '$filter', '$http', '$q', '$cookies',
     function ($scope, $route, $routeParams, $location, $filter, $http, $q, $cookies) {
         var EDIT_ID_COOKIE_LABEL = "officesEditId",

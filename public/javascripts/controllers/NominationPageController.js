@@ -1,3 +1,5 @@
+import app from '../module';
+
 app.controller('NominationPageController', ['$scope', '$routeParams', '$http', '$q', '$location',
 function ($scope, $routeParams, $http, $q, $location) {
   var loadData = function () {
