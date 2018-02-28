@@ -28,6 +28,10 @@ var static_routes = require('./routes/static');
 var settings = require('./routes/settings');
 var elections = require('./routes/elections');
 
+// Webpack
+var webpack = require('webpack');
+var webpackDevMiddleware = require('webpack-dev-middleware');
+
 // App initialization
 var app = express();
 
@@ -65,7 +69,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '/public')));
-app.use('/dist/', express.static(__dirname + '/dist/'));
 
 app.use('/', routes);
 app.use('/images', express.static(__dirname + '/public/usr_content'));
@@ -114,6 +117,13 @@ app.get('/login', cas.bounce, function (req, res) {
 
 app.get('/logout', cas.logout);
 
+const webpackConfig = require('./webpack.config.js');
+const compiler = webpack(webpackConfig);
+app.use(webpackDevMiddleware(compiler, {
+  publicPath: webpackConfig.output.publicPath
+}));
+app.use(require("webpack-hot-middleware")(compiler));
+
 app.get('/*', function(req, res){
     res.sendFile(__dirname + '/views/index.html');
 });
@@ -130,10 +140,10 @@ app.use(function (req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-    app.use(function (err, req, res, next) {
-        res.status(err.status || 500).send("<!DOCTYPE html><html><body><h1>There's an error (" + err.status + ")!</h1>" +
-            "<p>" + err.message + "</p><p>" + err + "</p></body></html>");
-    });
+  app.use(function (err, req, res, next) {
+    res.status(err.status || 500).send("<!DOCTYPE html><html><body><h1>There's an error (" + err.status + ")!</h1>" +
+    "<p>" + err.message + "</p><p>" + err + "</p></body></html>");
+  });
 }
 
 // production error handler
