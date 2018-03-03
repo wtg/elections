@@ -1,0 +1,51 @@
+<div class="container page shadow" ng-if="!dataLoaded">
+    <div class="row">
+        <div class="loader">Loading...</div>
+    </div>
+</div>
+<div class="container page shadow" ng-if="dataLoaded">
+    <div class="row">
+        <div class="col-sm-12 col-md-10">
+            <h1 ng-bind="title">Test</h1>
+        </div>
+        <div class="col-sm-12 col-md-2" ng-if="editPermissions">
+            <div class="btn-group pull-right header-btns">
+                <button class="btn btn-default" ng-class="{'active': !edit}"
+                        ng-click="toggleEdit()">
+                    View
+                </button>
+                <button class="btn btn-primary" ng-class="{'active': edit}"
+                ng-click="toggleEdit()">
+                    Edit
+                </button>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="row" ng-if="!edit">
+        <div class="col-xs-12">
+            <div ng-bind-html="htmlContent"></div>
+        </div>
+    </div>
+    <div class="row" ng-if="edit">
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label for="editStaticTitle">Title</label>
+                <input class="form-control" ng-model="title" id="editStaticTitle" name="editStaticTitle">
+            </div>
+            <hr />
+            <div class="form-group">
+                <label for="editStaticContent">Content</label>
+                <textarea class="form-control" ng-model="content"
+                          id="editStaticContent" name="editStaticContent"
+                          style="min-height: 160px; resize: vertical;"></textarea>
+                <p class="help-block">Markdown is supported! Find a list of rules <a href="https://daringfireball.net/projects/markdown/basics">here</a>!</p>
+            </div>
+            <hr />
+            <label>Live Preview</label>
+            <div class="md-live-preview" markdown-to-html="content"></div>
+            <button class="btn btn-success" ng-click="save(title, content)">Save</button>
+        </div>
+    </div>
+    <ng-include src="'footer.html'"></ng-include>
+</div>

@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var MySQLStore = require('express-mysql-session')(session);
 var CASAuthentication = require('cas-authentication');
+var history = require('connect-history-api-fallback');
 var Q = require('q');
 var cms = require('./cms.js');
 var config = require('./config.js');
@@ -36,7 +37,7 @@ var webpackDevMiddleware = require('webpack-dev-middleware');
 var app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+// app.set('views', path.join(__dirname, 'views'));
 //app.set('view engine', 'jade');
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
@@ -68,10 +69,10 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '/public')));
+// app.use(express.static(path.join(__dirname, '/public')));
 
-app.use('/', routes);
-app.use('/images', express.static(__dirname + '/public/usr_content'));
+// app.use('/', routes);
+// app.use('/images', express.static(__dirname + '/public/usr_content'));
 app.use('/api/ama', ama);
 app.use('/api/assistants', assistants);
 app.use('/api/offices', offices);
@@ -117,16 +118,17 @@ app.get('/login', cas.bounce, function (req, res) {
 
 app.get('/logout', cas.logout);
 
+app.use(history());
 const webpackConfig = require('./webpack.config.js');
 const compiler = webpack(webpackConfig);
 app.use(webpackDevMiddleware(compiler, {
-  publicPath: webpackConfig.output.publicPath
+  publicPath: webpackConfig.output.publicPath,
 }));
 app.use(require("webpack-hot-middleware")(compiler));
 
-app.get('/*', function(req, res){
-    res.sendFile(__dirname + '/views/index.html');
-});
+// app.get('/*', function(req, res){
+//     res.sendFile(__dirname + '/views/index.html');
+// });
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

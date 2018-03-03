@@ -1,0 +1,40 @@
+<div class="container page shadow" ng-if="!dataLoaded">
+    <div class="row">
+        <div class="loader">Loading...</div>
+    </div>
+</div>
+<div class="container page shadow" ng-if="dataLoaded">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center" ng-bind="getDetailActiveParty().name"></h1>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Party Platform</h2>
+            <p ng-if="!getDetailActiveParty().platform" class="text-muted">No platform has been entered for this party!</p>
+            <p ng-bind="getDetailActiveParty().platform"></p>
+        </div>
+        <div class="col-md-6">
+            <h2>Party Officers</h2>
+            <p class="text-muted" ng-if="!getDetailActiveParty().officers">
+                This party does not currently have any officers.
+            </p>
+            <ul class="list-group">
+                <li class="list-group-item" ng-repeat="o in getDetailActiveParty().officers | orderBy:'-is_highest'">
+                    <span class="fa fa-star" ng-if="o.is_highest === 1"></span>
+                    <a ng-bind="constructName(o)" ng-href="mailto:{{o.rcs_id}}@rpi.edu"></a>
+                    &ndash; <span ng-bind="o.position"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <h2>Party Candidates</h2>
+            <p class="text-muted">This feature is coming soon! For now, check <a href="/offices">here</a>!</p>
+        </div>
+    </div>
+    <ng-include src="'footer.html'"></ng-include>
+</div>
