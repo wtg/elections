@@ -13,6 +13,7 @@ var cms = require('./cms.js');
 var config = require('./config.js');
 var custom_logger = require('./logger.js');
 var functions = require('./functions.js');
+const csp = require('./csp');
 
 // Routes
 var ama = require('./routes/ama');
@@ -58,9 +59,10 @@ var cas = new CASAuthentication({
 });
 
 app.use(logger('dev'));
-app.use(bodyParser.json());
+app.use(bodyParser.json({type: ['application/json', 'application/csp-report']}));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
+app.use(csp);
 
 app.use('/api/ama', ama);
 app.use('/api/assistants', assistants);

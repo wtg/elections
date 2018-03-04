@@ -5,6 +5,13 @@ var db = require('./config.js').db,
     email = require('./config.js').email,
     nodemailer = require('nodemailer'),
     databasedebug = require('debug')('elections:database');
+const winston = require('winston');
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.simple(),
+  transports: [new winston.transports.Console()],
+});
 
 module.exports = {
     dbConnect: function (res) {
@@ -90,5 +97,6 @@ module.exports = {
             user: email.username,
             pass: email.password
         }
-    })
+    }),
+    logger: logger,
 };
