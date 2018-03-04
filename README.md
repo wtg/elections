@@ -1,4 +1,4 @@
-# RPI Elections [![Stories in Ready](https://badge.waffle.io/wtg/elections.svg?label=ready&title=Ready)](http://waffle.io/wtg/elections)
+# Elections [![Stories in Ready](https://badge.waffle.io/wtg/elections.svg?label=ready&title=Ready)](http://waffle.io/wtg/elections)&nbsp; [![David](https://david-dm.org/wtg/elections/status.svg)](https://david-dm.org/wtg/elections)
 
 A modern platform for managing elections, designed specifically for GM Week and other student government elections at RPI.
 
