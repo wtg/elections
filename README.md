@@ -30,7 +30,9 @@ This website is built in a modified MEAN stack (MariaDB, Express.js, Angular.js,
     * This could be completed in the terminal by running: `> cp devconfig.example.js devconfig.js`
     * Blank configuration variables are provided in the file.
 
-8. Run the server: `npm run dev`. This command will also create the database for the site if it doesn't currently exist.
+8. Run the server: `npm start`. This command will also create the database for the site if it doesn't currently exist.
+
+_Note: if `NODE_ENV` is "production", `npm start` will serve static files from the `dist` folder, which you can have Webpack build by running `npm run build`. If `NODE_ENV` is "development", `npm start` will automatically run Webpack and serve assets from memory._
 
 9. Navigate to `localhost:3000` in your browser, and pat yourself on the back—your instance is deployed.
 

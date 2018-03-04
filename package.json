@@ -7,8 +7,7 @@
     "prestart": "node ./bin/install",
     "test": "mocha",
     "coverage": "istanbul cover _mocha -- -R spec",
-    "build": "webpack --config webpack.prod.js",
-    "dev": "node bin/www"
+    "build": "webpack --config webpack.prod.js"
   },
   "main": "bin/www",
   "engines": {
