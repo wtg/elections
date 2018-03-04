@@ -15,13 +15,15 @@
         <div class="form-group">
             <label class="col-sm-2 control-label">RIN</label>
             <div class="col-sm-5 col-xs-12">
-                <input type="text" class="form-control" ng-model="nomination.rin" ng-change="changeNomination()" ng-model-options="{debounce: 750}">
+                <p ng-if="!editPermissions" class="form-control-static">{{ nomination.rin }}</p>
+                <input ng-if="editPermissions" type="text" class="form-control" ng-model="nomination.rin" ng-change="changeNomination()" ng-model-options="{debounce: 750}">
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">Initials</label>
             <div class="col-sm-5 col-xs-12">
-                <input type="text" class="form-control" ng-model="nomination.initials" ng-change="changeNomination()" ng-model-options="{debounce: 750}">
+                <p ng-if="!editPermissions" class="form-control-static">{{ nomination.initials }}</p>
+                <input ng-if="editPermissions" type="text" class="form-control" ng-model="nomination.initials" ng-change="changeNomination()" ng-model-options="{debounce: 750}">
             </div>
         </div>
         <div class="form-group">
