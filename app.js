@@ -16,7 +16,6 @@ var custom_logger = require('./logger.js');
 var functions = require('./functions.js');
 
 // Routes
-var routes = require('./routes/index');
 var ama = require('./routes/ama');
 var assistants = require('./routes/assistants');
 var offices = require('./routes/offices');
@@ -66,8 +65,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 
-// app.use('/', routes);
-// app.use('/images', express.static(__dirname + '/public/usr_content'));
 app.use('/api/ama', ama);
 app.use('/api/assistants', assistants);
 app.use('/api/offices', offices);
@@ -110,7 +107,6 @@ app.get('/login', cas.bounce, function (req, res) {
         res.redirect('/');
     });
 });
-
 app.get('/logout', cas.logout);
 
 // serve /index.html for non-JSON GET requests
@@ -133,10 +129,6 @@ if (environment === 'production') {
   }));
   app.use(require("webpack-hot-middleware")(compiler));
 }
-
-// app.get('/*', function(req, res){
-//     res.sendFile(__dirname + '/views/index.html');
-// });
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
