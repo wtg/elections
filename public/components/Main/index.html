@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html ng-app="Elections">
+<head>
+    <title>RPI Elections</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <base href="/">
+    <link rel="icon" href="favicon.png">
+</head>
+<body ng-cloak ng-controller="MainController">
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">RPI Elections</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav" ng-if="!maintenanceMode || editPermissions">
+                <li ng-class="{'active':isCurrentPage('offices') || isCurrentPage('candidate')}">
+                    <a href="/offices">Offices <span class="sr-only">(current)</span></a>
+                </li>
+                <li ng-if="partiesEnabled" ng-class="{'active':isCurrentPage('parties') || isCurrentPage('party')}">
+                    <a href="/parties">Parties</a>
+                </li>
+                <li ng-class="{'active':isCurrentPage('events')}">
+                    <a href="/events">Events</a>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Run for Office <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://rpi.box.com/s/0c10q7g15rvzw8bcjxo7gvd7twf4hfag">Necessary Forms</a></li>
+                        <li><a href="/handbook">Election Handbook</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="https://rpi.box.com/s/0c10q7g15rvzw8bcjxo7gvd7twf4hfag">Updates, Violations, &amp; Decisions</a></li>
+                        <li><a href="/about">About RnE &amp; WTG</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li ng-if="!authenticated">
+                    <a href="/login" target="_self">
+                        <span ng-if="!maintenanceMode">Candidate</span>
+                        <span ng-if="maintenanceMode">Admin</span>
+                        Login
+                    </a>
+                </li>
+                <li class="dropdown" ng-if="authenticated">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">
+                        Signed in as <i ng-bind="username"></i> <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <!--<li><a href="/">Edit Content</a></li>-->
+                        <!--<li><a href="/">Moderate Submissions</a></li>-->
+                        <li ng-if="editPermissions"><a href="/settings">Admin Settings</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="/logout" target="_self">Sign out</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<ng-include ng-if="maintenanceMode" src="'maintenance.html'"></ng-include>
+<ng-view ng-hide="maintenanceMode && !editPermissions"></ng-view>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+</script>
+
+</body>
+</html>

@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var MySQLStore = require('express-mysql-session')(session);
 var CASAuthentication = require('cas-authentication');
+var history = require('connect-history-api-fallback');
 var Q = require('q');
 var cms = require('./cms.js');
 var config = require('./config.js');
@@ -15,7 +16,6 @@ var custom_logger = require('./logger.js');
 var functions = require('./functions.js');
 
 // Routes
-var routes = require('./routes/index');
 var ama = require('./routes/ama');
 var assistants = require('./routes/assistants');
 var offices = require('./routes/offices');
@@ -32,7 +32,7 @@ var elections = require('./routes/elections');
 var app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+// app.set('views', path.join(__dirname, 'views'));
 //app.set('view engine', 'jade');
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
@@ -59,16 +59,12 @@ var cas = new CASAuthentication({
 });
 
 // uncomment after placing your favicon in /public
-app.use(favicon(path.join(__dirname, '/public', 'favicon.png')));
+// app.use(favicon(path.join(__dirname, '/public', 'favicon.png')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '/public')));
-app.use('/bower_components', express.static(__dirname + '/bower_components'));
 
-app.use('/', routes);
-app.use('/images', express.static(__dirname + '/public/usr_content'));
 app.use('/api/ama', ama);
 app.use('/api/assistants', assistants);
 app.use('/api/offices', offices);
@@ -111,12 +107,28 @@ app.get('/login', cas.bounce, function (req, res) {
         res.redirect('/');
     });
 });
-
 app.get('/logout', cas.logout);
 
-app.get('/*', function(req, res){
-    res.sendFile(__dirname + '/views/index.html');
-});
+// serve /index.html for non-JSON GET requests
+app.use(history());
+
+const environment = process.env.NODE_ENV || 'development';
+if (environment === 'production') {
+  console.log('Production mode; serving static files from ./dist');
+  app.use('/', express.static(path.join(__dirname, '/dist')));
+} else if (environment === 'development') {
+  console.log('Development mode; enabling Webpack middleware');
+  // Webpack
+  var webpack = require('webpack');
+  var webpackDevMiddleware = require('webpack-dev-middleware');
+
+  const webpackConfig = require('./webpack.dev.js');
+  const compiler = webpack(webpackConfig);
+  app.use(webpackDevMiddleware(compiler, {
+    publicPath: webpackConfig.output.publicPath,
+  }));
+  app.use(require("webpack-hot-middleware")(compiler));
+}
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -130,10 +142,10 @@ app.use(function (req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-    app.use(function (err, req, res, next) {
-        res.status(err.status || 500).send("<!DOCTYPE html><html><body><h1>There's an error (" + err.status + ")!</h1>" +
-            "<p>" + err.message + "</p><p>" + err + "</p></body></html>");
-    });
+  app.use(function (err, req, res, next) {
+    res.status(err.status || 500).send("<!DOCTYPE html><html><body><h1>There's an error (" + err.status + ")!</h1>" +
+    "<p>" + err.message + "</p><p>" + err + "</p></body></html>");
+  });
 }
 
 // production error handler

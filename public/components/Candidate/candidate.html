@@ -1,0 +1,241 @@
+<div class="container page shadow" ng-if="!dataLoaded">
+    <div class="row">
+        <div class="loader">Loading...</div>
+    </div>
+</div>
+<div class="container shadow profile-cover-photo" ng-style="{'background-image': coverCSS()}" ng-if="candidate.cover_url"></div>
+<div id="propic" class="profile" ng-if="dataLoaded" ng-style="{'background-image': profileCSS()}" ng-class="{'with-cover': candidate.cover_url}"></div>
+<div id="candidate-content" class="container page shadow" ng-if="dataLoaded">
+    <div class="row">
+        <div class="col-xs-12">
+            <h1 class="text-center" ng-bind="formName()"></h1>
+        </div>
+        <div class="col-xs-12">
+            <h3 class="text-center text-muted" style="margin-top:5px">
+                Running for <span ng-bind="candidate.office_name"></span>
+            </h3>
+        </div>
+        <div class="col-xs-12" ng-if="candidate.party_name">
+            <h4 class="text-center text-muted" style="margin-top:5px">
+                Member of the
+                <a ng-href="/party/{{candidate.party_id}}" ng-bind="candidate.party_name"></a>
+                <span ng-if="shouldAppendParty()">Party</span>
+            </h4>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-md-2 col-xs-1">
+            <div class="btn-group">
+            <a class="btn btn-facebook" href="{{candidate.facebook}}" ng-if="candidate.facebook">
+                <i class="fa fa-facebook"></i>
+            </a>
+            <a class="btn btn-twitter" href="{{candidate.twitter}}" ng-if="candidate.twitter">
+                <i class="fa fa-twitter"></i>
+            </a>
+            </div>
+        </div>
+        <div class="col-md-4 col-md-offset-2 col-xs-10 col-xs-offset-0">
+            <ul class="nav nav-pills nav-justified">
+                <li role="presentation" ng-class="{'active': currentSection === 'about'}">
+                    <a href="/candidate/{{candidate.rcs_id}}/about">About me</a>
+                </li>
+                <li role="presentation" ng-class="{'active': currentSection === 'platform'}">
+                    <a href="/candidate/{{candidate.rcs_id}}/platform">Platform</a>
+                </li>
+                <li role="presentation" ng-class="{'active': currentSection === 'ama'}">
+                    <a href="/candidate/{{candidate.rcs_id}}/ama">AMA</a>
+                </li>
+                <li role="presentation" ng-class="{'active': currentSection === 'contact'}">
+                    <a ng-href="mailto:{{candidate.rcs_id}}@rpi.edu">Contact</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-3 col-md-offset-1 col-xs-1 col-xs-offset-0"
+             ng-if="editPermissions || (candidate.rcs_id === username) || isCandidateAssistant(username)">
+            <div class="btn-group pull-right">
+                <a class="btn btn-primary" href="/candidate/{{candidate.rcs_id}}/edit"
+                   ng-if="editPermissions || (candidate.rcs_id === username)">Edit</a>
+                <a class="btn btn-default" href="/candidate/{{candidate.rcs_id}}/nominations"
+                   ng-if="editPermissions || (candidate.rcs_id === username) || isCandidateAssistant(username)">Nominations</a>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-md-5">
+            <div class="embed-responsive embed-responsive-16by9" ng-if="candidate.video_url">
+                <iframe class="embed-responsive-item" ng-src="{{candidate.video_url_trusted}}" frameborder="0"
+                        allowfullscreen></iframe>
+            </div>
+            <hr ng-if="candidate.video_url"/>
+            <h3>
+                Nominations
+                <span class="text-muted pull-right" ng-if="candidate.offices.length === 1">
+                    {{candidate.offices[0].nominations_capped}}/{{candidate.office_nominations_required}}
+                </span>
+            </h3>
+            <div class="progress" ng-if="candidate.offices.length === 1">
+                <div class="progress-bar" role="progressbar" aria-valuenow="{{candidate.offices[0].nominations_capped}}" aria-valuemin="0"
+                     aria-valuemax="{{candidate.office_nominations_required}}"
+                     ng-class="{'progress-bar-success': candidate.offices[0].nominations_capped >= candidate.office_nominations_required}"
+                     ng-style="{'width': nominationPercentage(candidate.offices[0].nominations_capped, candidate.office_nominations_required)}">
+                </div>
+            </div>
+
+            <h4 ng-if="candidate.offices.length > 1" ng-repeat-start="o in candidate.offices">
+                {{o.office_name}}
+                <span class="text-muted pull-right">
+                    {{o.nominations_capped}}/{{o.office_nominations_required}}
+                </span>
+            </h4>
+            <div class="progress" ng-if="candidate.offices.length > 1" ng-repeat-end>
+                <div class="progress-bar" role="progressbar" aria-valuenow="{{o.nominations_capped}}" aria-valuemin="0"
+                     aria-valuemax="{{o.office_nominations_required}}"
+                     ng-class="{'progress-bar-success': o.nominations >= o.office_nominations_required}"
+                     ng-style="{'width': nominationPercentage(o.nominations_capped, o.office_nominations_required)}">
+                </div>
+            </div>
+
+            <hr/>
+            <h3>Candidate Facts</h3>
+            <dl class="dl-horizontal">
+
+                <dt>Class year</dt>
+                <dd ng-bind="candidate.grad_date.substr(0,4)"></dd>
+
+                <dt ng-if="!candidate.majors && candidate.major">Major</dt>
+                <dd ng-if="!candidate.majors && candidate.major" ng-bind="candidate.major"></dd>
+
+                <dt ng-if="candidate.majors">Majors</dt>
+                <dd ng-if="candidate.majors">
+                    <span ng-repeat="m in candidate.majors track by $index">
+                        <span ng-bind="m"></span><br ng-if="$index < candidate.majors.length-1" />
+                    </span>
+                </dd>
+
+                <dt ng-if="candidate.experience">Experience</dt>
+                <dd ng-if="candidate.experience" ng-bind="candidate.experience"></dd>
+
+                <dt ng-if="candidate.activities">Activities</dt>
+                <dd ng-if="candidate.activities" ng-bind="candidate.activities"></dd>
+
+                <dt ng-repeat-start="m in candidate.misc_info_obj" ng-bind="m.label"></dt>
+                <dd ng-repeat-end ng-bind="m.entry"></dd>
+            </dl>
+
+            <section ng-if="assistants.length > 0">
+                <hr/>
+                <h3>Candidate Assistants</h3>
+                <p>
+                    <span ng-repeat="a in assistants"
+                          ng-bind="formName(a) + ($index < assistants.length-1 ? ', ' : '')"></span>
+                </p>
+            </section>
+        </div>
+        <div class="col-md-7" ng-if="currentSection == 'about'">
+            <h2 class="no-margin-top">About me</h2>
+            <div ng-bind-html="convertMarkdown(candidate.about)"></div>
+            <div ng-if="!candidate.about">This candidate has not yet provided a biography!</div>
+        </div>
+        <div class="col-md-7" ng-if="currentSection == 'platform'">
+            <h2 class="no-margin-top">Platform</h2>
+            <div ng-bind-html="convertMarkdown(candidate.platform)"></div>
+            <div ng-if="!candidate.platform">This candidate has not yet provided a platform!</div>
+        </div>
+        <div class="col-md-7" ng-if="currentSection == 'ama'">
+            <h2 class="no-margin-top">Ask Me Anything</h2>
+            <div ng-if="!authenticated">
+                <p>
+                    Sign in to ask this candidate a question!
+                </p>
+            </div>
+            <div ng-if="authenticated">
+                <div class="form-group">
+                    <textarea class="form-control" placeholder="Question" ng-model="newAMA.question_text"></textarea>
+                </div>
+                <div class="form-group">
+                    <p class="text-muted pull-left">
+                        <input type="checkbox" ng-model="newAMA.is_anonymous" /> Ask anonymously<br />
+                        <span style="font-size:10pt">Questions should follow the Terms of Use.</span>
+                        <span style="font-size:10pt"></span>
+                    </p>
+                    <button class="btn btn-primary btn-sm pull-right"
+                            ng-disabled="!newAMA.question_text"
+                            ng-click="submitAMA()">Ask</button>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <ul class="nav nav-tabs ama-filter-tabs">
+                <li ng-click="setAMAFilter(0)" ng-class="{active: amaFilter === 0}">
+                    <a>All</a>
+                </li>
+                <li ng-click="setAMAFilter(1)" ng-class="{active: amaFilter === 1}">
+                    <a>Answered</a>
+                </li>
+                <li ng-click="setAMAFilter(2)" ng-class="{active: amaFilter === 2}">
+                    <a>Unanswered</a>
+                </li>
+            </ul>
+            <div class="ama_questions">
+                <div class="media ama_question" ng-repeat="a in getAMAs()">
+                    <div class="media-body">
+                        <p ng-if="!a.answer_text">
+                            <span class="label label-info">Unanswered</span>
+                            <button ng-if="candidate.rcs_id === username || editPermissions"
+                                    class="btn btn-default btn-xs"
+                                    ng-click="showAnswer[$index]=!showAnswer[$index]">Answer</button>
+                        </p>
+                        <h4 class="media-heading" ng-bind="a.question_text"></h4>
+                        <p class="text-muted small">
+                            <span ng-if="!a.is_anonymous">Asked by {{a.rcs_id}}</span>
+                            <span ng-if="a.is_anonymous">Asked anonymously</span>
+                            <span class="pull-right" ng-bind="a.timestamp | timeAgo"></span>
+                        </p>
+                        <p ng-bind-html="convertMarkdown(a.answer_text)"></p>
+                        <div class="form-group" ng-if="showAnswer[$index]">
+                            <textarea class="form-control" ng-model="a.new_answer_text"></textarea>
+                            <p class="help-block">Markdown is supported! Find a list of rules <a href="https://daringfireball.net/projects/markdown/basics">here</a>!</p>
+                        </div>
+                        <button class="btn btn-primary btn-sm pull-right"
+                                ng-if="showAnswer[$index]"
+                                ng-click="answerAMA(a)">Answer</button>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-default btn-sm" ng-if="ama.length > 5">
+                <span class="fa fa-arrow-down"></span>
+                Show more
+            </button>
+        </div>
+        <div class="col-md-7" ng-if="currentSection == 'contact'">
+            <h3>Contact me</h3>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="contactName" class="col-sm-3 control-label">Your name</label>
+                    <div class="col-sm-9">
+                        <input type="name" class="form-control" id="contactName" placeholder="Your name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-3 control-label">Your email</label>
+                    <div class="col-sm-9">
+                        <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="contactMessage" class="col-sm-3 control-label">Message</label>
+                    <div class="col-sm-9">
+                        <textarea class="form-control" id="contactMessage" placeholder="Message"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-9 col-sm-3">
+                        <button type="submit" class="btn btn-primary pull-right">Send message</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <ng-include src="'footer.html'"></ng-include>
+</div>

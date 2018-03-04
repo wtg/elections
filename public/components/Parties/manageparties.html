@@ -1,0 +1,154 @@
+<div class="container page shadow" ng-if="!dataLoaded">
+    <div class="row">
+        <div class="loader">Loading...</div>
+    </div>
+</div>
+<div class="container page shadow" ng-if="dataLoaded">
+    <div class="row">
+        <div class="col-sm-12 col-md-4">
+            <h1>Political Parties</h1>
+        </div>
+        <div class="col-sm-12 col-md-8">
+            <div class="btn-group pull-right header-btns">
+                <a class="btn btn-default" href="/parties">
+                    View
+                </a>
+                <button class="btn btn-primary active">
+                    Edit
+                </button>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="btn-group btn-group-justified">
+                <a class="btn btn-primary btn-justified" ng-click="setEditId('new')" ng-disabled="currentEditId=='new'">
+                    Create party
+                </a>
+            </div>
+            <br/>
+            <ul class="nav nav-pills nav-stacked">
+                <li role="presentation" ng-repeat="p in parties track by $index"
+                    ng-class="{'active': p.party_id==currentEditId}" ng-click="setEditId(p.party_id)">
+                    <a>
+                        <span ng-bind="p.name"></span>
+                        <span ng-if="p.name.length === 0">Untitled party</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-9" ng-show="currentEditId == 'new'">
+            <h2 class="office-title">
+                New party
+                <button class="btn btn-success pull-right" ng-click="createParty()">Create</button>
+            </h2>
+            <hr/>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="newName" class="col-sm-3 control-label">Party Name</label>
+
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" name="newName" id="newName" ng-model="new.name"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="newPlatform" class="col-sm-3 control-label">Party Platform</label>
+
+                    <div class="col-sm-9">
+                        <textarea class="form-control" name="newPlatform" id="newPlatform" ng-model="new.platform"></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-9" ng-repeat="p in parties track by $index" ng-show="currentEditId == p.party_id">
+            <div class="row">
+                <div class="col-xs-12" ng-show="showAlerts" ng-repeat="a in alerts track by $index">
+                    <div class="alert" ng-class="{'alert-danger': a.type == 'error', 'alert-success': a.type == 'success',
+                 'alert-info': a.type == 'info'}">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close" ng-click="removeAlert($index)">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <strong ng-if="a.type === 'success'">Success!</strong>
+                        <strong ng-if="a.type === 'error'">Error!</strong>
+                        <span ng-bind="a.message"></span>
+                    </div>
+                </div>
+            </div>
+            <h2 class="office-title">
+                <i class="text-muted">Editing:</i>
+                <span ng-bind="p.name"></span>
+                <span ng-if="p.name.length === 0">Untitled party</span>
+                <button class="btn btn-success pull-right" ng-click="saveEdits()" ng-disabled="!p.changesPending">Save</button>
+            </h2>
+            <hr/>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="posName" class="col-sm-3 control-label">Party Name</label>
+
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" name="posName" id="posName" ng-model="p.name"
+                               ng-change="p.changesPending = true"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="posPlatform" class="col-sm-3 control-label">Party Platform</label>
+
+                    <div class="col-sm-9">
+                        <textarea class="form-control" name="posPlatform" id="posPlatform" ng-model="p.platform"
+                                  ng-change="p.changesPending = true"></textarea>
+                    </div>
+                </div>
+            </form>
+            <hr/>
+            <h3>Party Officers</h3>
+            <p class="text-muted">
+                The row containing a star denotes the leader (highest officer) of the party.
+            </p>
+            <ul class="list-group">
+                <!--<li class="list-group-item">-->
+                    <!--<span class="fa fa-star"></span>-->
+                    <!--<button class="btn btn-default btn-xs pull-right" ng-click="removeCandidate(c.rcsId, o.id)">-->
+                        <!--<span class="fa fa-times"></span>-->
+                    <!--</button>-->
+                    <!--<span>Person Name</span> <span class="text-muted" ng-bind="'(namep)'"></span>-->
+                    <!--&ndash; <span>Leader</span>-->
+                <!--</li>-->
+                <li class="list-group-item" ng-repeat="o in p.officers | orderBy:'-is_highest'">
+                    <span class="fa fa-star" ng-if="o.is_highest === 1"></span>
+                    <div class="btn-toolbar pull-right" ng-if="o.is_highest === 0">
+                        <button class="btn btn-primary btn-xs" ng-click="promoteOfficer(o.rcs_id, p.party_id)">
+                            Make Leader
+                        </button>
+                        <button class="btn btn-default btn-xs" ng-click="removeOfficer(o.rcs_id, p.party_id)">
+                            <span class="fa fa-times"></span>
+                        </button>
+                    </div>
+                    <span ng-bind="constructName(o)"></span> <span class="text-muted" ng-bind="'('+o.rcs_id+')'"></span>
+                    &ndash; <span ng-bind="o.position"></span>
+                </li>
+            </ul>
+            <div class="input-group">
+                <input class="form-control" type="text" placeholder="New officer's RIN or RCS ID"
+                       ng-model="newOfficer.rcs" name="addOfficerField{{p.id}}" ng-keypress="addOfficerKeypressEvent($event)"
+                       id="addOfficerField"{{p.id}}/>
+				<span class="input-group-btn">
+		        	<button class="btn btn-primary" type="button" ng-click="addOfficer(p.id)"
+                            ng-disabled="newOfficer.rcs == ''">
+                        Add
+                    </button>
+		      	</span>
+            </div>
+            <hr/>
+            <h3>Dangerous Actions</h3>
+            <br/>
+
+            <p>
+                <button class="btn btn-danger" ng-click="deleteParty(p.id)">Delete Party</button>
+            </p>
+            <p class="text-muted"><span class="text-danger">Caution:</span> this action will <b>permanently</b> delete
+                this party from the Elections site.</p>
+        </div>
+    </div>
+    <ng-include src="'footer.html'"></ng-include>
+</div>
