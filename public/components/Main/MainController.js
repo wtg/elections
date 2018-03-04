@@ -8,6 +8,7 @@ import app from '../../elections';
 import './main.css';
 import footer from './footer.html';
 import maintenance from './maintenance.html';
+import './google-analytics';
 
 app.controller('MainController', ['$scope', '$location', '$http', '$templateCache', function ($scope, $location, $http, $templateCache) {
     $templateCache.put('footer.html', footer);

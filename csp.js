@@ -11,6 +11,10 @@ router.post('/csp-report', (req, res) => {
 router.use(csp({
   directives: {
     defaultSrc: ["'self'"],
+    imgSrc: ["'self'", "data:", "*"],
+    fontSrc: ["'self'", "https://fonts.gstatic.com"],
+    styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+    scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "data:", "https://www.google-analytics.com"],
     reportUri: '/csp-report',
   },
   reportOnly: true,
