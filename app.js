@@ -29,10 +29,6 @@ var static_routes = require('./routes/static');
 var settings = require('./routes/settings');
 var elections = require('./routes/elections');
 
-// Webpack
-var webpack = require('webpack');
-var webpackDevMiddleware = require('webpack-dev-middleware');
-
 // App initialization
 var app = express();
 
@@ -64,12 +60,11 @@ var cas = new CASAuthentication({
 });
 
 // uncomment after placing your favicon in /public
-app.use(favicon(path.join(__dirname, '/public', 'favicon.png')));
+// app.use(favicon(path.join(__dirname, '/public', 'favicon.png')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-// app.use(express.static(path.join(__dirname, '/public')));
 
 // app.use('/', routes);
 // app.use('/images', express.static(__dirname + '/public/usr_content'));
@@ -118,13 +113,26 @@ app.get('/login', cas.bounce, function (req, res) {
 
 app.get('/logout', cas.logout);
 
+// serve /index.html for non-JSON GET requests
 app.use(history());
-const webpackConfig = require('./webpack.config.js');
-const compiler = webpack(webpackConfig);
-app.use(webpackDevMiddleware(compiler, {
-  publicPath: webpackConfig.output.publicPath,
-}));
-app.use(require("webpack-hot-middleware")(compiler));
+
+const environment = process.env.NODE_ENV || 'development';
+if (environment === 'production') {
+  console.log('Production mode; serving static files from ./dist');
+  app.use('/', express.static(path.join(__dirname, '/dist')));
+} else if (environment === 'development') {
+  console.log('Development mode; enabling Webpack middleware');
+  // Webpack
+  var webpack = require('webpack');
+  var webpackDevMiddleware = require('webpack-dev-middleware');
+
+  const webpackConfig = require('./webpack.dev.js');
+  const compiler = webpack(webpackConfig);
+  app.use(webpackDevMiddleware(compiler, {
+    publicPath: webpackConfig.output.publicPath,
+  }));
+  app.use(require("webpack-hot-middleware")(compiler));
+}
 
 // app.get('/*', function(req, res){
 //     res.sendFile(__dirname + '/views/index.html');

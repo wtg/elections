@@ -7,7 +7,7 @@
     "prestart": "node ./bin/install",
     "test": "mocha",
     "coverage": "istanbul cover _mocha -- -R spec",
-    "build": "webpack",
+    "build": "webpack --config webpack.prod.js",
     "dev": "node bin/www"
   },
   "main": "bin/www",
@@ -63,10 +63,12 @@
     "mocha": "^2.5.3",
     "style-loader": "^0.20.2",
     "supertest": "^1.2.0",
+    "uglifyjs-webpack-plugin": "^1.2.2",
     "url-loader": "^0.6.2",
     "webpack": "^4.0.1",
     "webpack-cli": "^2.0.9",
     "webpack-dev-middleware": "^2.0.6",
-    "webpack-hot-middleware": "^2.21.0"
+    "webpack-hot-middleware": "^2.21.0",
+    "webpack-merge": "^4.1.2"
   }
 }

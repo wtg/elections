@@ -7,14 +7,12 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 module.exports = {
   entry: [
     './public/app.js',
-    'webpack-hot-middleware/client?reload=true',
   ],
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
     publicPath: '/'
   },
-  devtool: 'source-map',
   module: {
     rules: [{
       test: /\.js$/,
