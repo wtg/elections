@@ -50,7 +50,6 @@
     "ng-showdown": "^1.1.0",
     "nodemailer": "^4.6.0",
     "q": "^1.5.1",
-    "serve-favicon": "^2.4.5",
     "showdown": "^1.8.6",
     "striptags": "^3.1.1",
     "style-loader": "^0.20.2",
