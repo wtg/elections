@@ -7,20 +7,32 @@
     <!-- <button class="btn btn-default btn-xs pull-right" ng-click="">
         <span class="fa fa-times"></span>
     </button> -->
-    <dl class="list-group-item-text dl-horizontal">
-        <dt>Number</dt>
-        <dd>{{ nomination.number }}</dd>
-        <dt>RIN</dt>
-        <dd>{{ nomination.rin }}</dd>
-        <dt>Initials</dt>
-        <dd>{{ nomination.initials }}</dd>
-        <dt>Status</dt>
-        <dd>
-            <span class="label" ng-class="{'label-success': isValid(), 'label-danger': isInvalid(), 'label-default': isPending()}">
-                {{ statusText() }}
-            </span>
-        </dd>
-    </dl>
+    <form class="list-group-item-text form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Number</label>
+            <p class="col-sm-5 form-control-static">{{ nomination.number }}</p>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">RIN</label>
+            <div class="col-sm-5 col-xs-12">
+                <input type="text" class="form-control" ng-model="nomination.rin" ng-change="changeNomination()" ng-model-options="{debounce: 750}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Initials</label>
+            <div class="col-sm-5 col-xs-12">
+                <input type="text" class="form-control" ng-model="nomination.initials" ng-change="changeNomination()" ng-model-options="{debounce: 750}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Status</label>
+            <p class="col-sm-5 form-control-static">
+                <span class="label" ng-class="{'label-success': isValid(), 'label-danger': isInvalid(), 'label-default': isPending()}">
+                    {{ statusText() }}
+                </span>
+            </p>
+        </div>
+    </form>
     <div class="list-group-item-text" ng-if="error">
         <br>
         <div class="alert alert-warning">{{ error }}</div>
