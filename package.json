@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "sh bin/start.sh",
+    "postinstall": "webpack --config webpack.prod.js",
     "prestart": "node ./bin/install",
     "test": "mocha",
     "coverage": "istanbul cover _mocha -- -R spec",
