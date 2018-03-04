@@ -53,7 +53,7 @@ module.exports = {
       'window.jQuery': 'jquery',
     }),
     new HtmlWebpackPlugin({
-      template: 'public/components/main/index.html',
+      template: 'public/components/Main/index.html',
     }),
     new ExtractTextPlugin({
       filename: '[name].css',
