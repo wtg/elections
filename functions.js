@@ -3,11 +3,15 @@ var db = require('./config.js').db,
     cms = require('./cms.js'),
     db_name = mysql.escapeId(require('./config.js').db_name),
     email = require('./config.js').email,
-    nodemailer = require('nodemailer');
+    nodemailer = require('nodemailer'),
+    databasedebug = require('debug')('elections:database');
 
 module.exports = {
     dbConnect: function (res) {
         var connection = mysql.createConnection(db);
+        connection.on('error', err => {
+          databasedebug(err)
+        });
         connection.connect();
         connection.query("USE " + db_name, function (err) {
             if (err) {
