@@ -196,25 +196,8 @@ router.get('/rcs/:rcs_id', function (req, res) {
 
             res.json(processMiscInfo(result));
         });
+        connection.end();
     });
-});
-
-router.get('/office/:office_id', function (req, res) {
-    var connection = functions.dbConnect(res),
-        office_id = req.params.office_id;
-
-    useDataQuery(req, res, function (query) {
-        connection.query(query + queries.office + mysql.escape(office_id), function (err, result) {
-            if (err) {
-                console.log(err);
-                res.status(500);
-            }
-
-            res.json(processMiscInfo(result));
-        });
-    });
-
-    connection.end();
 });
 
 router.post('/create/:rcs_id/:office_id', function (req, res) {
