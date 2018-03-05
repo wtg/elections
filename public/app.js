@@ -34,7 +34,7 @@ app.config(['$routeProvider', function ($routeProvider) {
         controller: 'OfficesController'
     }).
     when('/offices/:filter', {
-        templateUrl: require('./components/Offices/offices.html'),
+        template: require('./components/Offices/offices.html'),
         controller: 'OfficesController'
     }).
     when('/candidate', {
