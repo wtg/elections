@@ -1,5 +1,7 @@
 import app from '../../elections';
 
+import silhouette from '../Offices/silhouette.png';
+
 app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$showdown', '$sce', '$http', '$q', '$location', '$filter',
     function ($scope, $route, $routeParams, $showdown, $sce, $http, $q, $location, $filter) {
         var loadData = function () {
@@ -145,7 +147,7 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
         };
 
         $scope.profileCSS = function () {
-            return 'url(\'' + ($scope.candidate.profile_url ? $scope.candidate.profile_url : 'silhouette.png') + '\')';
+            return 'url(\'' + ($scope.candidate.profile_url ? $scope.candidate.profile_url : silhouette) + '\')';
         };
 
         $scope.coverCSS = function () {
