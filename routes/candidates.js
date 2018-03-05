@@ -58,7 +58,7 @@ var queries = {
 
     duplicateRCS: " ON DUPLICATE KEY UPDATE rcs_id = ",
     partiesEnabled: "SELECT `value` FROM `configurations` WHERE `key` = 'parties_enabled'",
-    listRCS: "SELECT `rcs_id` FROM `candidates` WHERE election_id = (SELECT `value` FROM `configurations` WHERE `key` = 'active_election_id');"
+    listEmails: "SELECT DISTINCT CONCAT(`rcs_id`, '@rpi.edu') as email FROM `candidates` WHERE election_id = (SELECT `value` FROM `configurations` WHERE `key` = 'active_election_id');"
 };
 
 var processMiscInfo = function (result) {
@@ -102,17 +102,6 @@ var processMiscInfo = function (result) {
 
     return result;
 };
-
-var makeEmailsFromRCSList = function (result) {
-    var string = ''
-        for (var i = 0; i < result.length; i++) {
-            if (i > 0 && i < result.length - 1 &&
-                result[i - 1].rcs_id == result[i].rcs_id) continue;
-            string += result[i].rcs_id + '@rpi.edu';
-            if (i != result.length - 1) string += '\n';
-        }
-    return string;
-}
 
 var useDataQuery = function (req, res, callback) {
     var connection = functions.dbConnect();
@@ -434,13 +423,14 @@ router.get('/upload', function (req, res) {
 router.get('/email', function (req, res) {
     var connection = functions.dbConnect(res);
 
-    connection.query(queries.listRCS, function(err, rows, fields) {
+    connection.query(queries.listEmails, function(err, rows, fields) {
         if (err) {
             console.log(err);
             res.status(500);
         }
         res.set('Content-Type', 'text/plain');
-        res.send(makeEmailsFromRCSList(rows));
+        emails = rows.map(row => row.email).join('\n');
+        res.send(emails);
     });
     connection.end();
 });
