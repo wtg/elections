@@ -1,6 +1,7 @@
-var express = require('express'),
+const express = require('express'),
     router = express.Router(),
     mysql = require('mysql'),
+    winston = require('winston'),
     functions = require('../functions.js'),
     cms = require('../cms.js'),
     logger = require('../logger.js'),
@@ -68,7 +69,7 @@ router.post('/create/:candidate_rcs/:assistant_rcs', function (req, res) {
                 cms_data = JSON.parse(response);
 
                 if(!cms_data.entry_date) {
-                    console.log("Non-student account attempted (" + cms_data.username + "). The client was notified.");
+                    winston.info("Non-student account attempted (" + cms_data.username + "). The client was notified.");
 
                     logger.write(null, req.session.cas_user, "CMS_INVALID", "Non-student RCS: " + cms_data.username);
 
@@ -99,14 +100,14 @@ router.post('/create/:candidate_rcs/:assistant_rcs', function (req, res) {
 
                 mailer.sendMail(mailoptions, (error, info) => {
                     if (error) {
-                        return console.log(error);
+                        return winston.error(error);
                     }
-                    console.log('Message %s sent: %s', info.messageId, info.response);
+                    winston.info('Message %s sent: %s', info.messageId, info.response);
                 });
 
                 connection.end();
             } catch (e) {
-                console.log("Invalid RCS entered (" + rcs_id + "). The client was notified.");
+                winston.info("Invalid RCS entered (" + rcs_id + "). The client was notified.");
 
                 logger.write(null, req.session.cas_user, "CMS_INVALID", "RCS or RIN attempted: " + assistant_rcs);
 
