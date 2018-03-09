@@ -62,6 +62,9 @@ var cas = new CASAuthentication({
     destroy_session: true,
 });
 
+// determine where we're running
+const environment = process.env.NODE_ENV || 'development';
+
 // Set up Winston for logging
 winston.configure({
   transports: [
@@ -71,7 +74,12 @@ winston.configure({
     winston.format.timestamp(),
     winston.format.colorize(),
     winston.format.printf(info => {
-      let msg = `${info.timestamp} ${info.level}: ${info.message}`;
+      let msg = ``;
+      // hide timestamp in production (dokku prefixes logs with one already)
+      if (environment !== 'production') {
+        msg += `${info.timestamp} `;
+      }
+      msg += `${info.level}: ${info.message}`;
       const meta = {};
       // don't copy things we've already printed
       for (const prop of Object.getOwnPropertyNames(info)) {
@@ -140,7 +148,6 @@ app.get('/logout', cas.logout);
 // serve /index.html for non-JSON GET requests
 app.use(history());
 
-const environment = process.env.NODE_ENV || 'development';
 if (environment === 'production') {
   winston.info('Production mode; serving static files from ./dist');
   app.use('/', express.static(path.join(__dirname, '/dist')));
