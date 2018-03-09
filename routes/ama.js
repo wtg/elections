@@ -1,6 +1,7 @@
-var express = require('express'),
+const express = require('express'),
     router = express.Router(),
     mysql = require('mysql'),
+    winston = require('winston'),
     functions = require('../functions.js'),
     cms = require('../cms.js'),
     logger = require('../logger.js'),
@@ -29,7 +30,7 @@ router.get('/', function (req, res) {
 
     connection.query(queries.all, function (err, result) {
         if (err) {
-            console.log(err);
+            winston.error(err);
             res.sendStatus(500);
             return;
         }
@@ -53,7 +54,7 @@ router.get('/candidate/:rcs_id', function (req, res) {
 
     connection.query(queries.all + queries.rcs + mysql.escape(rcs_id), function (err, result) {
         if (err) {
-            console.log(err);
+            winston.error(err);
             res.sendStatus(500);
             return;
         }
@@ -104,10 +105,10 @@ router.post('/candidate/:rcs_id', function (req, res) {
 
     mailer.sendMail(mailoptions, (error, info) => {
         if (error) {
-            console.log(error);
+            winston.error(error);
             return;
         }
-        console.log('Message %s sent to %s@rpi.edu: %s', info.messageId, candidate_rcs_id, info.response);
+        winston.info('Message %s sent to %s@rpi.edu: %s', info.messageId, candidate_rcs_id, info.response);
     });
 
 });
