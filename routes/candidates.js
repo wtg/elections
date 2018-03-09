@@ -1,6 +1,7 @@
-var express = require('express'),
+const express = require('express'),
     router = express.Router(),
     mysql = require('mysql'),
+    winston = require('winston'),
     functions = require('../functions.js'),
     cms = require('../cms.js'),
     logger = require('../logger.js'),
@@ -108,7 +109,7 @@ var useDataQuery = function (req, res, callback) {
 
     connection.query(queries.partiesEnabled, function (err, result) {
         if (err) {
-            console.log(err);
+            winston.error(err);
             res.status(500);
         }
 
@@ -135,7 +136,7 @@ router.get('/', function (req, res) {
     useDataQuery(req, res, function (query) {
         connection.query(query, function (err, result) {
             if (err) {
-                console.log(err);
+                winston.error(err);
                 res.status(500);
             }
 
@@ -174,7 +175,7 @@ router.get('/rcs/:rcs_id', function (req, res) {
     useDataQuery(req, res, function (query) {
         connection.query(query + queries.rcs + mysql.escape(rcs_id), function (err, result) {
             if (err) {
-                console.log(err);
+                winston.error(err);
                 res.status(500);
             }
 
@@ -211,7 +212,7 @@ router.post('/create/:rcs_id/:office_id', function (req, res) {
             cms_data = JSON.parse(response);
 
             if(!cms_data.entry_date) {
-                console.log("Non-student account attempted (" + cms_data.username + "). The client was notified.");
+                winston.info("Non-student account attempted (" + cms_data.username + "). The client was notified.");
 
                 logger.write(null, req.session.cas_user, "CMS_INVALID", "Non-student RCS: " + cms_data.username);
 
@@ -257,16 +258,16 @@ router.post('/create/:rcs_id/:office_id', function (req, res) {
                 };
                 mailer.sendMail(mailoptions, (error, info) => {
                     if (error) {
-                        return console.log(error);
+                        return winston.error(error);
                     }
-                    console.log('Message %s sent: %s', info.messageId, info.response);
+                    winston.info('Message %s sent: %s', info.messageId, info.response);
                 });
             } catch (e) {
-                console.log("Unable to send email:", e)
+                winston.error("Unable to send email:", e)
             }
             connection.end();
         } catch (e) {
-            console.log("Invalid RCS entered (" + rcs_id + "). The client was notified.");
+            winston.info("Invalid RCS entered (" + rcs_id + "). The client was notified.");
 
             logger.write(null, req.session.cas_user, "CMS_INVALID", "RCS or RIN attempted: " + req.params.rcs_id);
 
@@ -293,10 +294,9 @@ router.put('/update/:rcs_id', function (req, res) {
 
     var query = queries.updateParty.replace(/<>/g, !isNaN(parseInt(data.party_id)) ? data.party_id : "NULL") +
         mysql.escape(data.rcs_id);
-    console.log(query);
     connection.query(query, function (err) {
         if (err) {
-            console.log(err);
+            winston.error(err);
             res.sendStatus(500);
             connection.end();
             return;
@@ -400,7 +400,7 @@ router.get('/upload', function (req, res) {
     // Error Handling
     is.on('error', function() {
         if (err) {
-            console.log(err);
+            winston.error(err);
             return res.send(500, 'Something went wrong');
         }
     });
@@ -425,7 +425,7 @@ router.get('/email', function (req, res) {
 
     connection.query(queries.listEmails, function(err, rows, fields) {
         if (err) {
-            console.log(err);
+            winston.error(err);
             res.status(500);
         }
         res.set('Content-Type', 'text/plain');
