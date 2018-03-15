@@ -1,6 +1,7 @@
-var express = require('express'),
+const express = require('express'),
     router = express.Router(),
     mysql = require('mysql'),
+    winston = require('winston'),
     functions = require('../functions.js'),
     cms = require('../cms.js'),
     logger = require('../logger.js');
@@ -36,13 +37,13 @@ router.get('/officers', function (req, res) {
 
     connection.query(queries.all + queries.election + queries.activeElection, function (err, parties) {
         if (err) {
-            console.log(err);
+            winston.error(err);
             res.status(500);
         }
 
         connection.query(queries.officers, function (err, officers) {
             if (err) {
-                console.log(err);
+                winston.error(err);
                 res.status(500);
             }
 
@@ -121,7 +122,6 @@ router.post('/addofficer/:party_id/:rcs_id', function (req, res) {
 
     functions.determineCMSPromise(rcs_id).then(function (response) {
         try {
-            console.log("HERE");
             var cms_data = JSON.parse(response),
                 connection = functions.dbConnect(res);
 
@@ -135,7 +135,7 @@ router.post('/addofficer/:party_id/:rcs_id', function (req, res) {
 
             connection.query(query, function (err, result) {
                 if (err) {
-                    console.log(err);
+                    winston.error(err);
                     res.status(500);
                 }
 
@@ -148,7 +148,7 @@ router.post('/addofficer/:party_id/:rcs_id', function (req, res) {
                 connection.end();
             });
         } catch (e) {
-            console.log("Invalid RCS entered (" + rcs_id + "). The client was notified.");
+            winston.info("Invalid RCS entered (" + rcs_id + "). The client was notified.");
 
             logger.write(null, req.session.cas_user, "CMS_INVALID", "RCS or RIN attempted: " + req.params.rcs_id);
 
@@ -194,7 +194,7 @@ router.put('/setleader/:party_id/:rcs_id', function (req, res) {
     var connection = functions.dbConnect(res);
 
     connection.query(queries.demoteLeader + party_id, function (err) {
-        if (err) console.log(err);
+        if (err) winton.error(err);
 
         var values = functions.constructSQLArray([
             party_id, rcs_id, "Leader", 1
