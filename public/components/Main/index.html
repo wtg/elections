@@ -47,7 +47,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li ng-if="!authenticated">
-                    <a href="/login" target="_self">
+                    <a ng-href="{{ loginURL() }}" target="_self">
                         <span ng-if="maintenanceMode">Admin sign in</span>
                         <span ng-else>Sign in</span>
                     </a>
