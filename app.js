@@ -13,6 +13,10 @@ var cms = require('./cms.js');
 var config = require('./config.js');
 var custom_logger = require('./logger.js');
 var functions = require('./functions.js');
+const winston = require('winston');
+const util = require('util');
+
+// Middleware
 const csp = require('./csp');
 
 // Routes
@@ -56,6 +60,39 @@ var cas = new CASAuthentication({
     is_dev_mode: config.cas_dev_mode,
     dev_mode_user: config.cas_dev_mode_user,
     destroy_session: true,
+});
+
+// determine where we're running
+const environment = process.env.NODE_ENV || 'development';
+
+// Set up Winston for logging
+winston.configure({
+  transports: [
+    new winston.transports.Console()
+  ],
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.colorize(),
+    winston.format.printf(info => {
+      let msg = ``;
+      // hide timestamp in production (dokku prefixes logs with one already)
+      if (environment !== 'production') {
+        msg += `${info.timestamp} `;
+      }
+      msg += `${info.level}: ${info.message}`;
+      const meta = {};
+      // don't copy things we've already printed
+      for (const prop of Object.getOwnPropertyNames(info)) {
+        if (prop != 'level' && prop != 'message' && prop != 'timestamp') {
+          meta[prop] = info[prop];
+        }
+      }
+      if (Object.keys(meta).length !== 0) {
+        msg += ` ${util.inspect(meta, {colors: true})}`;
+      }
+      return msg;
+    })
+  )
 });
 
 app.use(logger('dev'));
@@ -122,12 +159,11 @@ app.get('/logout', cas.logout);
 // serve /index.html for non-JSON GET requests
 app.use(history());
 
-const environment = process.env.NODE_ENV || 'development';
 if (environment === 'production') {
-  console.log('Production mode; serving static files from ./dist');
+  winston.info('Production mode; serving static files from ./dist');
   app.use('/', express.static(path.join(__dirname, '/dist')));
 } else if (environment === 'development') {
-  console.log('Development mode; enabling Webpack middleware');
+  winston.info('Development mode; enabling Webpack middleware');
   // Webpack
   var webpack = require('webpack');
   var webpackDevMiddleware = require('webpack-dev-middleware');
