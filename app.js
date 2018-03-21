@@ -113,7 +113,15 @@ app.use('/api/static', static_routes);
 app.use('/api/settings', settings);
 app.use('/api/elections', elections);
 
-app.get('/login', cas.bounce, function (req, res) {
+app.get('/login', function (req, res, next) {
+    // store page to redirect to in session
+    if (req.query.redirect) {
+      req.session.redirect = req.query.redirect;
+    }
+    next();
+  },
+  cas.bounce,
+  function (req, res) {
     if (!req.session || !req.session.cas_user) {
         res.redirect('/logout');
     }
@@ -140,7 +148,10 @@ app.get('/login', cas.bounce, function (req, res) {
         req.session.admin_rights = wtg_status || rne_status;
         req.session.is_authenticated = true;
 
-        res.redirect('/');
+        // redirect to stored page, if exists
+        const redirect = req.session.redirect || '/';
+        delete req.session.redirect;
+        res.redirect(redirect);
     });
 });
 app.get('/logout', cas.logout);
