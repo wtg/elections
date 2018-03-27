@@ -77,8 +77,4 @@ app.controller('MainController', ['$scope', '$location', '$http', '$templateCach
 
         return Math.round((obtained / required) * 100) + '%';
     };
-
-    $scope.loginURL = function () {
-      return '/login?redirect=' + encodeURIComponent($location.path());
-    };
 }]);
