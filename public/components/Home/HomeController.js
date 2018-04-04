@@ -106,7 +106,7 @@ app.controller('HomeController', ['$scope', '$sce', '$showdown', '$http', functi
     $scope.infoBlocks = [
         {
             header: "Get out and vote",
-            body: "Primary elections will take place on Tuesday, April 3. Final elections will take place on Friday, April 6. " +
+            body: "Primary elections will take place on Monday, April 2. Final elections will take place on Thursday, April 5. " +
             "Get to Commons, the Union, or the DCC and earn a free GM Week mug by voting!",
             icon: "fa-check-square"
         },
