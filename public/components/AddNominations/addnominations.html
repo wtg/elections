@@ -31,7 +31,10 @@
                     <div class="col-sm-4" ng-class="colorNomination(n).initials">
                         <input class="form-control" placeholder="Initials" ng-model="n.initials" ng-change="changeNomination(n)" ng-model-options="{debounce: 750}">
                     </div>
-                    <div class="col-sm-7" ng-class="colorNomination(n).rin">
+                    <div class="col-sm-4" ng-class="colorNomination(n).rcs">
+                        <input class="form-control" placeholder="RCSID" ng-model="n.rin" ng-change="changeNomination(n)" ng-model-options="{debounce: 750}">
+                    </div>
+                    <div class="col-sm-4" ng-class="colorNomination(n).rin">
                         <input class="form-control" placeholder="Last three digits of RIN" ng-model="n.rin" ng-change="changeNomination(n)" ng-model-options="{debounce: 750}">
                     </div>
                     <div class="col-sm-12" ng-if="n.issues.length > 0">
