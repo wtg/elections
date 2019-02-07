@@ -89,8 +89,8 @@ function ($scope, $routeParams, $http, $q, $location) {
       return;
     }
 
-    if (nom.rin != null && nom.rin.length != 9) {
-      issues.push("RIN must be nine characters.");
+    if (nom.rin != null && nom.rin.length != 3) {
+      issues.push("Please only include the last three digits of the RIN.");
     }
     if (nom.initials != null && nom.initials.length > 3) {
       issues.push("Initials must be three characters or fewer.");
