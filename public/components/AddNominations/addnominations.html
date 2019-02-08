@@ -28,10 +28,7 @@
                     <div class="col-sm-1">
                         <p class="form-control-static">{{ n.num }}</p>
                     </div>
-                    <div class="col-sm-3" ng-class="colorNomination(n).initials">
-                        <input class="form-control" placeholder="Initials" ng-model="n.initials" ng-change="changeNomination(n)" ng-model-options="{debounce: 750}">
-                    </div>
-                    <div class="col-sm-3" ng-class="colorNomination(n).rcs">
+                    <div class="col-sm-5" ng-class="colorNomination(n).rcs">
                         <input class="form-control" placeholder="RCSID" ng-model="n.rcs" ng-change="changeNomination(n)" ng-model-options="{debounce: 750}">
                     </div>
                     <div class="col-sm-5" ng-class="colorNomination(n).rin">

@@ -11,7 +11,7 @@ app.controller('NominationController', ['$scope', '$routeParams', '$http', '$q',
         params: {
           candidate_rcs: $routeParams.rcs,
           office: $routeParams.office,
-          initials: $scope.nomination.initials,
+          rcs: $scope.nomination.rcs,
           rin: $scope.nomination.rin,
           id: $scope.nomination.id,
         }
@@ -83,7 +83,7 @@ app.controller('NominationController', ['$scope', '$routeParams', '$http', '$q',
       nom = nom || $scope.nomination;
       const toSubmit = {
         rin: parseInt(nom.rin),
-        initials: nom.initials,
+        rcs: nom.rcs,
         number: nom.num,
         page: nom.page,
         valid: nom.valid,
