@@ -106,8 +106,8 @@ app.controller('HomeController', ['$scope', '$sce', '$showdown', '$http', functi
     $scope.infoBlocks = [
         {
             header: "Get out and vote",
-            body: "Primary elections will take place on Monday, April 2. Final elections will take place on Thursday, April 5. " +
-            "Get to Commons, the Union, or the DCC and earn a free GM Week mug by voting!",
+            body: "Final elections will take place on Thursday, March 28. " +
+            "Get to Commons, the Union, the Library, or the DCC and earn a free GM Week mug by voting!",
             icon: "fa-check-square"
         },
         {
@@ -122,7 +122,7 @@ app.controller('HomeController', ['$scope', '$sce', '$showdown', '$http', functi
         },
         {
             header: "Become a candidate",
-            body: "You’ve got nothing better to do Wednesday night, right? Learn about how to become a candidate, read the handbook, " +
+            body: "Learn about how to become a candidate, read the handbook, " +
             "and find the forms needed to sign up!",
             icon: "fa-plus-square"
         }
@@ -138,13 +138,10 @@ app.controller('HomeController', ['$scope', '$sce', '$showdown', '$http', functi
             "<b>Do:</b> Get around 15% more than is required. Inevitably, some will be invalid.",
 
             "<b>Don't:</b> Actively campaign in dining halls or lecture halls during class hours.<br/>" +
-            "<b>Do:</b> Check the elections handbook for acceptable campaigning locations. The definition of active campaigning, along with the campaign rules, are found in Section 5.",
+            "<b>Do:</b> Check the elections handbook for acceptable campaigning locations. The definition of active campaigning, along with the campaign rules, are found in Article I Section 5.",
 
             "<b>Don't:</b> Place posters on the sign boards on the footbridge.<br/>" +
             "<b>Do:</b> Check the elections handbook for postering rules.",
-
-            "<b>Don't:</b> Have non-candidate assistants actively campaigning on your behalf.<br/>" +
-            "<b>Do:</b> Register candidate assistants with the EC using the appropriate form."
         ]
     };
 
