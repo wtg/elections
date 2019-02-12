@@ -82,7 +82,7 @@ app.controller('NominationController', ['$scope', '$routeParams', '$http', '$q',
     $scope.putNomination = function(nom) {
       nom = nom || $scope.nomination;
       const toSubmit = {
-        rin: parseInt(nom.rin),
+        rin: nom.rin,
         rcs: nom.rcs,
         number: nom.num,
         page: nom.page,
