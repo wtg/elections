@@ -30,7 +30,7 @@ function ($scope, $routeParams, $http, $q, $location) {
       for (let i = 0; i < 25; i++) {
         $scope.nominations.push({
           rin: null,
-          initials: null,
+          rcs: null,
           issues: new Set(),
           num: i + 1,
         });
@@ -58,8 +58,8 @@ function ($scope, $routeParams, $http, $q, $location) {
     var nomsToSubmit = [];
     for (var i = 0; i < $scope.nominations.length; i++) {
       const nom = {
-        rin: parseInt($scope.nominations[i].rin),
-        initials: $scope.nominations[i].initials,
+        rin: $scope.nominations[i].rin,
+        rcs: $scope.nominations[i].rcs,
         number: $scope.nominations[i].num,
       }
       // if any one of the fields has data, submit it
@@ -84,18 +84,18 @@ function ($scope, $routeParams, $http, $q, $location) {
     const issues = [];
 
     // if row empty, no issues
-    if (!nom.rin && !nom.initials) {
+    if (!nom.rin && !nom.rcs) {
       nom.issues = issues;
       return;
     }
 
-    if (nom.rin != null && nom.rin.length != 9) {
-      issues.push("RIN must be nine characters.");
+    if (nom.rin != null && nom.rin.length != 3) {
+      issues.push("Please only include the last three digits of the RIN.");
     }
-    if (nom.initials != null && nom.initials.length > 3) {
-      issues.push("Initials must be three characters or fewer.");
+    if (nom.rcs != null && nom.rcs.length === 0) {
+      issues.push("Please enter a valid RCS id");
     }
-
+    console.log(nom)
     nom.issues = issues;
   }
 
@@ -103,7 +103,7 @@ function ($scope, $routeParams, $http, $q, $location) {
     let oneExists = false;
     for (const nom of $scope.nominations) {
       if (nom.issues.length > 0) return false;
-      if (nom.rin || nom.initials) oneExists = true;
+      if (nom.rin || nom.initials || nom.rcs) oneExists = true;
     }
     return oneExists;
   }
@@ -112,7 +112,7 @@ function ($scope, $routeParams, $http, $q, $location) {
     let classes = {};
     for (const issue of nom.issues) {
       if (issue.indexOf("RIN") != -1) classes.rin = 'has-error';
-      if (issue.indexOf("Initials") != -1) classes.initials = 'has-error';
+      if (issue.indexOf("RCS") != -1) classes.rcs = 'has-error';
     }
     return classes;
   };

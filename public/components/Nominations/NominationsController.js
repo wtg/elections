@@ -133,6 +133,7 @@ app.controller('NominationsController', ['$scope', '$routeParams', '$http', '$q'
         $scope.submit = function () {
             var nomsToSubmit = [];
             for(var i = 0; i < $scope.nominations.length; i++) {
+                console.log($scope.nominations[i].rin)
                nomsToSubmit.push({rin: $scope.nominations[i].rin, initials: $scope.nominations[i].initials});
             }
 
