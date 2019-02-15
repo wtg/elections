@@ -1,6 +1,7 @@
 import app from '../../elections';
 import './offices-card.css';
 import silhouette from './silhouette.png';
+import { stringify } from 'querystring';
 
 app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$location', '$filter', '$http', '$q', '$cookies',
     function ($scope, $route, $routeParams, $location, $filter, $http, $q, $cookies) {
@@ -382,8 +383,8 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
             } else if (!preparedData.description) {
                 addNewAlert("error", "You didn't enter a description for the office!", "create");
                 return;
-            } else if (!preparedData.nominations_required) {
-                addNewAlert("error", "You didn't enter a required number of nominations for the office!", "create");
+            } else if (preparedData.nominations_required === '') {
+                addNewAlert("error", "You didn't enter a required number of nominations for the office!" + stringify(preparedData), "create");
                 return;
             } else if (!preparedData.openings) {
                 addNewAlert("error", "You didn't enter a number of openings for the office!", "create");
