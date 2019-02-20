@@ -46,20 +46,20 @@ var sessionStore = new MySQLStore({}, functions.dbConnect());
 
 // Set up an Express session, which is required for CASAuthentication.
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'super secret key',
-    resave: false,
-    saveUninitialized: true,
-    store: sessionStore
+  secret: process.env.SESSION_SECRET || 'super secret key',
+  resave: false,
+  saveUninitialized: true,
+  store: sessionStore
 }));
 
 // Create a new instance of CASAuthentication.
 var cas = new CASAuthentication({
-    cas_url: 'https://cas-auth.rpi.edu/cas',
-    service_url: config.service_url,
-    cas_version: '2.0',
-    is_dev_mode: config.cas_dev_mode,
-    dev_mode_user: config.cas_dev_mode_user,
-    destroy_session: true,
+  cas_url: 'https://cas-auth.rpi.edu/cas',
+  service_url: config.service_url,
+  cas_version: '2.0',
+  is_dev_mode: config.cas_dev_mode,
+  dev_mode_user: config.cas_dev_mode_user,
+  destroy_session: true,
 });
 
 // determine where we're running
@@ -88,7 +88,7 @@ winston.configure({
         }
       }
       if (Object.keys(meta).length !== 0) {
-        msg += ` ${util.inspect(meta, {colors: true})}`;
+        msg += ` ${util.inspect(meta, { colors: true })}`;
       }
       return msg;
     })
@@ -96,8 +96,8 @@ winston.configure({
 });
 
 app.use(logger('dev'));
-app.use(bodyParser.json({type: ['application/json', 'application/csp-report']}));
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json({ type: ['application/json', 'application/csp-report'] }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(csp);
 
@@ -114,34 +114,35 @@ app.use('/api/settings', settings);
 app.use('/api/elections', elections);
 
 app.get('/login', cas.bounce, function (req, res) {
-    if (!req.session || !req.session.cas_user) {
-        res.redirect('/logout');
+  if (!req.session || !req.session.cas_user) {
+    res.redirect('/logout');
+  }
+
+  var rcs_id = req.session.cas_user.toLowerCase();
+
+  Q.all([
+    cms.getWTG(rcs_id),
+    cms.getEC(rcs_id)
+  ]).then(function (responses) {
+    var wtg_status = JSON.parse(responses[0]).result,
+      ec_status = JSON.parse(responses[1]).result;
+
+    if (wtg_status || ec_status) {
+      var logger_desc = "Granted admin access by CMS for ";
+      if (wtg_status) logger_desc += "WTG ";
+      if (wtg_status && ec_status) logger_desc += "and ";
+      if (ec_status) logger_desc += "EC ";
+      logger_desc += "membership";
+
+      custom_logger.write(null, req.session.cas_user, 'CMS_ADMIN', logger_desc);
     }
 
-    var rcs_id = req.session.cas_user.toLowerCase();
+    req.session.is_authenticated = true;
+    req.session.ec_member = ec_status;
+    req.session.wtg_member = wtg_status;
 
-    Q.all([
-        cms.getWTG(rcs_id),
-        cms.getRNE(rcs_id)
-    ]).then(function (responses) {
-        var wtg_status = JSON.parse(responses[0]).result,
-            rne_status = JSON.parse(responses[1]).result;
-
-        if(wtg_status || rne_status) {
-            var logger_desc = "Granted admin access by CMS for ";
-            if(wtg_status) logger_desc += "WTG ";
-            if(wtg_status && rne_status) logger_desc += "and ";
-            if(rne_status) logger_desc += "RNE ";
-            logger_desc += "membership";
-
-            custom_logger.write(null, req.session.cas_user, 'CMS_ADMIN', logger_desc);
-        }
-
-        req.session.admin_rights = wtg_status || rne_status;
-        req.session.is_authenticated = true;
-
-        res.redirect('/');
-    });
+    res.redirect('/');
+  });
 });
 app.get('/logout', cas.logout);
 
@@ -167,9 +168,9 @@ if (environment === 'production') {
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
 // error handlers
@@ -179,15 +180,15 @@ app.use(function (req, res, next) {
 if (app.get('env') === 'development') {
   app.use(function (err, req, res, next) {
     res.status(err.status || 500).send("<!DOCTYPE html><html><body><h1>There's an error (" + err.status + ")!</h1>" +
-    "<p>" + err.message + "</p><p>" + err + "</p></body></html>");
+      "<p>" + err.message + "</p><p>" + err + "</p></body></html>");
   });
 }
 
 // production error handler
 // no stacktraces leaked to user
 app.use(function (err, req, res, next) {
-    res.status(err.status || 500).send("<!DOCTYPE html><html><body><h1>There's an error (" + err.status + ")!</h1>" +
-        "<p>" + err.message + "</p></body></html>");
+  res.status(err.status || 500).send("<!DOCTYPE html><html><body><h1>There's an error (" + err.status + ")!</h1>" +
+    "<p>" + err.message + "</p></body></html>");
 });
 
 module.exports = app;

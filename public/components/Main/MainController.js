@@ -19,6 +19,7 @@ app.controller('MainController', ['$scope', '$location', '$http', '$templateCach
     };
 
     $scope.editPermissions = false;
+    $scope.maintenancePermissions = false;
     $scope.authenticated = false;
     $scope.username = null;
     $scope.maintenanceMode = false;
@@ -26,21 +27,22 @@ app.controller('MainController', ['$scope', '$location', '$http', '$templateCach
     $scope.partiesEnabled = true;
 
     $http.get("/api/users/").then(function (response) {
-        $scope.editPermissions = response.data.admin;
+        $scope.editPermissions = response.data.ec || response.data.wtg;
+        $scope.maintenancePermissions = response.data.wtg;
         $scope.authenticated = response.data.authenticated;
         $scope.username = response.data.username;
     });
     $http.get("/api/settings/maintenance_mode").then(function (response) {
-        $scope.maintenanceMode = response.data[0].value/1;
+        $scope.maintenanceMode = response.data[0].value / 1;
     });
     $http.get("/api/settings/maintenance_message").then(function (response) {
         $scope.maintenanceMessage = response.data[0].value;
         if (!$scope.maintenanceMessage) {
-          $scope.maintenanceMessage = "The site is under maintenance. Check back soon!"
+            $scope.maintenanceMessage = "The site is under maintenance. Check back soon!"
         }
     });
     $http.get("/api/settings/parties_enabled").then(function (response) {
-        $scope.partiesEnabled = response.data[0].value/1;
+        $scope.partiesEnabled = response.data[0].value / 1;
     });
 
     $scope.formatTime = function (time) {
@@ -53,7 +55,7 @@ app.controller('MainController', ['$scope', '$location', '$http', '$templateCach
     };
 
     $scope.isPastEvent = function (date) {
-        return date.toISOString().substr(0,10) < new Date().toISOString().substr(0,10);
+        return date.toISOString().substr(0, 10) < new Date().toISOString().substr(0, 10);
     };
 
     /**
