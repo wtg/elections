@@ -8,18 +8,20 @@ var express = require('express'),
 
 module.exports = router;
 
-router.get('/', function(req, res) {
+router.get('/', function (req, res) {
     if (!req.session || !req.session.cas_user || !req.session.is_authenticated) {
         res.json({
             authenticated: false,
             username: null,
-            admin: false
+            admin: false,
+            maintenance: false
         });
     } else {
         res.json({
             authenticated: req.session.is_authenticated,
             username: req.session.cas_user.toLowerCase(),
-            admin: req.session.admin_rights
+            admin: req.session.admin_rights,
+            maintenance: req.session.maintenance_rights
         });
     }
 });
