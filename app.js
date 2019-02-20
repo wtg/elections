@@ -122,24 +122,24 @@ app.get('/login', cas.bounce, function (req, res) {
 
   Q.all([
     cms.getWTG(rcs_id),
-    cms.getRNE(rcs_id)
+    cms.getEC(rcs_id)
   ]).then(function (responses) {
     var wtg_status = JSON.parse(responses[0]).result,
-      rne_status = JSON.parse(responses[1]).result;
+      ec_status = JSON.parse(responses[1]).result;
 
-    if (wtg_status || rne_status) {
+    if (wtg_status || ec_status) {
       var logger_desc = "Granted admin access by CMS for ";
       if (wtg_status) logger_desc += "WTG ";
-      if (wtg_status && rne_status) logger_desc += "and ";
-      if (rne_status) logger_desc += "RNE ";
+      if (wtg_status && ec_status) logger_desc += "and ";
+      if (ec_status) logger_desc += "EC ";
       logger_desc += "membership";
 
       custom_logger.write(null, req.session.cas_user, 'CMS_ADMIN', logger_desc);
     }
 
-    req.session.admin_rights = wtg_status || rne_status;
     req.session.is_authenticated = true;
-    req.session.maintenance_rights = wtg_status;
+    req.session.ec_member = ec_status;
+    req.session.wtg_member = wtg_status;
 
     res.redirect('/');
   });

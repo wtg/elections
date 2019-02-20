@@ -16,10 +16,10 @@ var endpoints = {
     rcs: '/api/users/view_rcs/%/',
     rin: '/api/users/view_rin/%/',
     wtg: '/api/users/get_if_wtg/%/',
-    rne: '/api/users/get_if_rne/%/'
+    ec: '/api/users/get_if_rne/%/'
 };
 
-var execute = function(path) {
+var execute = function (path) {
     var options = {
         method: defaults.method,
         host: defaults.host,
@@ -27,23 +27,23 @@ var execute = function(path) {
         headers: defaults.headers
     };
 
-    var deferred  = Q.defer();
+    var deferred = Q.defer();
 
-    var req = https.request(options, function(response) {
+    var req = https.request(options, function (response) {
         response.setEncoding('utf8');
 
         var responseData = '';
 
-        response.on('data', function(data) {
+        response.on('data', function (data) {
             responseData += data;
         });
 
-        response.on('end', function() {
+        response.on('end', function () {
             deferred.resolve(responseData);
         });
     });
 
-    req.on('error', function(err) {
+    req.on('error', function (err) {
         deferred.reject(err);
     });
 
@@ -59,10 +59,10 @@ module.exports = {
     getRIN: function (rin) {
         return execute(endpoints.rin.replace(/%/g, rin));
     },
-    getWTG: function(rcs_id) {
+    getWTG: function (rcs_id) {
         return execute(endpoints.wtg.replace(/%/g, rcs_id));
     },
-    getRNE: function(rcs_id) {
-        return execute(endpoints.rne.replace(/%/g, rcs_id));
+    getEC: function (rcs_id) {
+        return execute(endpoints.ec.replace(/%/g, rcs_id));
     }
 };

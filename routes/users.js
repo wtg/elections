@@ -13,15 +13,15 @@ router.get('/', function (req, res) {
         res.json({
             authenticated: false,
             username: null,
-            admin: false,
-            maintenance: false
+            ec: false,
+            wtg: false
         });
     } else {
         res.json({
             authenticated: req.session.is_authenticated,
             username: req.session.cas_user.toLowerCase(),
-            admin: req.session.admin_rights,
-            maintenance: req.session.maintenance_rights
+            ec: req.session.ec_member,
+            wtg: req.session.wtg_member
         });
     }
 });
