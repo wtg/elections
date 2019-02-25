@@ -7,14 +7,14 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
         var loadData = function () {
             $scope.candidate = {};
             $scope.newAMA = {};
-            $scope.amaFilter = 0;
+            $scope.amaFilter = null;
             $scope.parties = [];
             $scope.dataLoaded = false;
             $scope.showAnswer = {};
             $q.all([
                 $http.get('/api/candidates/rcs/' + $routeParams.rcs),
                 $http.get('/api/parties/'),
-                $http.get('/api/nominations/counts', {params: {rcs: $routeParams.rcs}}),
+                $http.get('/api/nominations/counts', { params: { rcs: $routeParams.rcs } }),
                 $http.get('/api/assistants/candidate/' + $routeParams.rcs),
                 $http.get('/api/ama/candidate/' + $routeParams.rcs)
             ]).then(function (responses) {
@@ -66,11 +66,11 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
                 }
 
                 $scope.parties = responses[1].data;
-                $scope.parties.push({party_id: null, name: "Unaffiliated"});
+                $scope.parties.push({ party_id: null, name: "Unaffiliated" });
 
                 responses[2].data.forEach(function (n_elem) {
                     $scope.candidate.offices.forEach(function (o_elem) {
-                        if(n_elem.office_id === o_elem.office_id && !o_elem.overridden) {
+                        if (n_elem.office_id === o_elem.office_id && !o_elem.overridden) {
                             o_elem.nominations = n_elem.nominations;
 
                             // cap displayed nominations count at the nomination threshold
@@ -99,7 +99,7 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
         };
 
         $scope.formName = function (person) {
-            if(!person) person = $scope.candidate;
+            if (!person) person = $scope.candidate;
             return (person.preferred_name ? person.preferred_name : person.first_name) + " " + person.last_name;
         };
 
@@ -185,12 +185,16 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
         };
 
         $scope.getAMAs = function () {
-            if($scope.amaFilter === 0) {
+            if ($scope.amaFilter === null) {
                 var AMAs = $scope.ama
-            } else if($scope.amaFilter === 1) {
-                var AMAs = $filter('filter')($scope.ama, { answer_text: '!' });
-            } else if($scope.amaFilter === 2) {
-                var AMAs = $filter('filter')($scope.ama, { answer_text: '!!' });
+            } else if ($scope.amaFilter === 'answered') {
+                var AMAs = $scope.ama.filter((elem) => {
+                    return elem.answer_text !== null;
+                });
+            } else if ($scope.amaFilter === 'unanswered') {
+                var AMAs = $scope.ama.filter((elem) => {
+                    return elem.answer_text === null;
+                });
             }
 
             return $filter('orderBy')(AMAs, '-timestamp');
@@ -198,11 +202,10 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
 
         $scope.setAMAFilter = function (index) {
             $scope.amaFilter = index;
-            console.log($scope.amaFilter);
         };
 
         $scope.submitAMA = function () {
-            if(!$scope.newAMA.question_text) return;
+            if (!$scope.newAMA.question_text) return;
             $scope.newAMA.is_anonymous = $scope.newAMA.is_anonymous ? 1 : 0;
 
             $http.post('/api/ama/candidate/' + $routeParams.rcs, $scope.newAMA).then(function () {
@@ -212,7 +215,7 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
             })
         };
 
-        $scope.answerAMA = function(ama) {
+        $scope.answerAMA = function (ama) {
             ama.answer_text = ama.new_answer_text;
 
             $http.put('/api/ama/candidate/' + $routeParams.rcs, ama).then(function () {
@@ -223,9 +226,9 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
         };
 
         $scope.isCandidateAssistant = function (rcs) {
-          for (const asst of $scope.assistants) {
-            if (asst.rcs_id === rcs) return true;
-          }
-          return false;
+            for (const asst of $scope.assistants) {
+                if (asst.rcs_id === rcs) return true;
+            }
+            return false;
         }
     }]);

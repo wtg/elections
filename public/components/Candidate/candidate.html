@@ -167,13 +167,13 @@
                 <div class="clearfix"></div>
             </div>
             <ul class="nav nav-tabs ama-filter-tabs">
-                <li ng-click="setAMAFilter(0)" ng-class="{active: amaFilter === 0}">
+                <li ng-click="setAMAFilter(null)" ng-class="{active: amaFilter === null}">
                     <a>All</a>
                 </li>
-                <li ng-click="setAMAFilter(1)" ng-class="{active: amaFilter === 1}">
+                <li ng-click="setAMAFilter('answered')" ng-class="{active: amaFilter === 'answered'}">
                     <a>Answered</a>
                 </li>
-                <li ng-click="setAMAFilter(2)" ng-class="{active: amaFilter === 2}">
+                <li ng-click="setAMAFilter('unanswered')" ng-class="{active: amaFilter === 'unanswered'}">
                     <a>Unanswered</a>
                 </li>
             </ul>
