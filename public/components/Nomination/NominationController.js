@@ -3,10 +3,10 @@ import app from '../../elections';
 import nomination from './nomination.html';
 
 app.controller('NominationController', ['$scope', '$routeParams', '$http', '$q', '$location', '$templateCache',
-  function($scope, $routeParams, $http, $q, $location, $templateCache) {
+  function ($scope, $routeParams, $http, $q, $location, $templateCache) {
     $templateCache.put('nomination.html', nomination);
 
-    $scope.validate = function() {
+    $scope.validate = function () {
       $http.get('/api/nominations/validate', {
         params: {
           candidate_rcs: $routeParams.rcs,
@@ -15,18 +15,18 @@ app.controller('NominationController', ['$scope', '$routeParams', '$http', '$q',
           rin: $scope.nomination.rin,
           id: $scope.nomination.id,
         }
-      }).then(function(response) {
+      }).then(function (response) {
         $scope.validation = response.data.validation;
         $scope.nominator = response.data.nominator;
         $scope.office = response.data.office;
-      }, function(response) {
+      }, function (response) {
         $scope.error = "Unable to get recommendation data.";
-      }).finally(function() {
+      }).finally(function () {
         $scope.dataLoaded = true;
       });
     };
 
-    let loadData = function() {
+    let loadData = function () {
       $scope.dataLoaded = false;
       $scope.validation = {};
 
@@ -38,30 +38,30 @@ app.controller('NominationController', ['$scope', '$routeParams', '$http', '$q',
     };
     loadData();
 
-    $scope.isValid = function() {
+    $scope.isValid = function () {
       return $scope.nomination.valid === true;
     };
 
-    $scope.isInvalid = function() {
+    $scope.isInvalid = function () {
       return $scope.nomination.valid === false;
     };
 
-    $scope.isPending = function() {
+    $scope.isPending = function () {
       return $scope.nomination.valid == null;
     };
 
-    $scope.statusText = function() {
+    $scope.statusText = function () {
       if ($scope.nomination.valid === true) return "Valid";
       if ($scope.nomination.valid === false) return "Invalid";
       if ($scope.nomination.valid == null) return "Pending";
     };
 
-    $scope.setStatus = function() {
+    $scope.setStatus = function () {
       $scope.nomination.valid = status;
       $scope.putNomination();
     };
 
-    $scope.toggleValid = function() {
+    $scope.toggleValid = function () {
       if ($scope.nomination.valid === true) {
         $scope.nomination.valid = null;
       } else if ($scope.nomination.valid === false || $scope.nomination.valid == null) {
@@ -70,7 +70,7 @@ app.controller('NominationController', ['$scope', '$routeParams', '$http', '$q',
       $scope.putNomination();
     };
 
-    $scope.toggleInvalid = function() {
+    $scope.toggleInvalid = function () {
       if ($scope.nomination.valid === false) {
         $scope.nomination.valid = null;
       } else if ($scope.nomination.valid === true || $scope.nomination.valid == null) {
@@ -79,12 +79,12 @@ app.controller('NominationController', ['$scope', '$routeParams', '$http', '$q',
       $scope.putNomination();
     };
 
-    $scope.putNomination = function(nom) {
+    $scope.putNomination = function (nom) {
       nom = nom || $scope.nomination;
       const toSubmit = {
         rin: nom.rin,
         rcs: nom.rcs,
-        number: nom.num,
+        number: nom.number,
         page: nom.page,
         valid: nom.valid,
         id: parseInt(nom.id),
@@ -93,19 +93,19 @@ app.controller('NominationController', ['$scope', '$routeParams', '$http', '$q',
         params: {
           nomination: $scope.nomination.id
         }
-      }).then(function(response) {
+      }).then(function (response) {
         // success
-      }, function(response) {
+      }, function (response) {
         alert("Oh no! We've encountered an error. Please try again. If this persists, email webtech@union.lists.rpi.edu.");
       });
     }
 
     // injected by NominationPage
-    this.setNomination = function(nomination) {
+    this.setNomination = function (nomination) {
       this.nomination = nomination;
     };
 
-    $scope.changeNomination = function() {
+    $scope.changeNomination = function () {
       $scope.putNomination($scope.nomination);
       $scope.validate();
     }
