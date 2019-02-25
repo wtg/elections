@@ -105,7 +105,7 @@ app.controller('OfficesController', ['$scope', '$route', '$routeParams', '$locat
                     });
                 });
             }, function (status, error) {
-                alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
+                alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.lists.rpi.edu.");
             }).finally(function () {
                 $scope.dataLoaded = true;
             });

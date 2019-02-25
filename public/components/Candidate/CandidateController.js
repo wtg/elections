@@ -87,7 +87,7 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
 
                 $scope.ama = responses[4].data;
             }, function () {
-                alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
+                alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.lists.rpi.edu.");
             }).finally(function () {
                 $scope.dataLoaded = true;
             });
@@ -126,7 +126,7 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
             $http.put('/api/candidates/update/' + $routeParams.rcs, $scope.candidate).then(function () {
                 $location.url('/candidate/' + $routeParams.rcs);
             }, function () {
-                alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
+                alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.lists.rpi.edu.");
             })
         };
 
@@ -142,7 +142,7 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
             $http.delete('/api/candidates/delete/' + $routeParams.rcs + '/' + officeId).then(function () {
                 $location.url('/offices');
             }, function () {
-                alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
+                alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.lists.rpi.edu.");
             });
         };
 
@@ -208,7 +208,7 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
             $http.post('/api/ama/candidate/' + $routeParams.rcs, $scope.newAMA).then(function () {
                 $route.reload();
             }, function () {
-                alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
+                alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.lists.rpi.edu.");
             })
         };
 
@@ -218,7 +218,7 @@ app.controller('CandidateController', ['$scope', '$route', '$routeParams', '$sho
             $http.put('/api/ama/candidate/' + $routeParams.rcs, ama).then(function () {
                 $route.reload();
             }, function () {
-                alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.rpi.edu.");
+                alert("Oh no! We encountered an error. Please try again. If this persists, email webtech@union.lists.rpi.edu.");
             })
         };
 
