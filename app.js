@@ -46,7 +46,7 @@ var sessionStore = new MySQLStore({}, functions.dbConnect());
 
 // Set up an Express session, which is required for CASAuthentication.
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'super secret key',
+  secret: config.session_secret,
   resave: false,
   saveUninitialized: true,
   store: sessionStore

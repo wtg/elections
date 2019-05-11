@@ -13,6 +13,7 @@ try {
     db_name: process.env.DB_NAME,
     cms: process.env.CMS_API_TOKEN,
     service_url: process.env.SERVICE_URL,
+    session_secret: process.env.SESSION_SECRET,
     cas_dev_mode: false,
     cas_dev_mode_user: '',
     elecnoms_url: process.env.ELECNOMS_URL,
