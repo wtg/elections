@@ -4,7 +4,8 @@ var db = require('./config.js').db,
     db_name = mysql.escapeId(require('./config.js').db_name),
     email = require('./config.js').email,
     nodemailer = require('nodemailer'),
-    databasedebug = require('debug')('elections:database');
+    databasedebug = require('debug')('elections:database'),
+    isCurrentCandidate = require('./is_candidate.js').isCurrentCandidate;
 
 module.exports = {
     dbConnect: function (res) {
@@ -58,7 +59,7 @@ module.exports = {
         return {
             authenticated: req.session.is_authenticated,
             username: req.session.cas_user.toLowerCase(),
-            admin: req.session.ec_member || req.session.wtg_member
+            admin: (req.session.ec_member || req.session.wtg_member) && !isCurrentCandidate(req.session.cas_user.toLowerCase())
         };
     },
     log: function (connection, rcsid, type, description) {
