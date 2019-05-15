@@ -23,13 +23,14 @@ module.exports = {
   db_name: 'rpielections',
   cms: '',
   service_url: 'http://localhost:3000',
+  session_secret: 'super secret key',
   cas_dev_mode: false,
   cas_dev_mode_user: '',
   elecnoms_url: 'http://127.0.0.1:3001',
   email: {
     username: '',
     password: '',
-    from: 'RPI Elections <rne@rpi.edu>',
+    from: 'Elections Comission <union-elections@rpi.edu>',
     host: '',
     secure: true,
     port: 465

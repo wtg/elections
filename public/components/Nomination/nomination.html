@@ -86,9 +86,15 @@
                             <dt>Last name</dt>
                             <dd>{{ nominator.last_name }}</dd>
                             <dt>Credit cohort</dt>
-                            <dd>{{ nominator.credit_cohort }}</dd>
+                            <dd>
+                              <span ng-if="nominator.is_graduate">Graduate</span>
+                              <span ng-if="!nominator.is_graduate">{{ nominator.credit_cohort }}</span>
+                            </dd>
                             <dt>Entry cohort</dt>
-                            <dd>{{ nominator.entry_cohort }}</dd>
+                            <dd>
+                              <span ng-if="nominator.is_graduate">Graduate</span>
+                              <span ng-if="!nominator.is_graduate">{{ nominator.entry_cohort }}</span>
+                            </dd>
                             <dt>Greek</dt>
                             <dd>
                                 <span ng-if="nominator.greek">Affiliated</span>

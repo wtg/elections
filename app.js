@@ -15,6 +15,7 @@ var custom_logger = require('./logger.js');
 var functions = require('./functions.js');
 const winston = require('winston');
 const util = require('util');
+var isCurrentCandidate = require('./is_candidate.js').isCurrentCandidate;
 
 // Middleware
 const csp = require('./csp');
@@ -46,7 +47,7 @@ var sessionStore = new MySQLStore({}, functions.dbConnect());
 
 // Set up an Express session, which is required for CASAuthentication.
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'super secret key',
+  secret: config.session_secret,
   resave: false,
   saveUninitialized: true,
   store: sessionStore
@@ -127,7 +128,7 @@ app.get('/login', cas.bounce, function (req, res) {
     var wtg_status = JSON.parse(responses[0]).result,
       ec_status = JSON.parse(responses[1]).result;
 
-    if (wtg_status || ec_status) {
+    if ((wtg_status || ec_status) && !isCurrentCandidate(rcs_id)) {
       var logger_desc = "Granted admin access by CMS for ";
       if (wtg_status) logger_desc += "WTG ";
       if (wtg_status && ec_status) logger_desc += "and ";

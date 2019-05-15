@@ -27,8 +27,8 @@ app.controller('MainController', ['$scope', '$location', '$http', '$templateCach
     $scope.partiesEnabled = true;
 
     $http.get("/api/users/").then(function (response) {
-        $scope.editPermissions = response.data.ec || response.data.wtg;
-        $scope.maintenancePermissions = response.data.wtg;
+        $scope.editPermissions = (response.data.ec || response.data.wtg) && (!response.data.is_candidate);
+        $scope.maintenancePermissions = response.data.wtg && !response.data.is_candidate;
         $scope.authenticated = response.data.authenticated;
         $scope.username = response.data.username;
     });
